@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- 상단 로고, 정렬 기준-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_toolbar"
         android:layout_width="match_parent"
@@ -48,6 +49,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- 검색창 -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search"
         android:layout_width="match_parent"
@@ -71,6 +73,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <!-- 뉴스 리스트-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
