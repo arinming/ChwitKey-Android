@@ -8,6 +8,10 @@ android {
     namespace 'com.example.cherry_pick_android'
     compileSdk 33
 
+    buildFeatures{
+        viewBinding = true
+        dataBinding = true
+    }
     defaultConfig {
         applicationId "com.example.cherry_pick_android"
         minSdk 33
@@ -62,4 +66,7 @@ dependencies {
     // Lifecycle
 
     // Coroutine
+
+    // naver
+    implementation 'com.navercorp.nid:oauth:5.6.0' // jdk 11
 }
