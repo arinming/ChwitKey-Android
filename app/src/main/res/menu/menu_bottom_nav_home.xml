@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/fragment_home_news"
+        android:title="홈"
+        android:icon="@drawable/ic_home_menu" />
+    <item
+        android:id="@+id/fragment_keyword"
+        android:title="키워드"
+        android:icon="@drawable/ic_keyword_menu"/>
+    <item
+        android:id="@+id/fragment_scrap"
+        android:title="스크랩"
+        android:icon="@drawable/ic_scrap_menu"/>
+    <item
+        android:id="@+id/fragment_my_page"
+        android:title="마이페이지"
+        android:icon="@drawable/ic_my_page_menu"/>
+</menu>
