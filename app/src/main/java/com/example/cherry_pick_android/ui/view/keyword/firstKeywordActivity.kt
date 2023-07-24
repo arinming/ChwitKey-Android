@@ -23,7 +23,7 @@ class firstKeywordActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_firstkeyword)
-        Log.d("KeywordActivity", "onCreate")
+        Log.d(TAG, "onCreate")
 
         val keyword = getKeyword() // 키워드 버튼 리스트 반환받기
         val selectedKeywords: Queue<Int> = LinkedList<Int>() // 선택된 키워드 버튼을 저장할 Queue
