@@ -93,7 +93,7 @@
                     android:textStyle="normal" />
 
                 <ImageButton
-                    android:id="@+id/btn_profile_name_change"
+                    android:id="@+id/ibtn_profile_name_change"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginLeft="0dp"
