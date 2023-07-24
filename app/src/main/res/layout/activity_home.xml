@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fv_home"
+        android:name="com.example.cherry_pick_android.ui.view.HomeNewsFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/btm_nav_view_home"
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:menu="@menu/menu_bottom_nav_home"
+        app:labelVisibilityMode="labeled"
+        app:itemTextColor="#8E8E92"
+        app:itemIconTint="#8E8E92"
+        android:backgroundTint="@drawable/menu_state_checked"
+        app:itemRippleColor="@drawable/menu_state_checked"
+        android:background="@drawable/ic_bottom_nav_home_background"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

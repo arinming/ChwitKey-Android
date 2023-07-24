@@ -1,3 +1,24 @@
 <resources>
     <string name="app_name">cherry_pick_android</string>
+
+    <!-- mypage -->
+    <string name="mypage_user_id">유저네임a</string>
+    <string name="mypage_saved_article">저장한 기사</string>
+    <string name="mypage_change_job">직군 정보 변경</string>
+    <string name="mypage_keyword_setting">키워드 설정</string>
+    <string name="mypage_score_appstore">스토어 별점 남기기</string>
+    <string name="mypage_user_policy">이용약관 및 사용자 정책</string>
+    <string name="mypage_contacts">언론사 연락처</string>
+    <string name="mypage_privacy_policy">개인정보처리방침</string>
+
+    <!-- profile -->
+    <string name="mypage_profile">프로필</string>
+    <string name="profile_photo_change">사진변경</string>
+    <string name="profile_name">이름</string>
+    <string name="profile_birth">생일</string>
+    <string name="profile_sex">성별</string>
+
+    <string name="profile_logout">로그아웃</string>
+    <string name="profile_leave_account">회원탈퇴</string>
+
 </resources>
