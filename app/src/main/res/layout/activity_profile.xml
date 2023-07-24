@@ -7,20 +7,20 @@
     tools:context=".ui.view.mypage.ProfileActivity">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/tb_profile_top"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         tools:ignore="MissingConstraints">
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/iv_back_button"
             android:layout_width="20dp"
             android:layout_height="20dp"
             android:padding="5dp"
             app:srcCompat="@drawable/icon_back_arrow" />
         <TextView
-            android:id="@+id/userinfo_edit_toolbar_textview"
+            android:id="@+id/tv_profile_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/mypage_profile"
@@ -29,16 +29,16 @@
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/ll_profile_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar">
+        app:layout_constraintTop_toBottomOf="@id/tb_profile_top">
 
         <LinearLayout
-            android:id="@+id/mypage_profile_layout"
+            android:id="@+id/ll_profile_pic_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -52,13 +52,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/mypage_icon_user_img"
+                android:id="@+id/iv_profile_pic"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 app:srcCompat="@drawable/icon_user_img" />
 
             <TextView
-                android:id="@+id/mypage_tv_user_id"
+                android:id="@+id/tv_profile_pic_change"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
@@ -93,6 +93,7 @@
                     android:textStyle="normal" />
 
                 <ImageButton
+                    android:id="@+id/btn_profile_name_change"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
                     android:layout_marginLeft="0dp"
@@ -142,7 +143,7 @@
                     android:text="@string/profile_sex" />
 
                 <TextView
-                    android:id="@+id/tv_mypage_keyword_setting"
+                    android:id="@+id/tv_profile_sex"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="30dp"
@@ -169,13 +170,13 @@
             android:layout_marginBottom="10dp">
 
             <ImageView
-                android:id="@+id/profile_logout"
+                android:id="@+id/iv_profile_logout"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 app:srcCompat="@drawable/icon_profile_logout" />
 
             <TextView
-                android:id="@+id/btn_profile_logout"
+                android:id="@+id/tv_profile_logout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
@@ -189,13 +190,13 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/profile_leave_account"
+                android:id="@+id/iv_profile_leave_account"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 app:srcCompat="@drawable/icon_profile_leave_account" />
 
             <TextView
-                android:id="@+id/btn_profile_leave_account"
+                android:id="@+id/tv_profile_leave_account"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="20dp"
