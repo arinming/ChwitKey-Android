@@ -41,6 +41,12 @@
 
 
         </activity>
+        <activity
+            android:name=".ui.view.keyword.firstKeywordActivity"
+            android:exported="false"
+            >
+        </activity>
+        <activity android:name=".ui.view.login.LoginActivity"/>
     </application>
 
 
