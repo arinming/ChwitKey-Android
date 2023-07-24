@@ -202,7 +202,7 @@
                 >
 
                 <android.widget.Button
-                    android:id="@+id/bnt_marine"
+                    android:id="@+id/btn_marine"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/keyword_btn_basic"

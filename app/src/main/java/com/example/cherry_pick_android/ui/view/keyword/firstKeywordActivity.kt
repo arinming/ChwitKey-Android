@@ -69,7 +69,7 @@ class firstKeywordActivity: AppCompatActivity() {
     // 키워드 버튼 리스트 생성
     private fun getKeyword(): List<Button>{
         val keyWordButton = listOf<Button>(
-            binding.bntMarine, binding.btnBattery, binding.btnCar, binding.btnBuild,
+            binding.btnMarine, binding.btnBattery, binding.btnCar, binding.btnBuild,
             binding.btnFB, binding.btnClothes, binding.btnDisplay, binding.btnDistribution,
             binding.btnIT, binding.btnLeisure, binding.btnOil, binding.btnPetrochemistry,
             binding.btnPhone, binding.btnShipbuild, binding.btnSemiconductor, binding.btnSteel
