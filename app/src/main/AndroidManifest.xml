@@ -23,7 +23,7 @@
             android:exported="true" />
 
         <activity
-            android:name=".ui.view.HomeActivity"
+            android:name=".ui.view.home.HomeActivity"
             android:exported="true" >
 
             <intent-filter>
@@ -35,7 +35,7 @@
         </activity>
 
         <activity
-            android:name=".ui.view.NewsSearchActivity"
+            android:name=".ui.view.newsSearch.NewsSearchActivity"
             android:exported="true">
 
 
