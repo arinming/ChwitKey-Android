@@ -1,5 +1,6 @@
 package com.example.cherry_pick_android.ui.view
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cherry_pick_android.R
@@ -12,5 +13,14 @@ class NewsSearchActivity: AppCompatActivity() {
         binding = ActivityNewsSearchBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        goToBack()
+    }
+
+    private fun goToBack() {
+        binding.ibtnBack.setOnClickListener {
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.cherry_pick_android.ui.view
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,11 +20,23 @@ class HomeNewsFragment: Fragment(R.layout.fragment_home_news) {
     ): View? {
         _binding = FragmentHomeNewsBinding.inflate(inflater, container, false)
         val view = binding.root
+        goToNewsSearch()
+
         return view
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    // 검색창 누르면 NewsSearch 액티비티로 이동
+    private fun goToNewsSearch() {
+        binding.btnHomeSearchBackground.setOnClickListener {
+            activity?.let {
+                val intent = Intent(it, NewsSearchActivity::class.java)
+                it.startActivity(intent)
+            }
+        }
     }
 }
