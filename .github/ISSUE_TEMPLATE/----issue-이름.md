@@ -10,5 +10,5 @@ assignees: ''
 ## 설명
 
 ## To-Do List
-- [] 1
-- [] 2
+- [ ] to-do 1
+- [ ] to-do 2
