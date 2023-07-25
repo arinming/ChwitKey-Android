@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.ui.view.home.newsSearch
+package com.example.cherry_pick_android.ui.view.newsSearch
 
 import android.content.Intent
 import android.os.Bundle

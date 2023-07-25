@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
-import com.example.cherry_pick_android.ui.view.home.newsSearch.NewsSearchActivity
+import com.example.cherry_pick_android.ui.view.newsSearch.NewsSearchActivity
 
 class HomeNewsFragment: Fragment(R.layout.fragment_home_news) {
     private var _binding: FragmentHomeNewsBinding? = null
