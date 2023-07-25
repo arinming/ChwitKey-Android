@@ -3,10 +3,14 @@ package com.example.cherry_pick_android.ui.view.searchList
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.databinding.ActivitySearchListBinding
 
 class SearchListActivity : AppCompatActivity() {
+    private lateinit var binding: ActivitySearchListBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_search_list)
+        binding = ActivitySearchListBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
     }
 }
