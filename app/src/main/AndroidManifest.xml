@@ -13,10 +13,10 @@
         android:theme="@style/Theme.Cherry_pick_android"
         tools:targetApi="31">
         <activity
-            android:name=".ui.view.mypage.ProfileActivity"
+            android:name=".ui.view.mypage.ProfileFragment"
             android:exported="false" />
         <activity
-            android:name=".ui.view.mypage.MyPageActivity"
+            android:name=".ui.view.mypage.MyPageFragment"
             android:exported="false" />
         <activity
             android:name=".ui.view.MainActivity"

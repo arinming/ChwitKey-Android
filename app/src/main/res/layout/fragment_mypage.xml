@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.view.mypage.MyPageActivity">
+    tools:context=".ui.view.mypage.MyPageFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,12 +18,12 @@
             android:id="@+id/ll_mypage_user_layout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_marginLeft="20dp"
             android:layout_marginTop="30dp"
             android:layout_marginRight="20dp"
-            android:orientation="vertical"
-            android:layout_gravity="center"
             android:gravity="center"
+            android:orientation="vertical"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -65,18 +64,21 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_weight="2"
-                    android:layout_marginLeft="10dp">
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="2">
+
                     <ImageView
                         android:id="@+id/iv_mypage_saved_article"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         app:srcCompat="@drawable/icon_saved_article" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="10">
+
                     <TextView
                         android:id="@+id/tv__mypage_saved_article"
                         android:layout_width="match_parent"
@@ -97,18 +99,21 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_weight="2"
-                    android:layout_marginLeft="10dp">
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="2">
+
                     <ImageView
                         android:id="@+id/iv_mypage_change_job"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         app:srcCompat="@drawable/icon_change_job" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="10">
+
                     <TextView
                         android:id="@+id/tv_mypage_change_job"
                         android:layout_width="match_parent"
@@ -129,18 +134,21 @@
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="40dp"
-                    android:layout_weight="2"
-                    android:layout_marginLeft="10dp">
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="2">
+
                     <ImageView
                         android:id="@+id/iv_mypage_keyword_setting"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         app:srcCompat="@drawable/icon_keyword_setting" />
                 </LinearLayout>
+
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="40dp"
                     android:layout_weight="10">
+
                     <TextView
                         android:id="@+id/tv_mypage_keyword_setting"
                         android:layout_width="match_parent"
@@ -170,8 +178,8 @@
                 android:id="@+id/tv_mypage_score_appstore"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
                 android:clickable="true"
                 android:text="@string/mypage_score_appstore" />
 
@@ -179,8 +187,8 @@
                 android:id="@+id/tv_mypage_user_policy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
                 android:clickable="true"
                 android:text="@string/mypage_user_policy" />
 
@@ -202,8 +210,8 @@
                 android:id="@+id/tv_mypage_contacts"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
                 android:clickable="true"
                 android:text="@string/mypage_contacts" />
 
@@ -211,8 +219,8 @@
                 android:id="@+id/tv_mypage_privacy_policy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
                 android:clickable="true"
                 android:text="@string/mypage_privacy_policy" />
 
