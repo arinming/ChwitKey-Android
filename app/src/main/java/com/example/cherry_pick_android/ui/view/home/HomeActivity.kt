@@ -1,8 +1,7 @@
-package com.example.cherry_pick_android.ui.view
+package com.example.cherry_pick_android.ui.view.home
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.ActivityHomeBinding
 
 class HomeActivity: AppCompatActivity() {

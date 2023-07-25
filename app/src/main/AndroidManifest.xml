@@ -24,27 +24,30 @@
 
         </activity>
         <activity
-            android:name=".ui.view.HomeActivity"
+            android:name=".ui.view.home.HomeActivity"
             android:exported="true" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
         </activity>
 
         <activity
-            android:name=".ui.view.NewsSearchActivity"
+            android:name=".ui.view.home.newsSearch.NewsSearchActivity"
             android:exported="true">
 
         </activity>
         <activity
             android:name=".ui.view.keyword.firstKeywordActivity"
-            android:exported="false"
-            >
+            android:exported="true"
+            ><intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
         </activity>
-        <activity android:name=".ui.view.login.LoginActivity"/>
+        <activity android:name=".ui.view.login.LoginActivity"
+            android:exported="true">
+
+        </activity>
     </application>
 
 
