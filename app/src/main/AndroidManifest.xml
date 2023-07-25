@@ -13,6 +13,12 @@
         android:theme="@style/Theme.Cherry_pick_android"
         tools:targetApi="31">
         <activity
+            android:name=".ui.view.mypage.ProfileActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.view.mypage.MyPageActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.view.MainActivity"
             android:exported="true">
 
@@ -33,6 +39,12 @@
             android:exported="true">
 
         </activity>
+        <activity
+            android:name=".ui.view.keyword.firstKeywordActivity"
+            android:exported="false"
+            >
+        </activity>
+        <activity android:name=".ui.view.login.LoginActivity"/>
     </application>
 
 

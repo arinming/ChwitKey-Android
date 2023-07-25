@@ -8,10 +8,14 @@ android {
     namespace 'com.example.cherry_pick_android'
     compileSdk 34
 
+    buildFeatures{
+        viewBinding = true
+        dataBinding = true
+    }
     defaultConfig {
         applicationId "com.example.cherry_pick_android"
         minSdk 33
-        targetSdk 33
+        targetSdk 34
         versionCode 1
         versionName "1.0"
 
@@ -62,4 +66,5 @@ dependencies {
     // Lifecycle
 
     // Coroutine
+
 }
