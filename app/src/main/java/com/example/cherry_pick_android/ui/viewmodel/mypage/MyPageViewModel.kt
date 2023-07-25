@@ -1,6 +1,8 @@
 package com.example.cherry_pick_android.ui.viewmodel.mypage
 
-class MyPageViewModel {
-} : ViewModel() {
+import androidx.lifecycle.ViewModel
+
+class MyPageViewModel: ViewModel() {
 
 }
+
