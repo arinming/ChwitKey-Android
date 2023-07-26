@@ -6,7 +6,6 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.R
-import com.example.cherry_pick_android.databinding.NewsItemBinding
 
 class RecyclerViewAdapter(private val newsDataSet: Array<String>):
     RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {

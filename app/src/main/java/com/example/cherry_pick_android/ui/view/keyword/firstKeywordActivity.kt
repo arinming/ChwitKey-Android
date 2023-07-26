@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.ActivityFirstkeywordBinding
 import com.example.cherry_pick_android.ui.view.MainActivity
+import com.example.cherry_pick_android.ui.view.home.HomeActivity
 import java.util.LinkedList
 import java.util.Queue
 
@@ -80,7 +81,7 @@ class firstKeywordActivity: AppCompatActivity() {
     // 선택된 키워드 데이터 넘겨주기 및 화면전환 (뉴스화면)
     private fun passSelectedKeywordData() {
         /* 데이터 넘겨주는 로직*/
-        val intent = Intent(this, MainActivity::class.java)
+        val intent = Intent(this, HomeActivity::class.java)
         startActivity(intent)
     }
 

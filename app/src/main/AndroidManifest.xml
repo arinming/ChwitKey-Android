@@ -13,18 +13,17 @@
         android:theme="@style/Theme.Cherry_pick_android"
         tools:targetApi="31">
         <activity
-            android:name=".ui.view.mypage.ProfileActivity"
+            android:name=".ui.view.gpt.GptActivity"
             android:exported="false" />
         <activity
             android:name=".ui.view.mypage.MyPageActivity"
             android:exported="false" />
         <activity
             android:name=".ui.view.MainActivity"
-            android:exported="true">
+            android:exported="true" />
 
-        </activity>
         <activity
-            android:name=".ui.view.HomeActivity"
+            android:name=".ui.view.home.HomeActivity"
             android:exported="true" >
 
             <intent-filter>
@@ -36,7 +35,7 @@
         </activity>
 
         <activity
-            android:name=".ui.view.NewsSearchActivity"
+            android:name=".ui.view.newsSearch.NewsSearchActivity"
             android:exported="true">
 
 

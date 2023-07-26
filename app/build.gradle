@@ -41,6 +41,10 @@ android {
         enabled = true
     }
 
+    dataBinding {
+        enabled = true
+    }
+
 }
 
 dependencies {
@@ -66,5 +70,4 @@ dependencies {
     // Lifecycle
 
     // Coroutine
-
 }
