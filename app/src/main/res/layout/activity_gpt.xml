@@ -29,20 +29,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/et_sendMessage"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/linear_gpt"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/ic_edittext_gpt"
-        android:gravity="center|start"
-        android:hint="궁금한 내용을 입력하세요"
-        android:textSize="15sp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_gpt_messages" />
+        app:layout_constraintEnd_toEndOf="parent"
+        >
+
+        <EditText
+            android:id="@+id/et_sendMessage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/ic_edittext_gpt"
+            android:gravity="center|start"
+            android:hint="궁금한 내용을 입력하세요"
+            android:textSize="15sp" />
+        <ImageButton
+            android:id="@+id/ibtn_gpt_send"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_marginEnd="8dp"
+            android:background="#ECEAEA"
+            android:layout_alignEnd="@+id/et_sendMessage"
+            android:src="@drawable/ic_gpt_send"
+            />
+
+    </RelativeLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_gpt_messages"
@@ -52,20 +72,9 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_appName"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/et_sendMessage"
+        app:layout_constraintBottom_toTopOf="@+id/linear_gpt"
         >
     </androidx.recyclerview.widget.RecyclerView>
-
-    <ImageButton
-        android:id="@+id/ibtn_gpt_send"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="32dp"
-        android:background=""
-        android:src="@drawable/ic_gpt_send"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/rv_gpt_messages" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
