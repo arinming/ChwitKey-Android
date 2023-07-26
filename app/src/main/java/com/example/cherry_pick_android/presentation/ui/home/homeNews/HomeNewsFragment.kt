@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.presentation.ui.home.homeNews.view
+package com.example.cherry_pick_android.presentation.ui.home.homeNews
 
 import android.content.Intent
 import android.os.Bundle
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
-import com.example.cherry_pick_android.presentation.ui.newsSearch.view.NewsSearchActivity
+import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
 
 class HomeNewsFragment: Fragment(R.layout.fragment_home_news) {
     private var _binding: FragmentHomeNewsBinding? = null

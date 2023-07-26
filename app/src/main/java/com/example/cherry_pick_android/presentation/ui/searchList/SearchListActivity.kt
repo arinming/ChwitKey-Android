@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.presentation.ui.searchList.view
+package com.example.cherry_pick_android.presentation.ui.searchList
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.presentation.ui.home.view
+package com.example.cherry_pick_android.presentation.ui.home
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

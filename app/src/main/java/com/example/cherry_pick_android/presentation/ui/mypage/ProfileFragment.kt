@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.presentation.ui.mypage.view
+package com.example.cherry_pick_android.presentation.ui.mypage
 
 
 import android.os.Bundle

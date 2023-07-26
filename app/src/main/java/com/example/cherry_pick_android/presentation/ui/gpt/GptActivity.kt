@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.presentation.ui.gpt.view
+package com.example.cherry_pick_android.presentation.ui.gpt
 
 import android.os.Bundle
 import android.text.Editable

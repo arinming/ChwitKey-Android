@@ -1,10 +1,10 @@
-package com.example.cherry_pick_android.presentation.ui.newsSearch.view
+package com.example.cherry_pick_android.presentation.ui.newsSearch
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
-import com.example.cherry_pick_android.presentation.ui.home.view.HomeActivity
+import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 
 class NewsSearchActivity: AppCompatActivity() {
     private lateinit var binding: ActivityNewsSearchBinding

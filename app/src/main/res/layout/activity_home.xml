@@ -6,7 +6,7 @@
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fv_home"
-        android:name="com.example.cherry_pick_android.presentation.ui.home.homeNews.view.HomeNewsFragment"
+        android:name="com.example.cherry_pick_android.presentation.ui.home.homeNews.HomeNewsFragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintStart_toStartOf="parent"
