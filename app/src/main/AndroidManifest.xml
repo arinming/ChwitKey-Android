@@ -13,19 +13,14 @@
         android:theme="@style/Theme.Cherry_pick_android"
         tools:targetApi="31">
         <activity
-            android:name=".ui.view.gpt.GptActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.mypage.MyPageActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.view.MainActivity"
-            android:exported="true" />
+            android:name=".presentation.ui.gpt.view.GptActivity"
+            android:exported="true">
 
+
+        </activity>
         <activity
-            android:name=".ui.view.home.HomeActivity"
+            android:name=".presentation.ui.home.view.HomeActivity"
             android:exported="true" >
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -35,17 +30,15 @@
         </activity>
 
         <activity
-            android:name=".ui.view.newsSearch.NewsSearchActivity"
+            android:name=".presentation.ui.newsSearch.view.NewsSearchActivity"
             android:exported="true">
 
+        </activity>
+
+        <activity android:name=".presentation.ui.login.view.LoginActivity"
+            android:exported="true">
 
         </activity>
-        <activity
-            android:name=".ui.view.keyword.firstKeywordActivity"
-            android:exported="false"
-            >
-        </activity>
-        <activity android:name=".ui.view.login.LoginActivity"/>
     </application>
 
 

@@ -105,7 +105,7 @@
             android:layout_marginTop="16dp"
             android:background="#00ff0000"
             android:text="모두 지우기"
-            android:textColor="@color/gray_6"
+            android:textColor="@color/black"
             android:textSize="14sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />

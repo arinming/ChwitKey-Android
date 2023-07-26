@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.view.searchList.SearchListActivity">
+    tools:context=".presentation.ui.searchList.view.SearchListActivity">
 
 
     <!-- 검색창-->
@@ -55,7 +55,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:text="전체"
-            android:textColor="@color/gray_6"
+            android:textColor="@color/black"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
