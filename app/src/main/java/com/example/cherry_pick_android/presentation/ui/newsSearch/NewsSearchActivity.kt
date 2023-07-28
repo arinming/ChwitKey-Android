@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
+import com.example.cherry_pick_android.presentation.ui.searchList.SearchListActivity
 
 class NewsSearchActivity: AppCompatActivity() {
     private lateinit var binding: ActivityNewsSearchBinding
@@ -15,11 +16,20 @@ class NewsSearchActivity: AppCompatActivity() {
         setContentView(view)
 
         goToBack()
+        goToSearchList()
     }
 
+    // 백 버튼 누르면 홈 화면으로
     private fun goToBack() {
         binding.ibtnBack.setOnClickListener {
             startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+        }
+    }
+
+    private fun goToSearchList() {
+        binding.btnKeyWord1.setOnClickListener {
+            startActivity(Intent(this, SearchListActivity::class.java))
             finish()
         }
     }
