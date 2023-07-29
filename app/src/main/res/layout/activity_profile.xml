@@ -129,8 +129,7 @@
                         android:background="@null"
                         android:text="@string/mypage_user_id"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="normal" />
+                        android:textSize="18sp" />
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
@@ -177,8 +176,7 @@
                     android:background="@null"
                     android:text="@string/profile_sex"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="normal" />
+                    android:textSize="18sp"/>
 
             </LinearLayout>
 
@@ -209,8 +207,7 @@
                     android:background="@null"
                     android:text="@string/profile_birth"
                     android:textColor="@color/black"
-                    android:textSize="18sp"
-                    android:textStyle="normal" />
+                    android:textSize="18sp" />
 
             </LinearLayout>
 
@@ -247,8 +244,7 @@
                         android:background="@null"
                         android:text="@string/profile_job"
                         android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="normal" />
+                        android:textSize="18sp" />
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
