@@ -1,6 +1,24 @@
 <resources>
     <string name="app_name">cherry_pick_android</string>
 
+    <!-- gpt -->
+    <string name="gpt_app_name">(앱이름)GPT</string>
+    <string name="gpt_edt_send_hint">궁금한 내용을 입력하세요.</string>
+    <string name="gpt_bubble">안녕하세요 (앱이름) GPT입니다.</string>
+    <string name="mine_bubble">기사를 요약해줘</string>
+
+
+    <!-- login -->
+    <string name="login_title">취업 성공의 치트키</string>
+    <string name="login_intro">직군별 추천으로 oooo 해보세요</string>
+    <string name="login_explain">계정 생성시 개인정보 처리방침 및 이용약관 및 사용자 정책에</string>
+    <string name="login_explain_2">동의하게 됩니다</string>
+
+    <!-- news_search -->
+    <string name="news_search_sub_title">이런 키워드는 어때요?</string>
+    <string name="news_search_recent">최근 검색어</string>
+
+
     <!-- mypage -->
     <string name="mypage_user_id">유저네임a</string>
     <string name="mypage_saved_article">저장한 기사</string>
@@ -20,5 +38,34 @@
 
     <string name="profile_logout">로그아웃</string>
     <string name="profile_leave_account">회원탈퇴</string>
+
+
+    <!-- menu -->
+    <string name="home_menu_home">홈</string>
+    <string name="home_menu_keyword">키워드</string>
+    <string name="home_menu_scrap">스크랩</string>
+    <string name="home_menu_my_page">마이페이지</string>
+
+
+    <!-- news_item -->
+    <string name="item_news_title">6월 무역수지 16개월 만에 흑자, 전년\n비 자동차 수출 58% 선박 98% 늘어</string>
+    <string name="item_news_editor">Business Post</string>
+    <string name="item_news_dot">･</string>
+    <string name="item_news_time">59분</string>
+    <string name="item_news_previous">전</string>
+
+    <!-- search_title -->
+    <string name="search_title">전체</string>
+    <string name="search_count">23</string>
+    <string name="search_sorting">인기순</string>
+    <string name="search_menu">정렬 메뉴 버튼</string>
+
+    <!-- home_news -->
+    <string name="home_news_search_hint">원하는 주제를 검색하세요</string>
+
+
+
+
+
 
 </resources>

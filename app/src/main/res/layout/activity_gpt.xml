@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="16dp"
-        android:text="(앱이름)GPT"
+        android:text="@string/gpt_app_name"
         android:textSize="20sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/rv_gpt_messages"
@@ -49,7 +49,7 @@
             android:layout_marginBottom="16dp"
             android:background="@drawable/ic_edittext_gpt"
             android:gravity="center|start"
-            android:hint="궁금한 내용을 입력하세요"
+            android:hint="@string/gpt_edt_send_hint"
             android:textSize="15sp" />
         <ImageButton
             android:id="@+id/ibtn_gpt_send"

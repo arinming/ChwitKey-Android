@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@mipmap/ic_gpt_bubble"
-        android:text="안녕하세요 (앱이름) GPT입니다."
+        android:text="@string/gpt_bubble"
         android:textSize="14sp"
         android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
