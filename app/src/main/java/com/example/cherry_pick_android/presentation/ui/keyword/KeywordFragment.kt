@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.presentation.ui.home.keyword
+package com.example.cherry_pick_android.presentation.ui.keyword
 
 import android.os.Bundle
 import android.view.LayoutInflater

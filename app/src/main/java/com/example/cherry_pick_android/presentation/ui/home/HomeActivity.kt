@@ -6,8 +6,9 @@ import androidx.fragment.app.Fragment
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.ActivityHomeBinding
 import com.example.cherry_pick_android.presentation.ui.home.homeNews.HomeNewsFragment
-import com.example.cherry_pick_android.presentation.ui.home.keyword.KeywordFragment
+import com.example.cherry_pick_android.presentation.ui.keyword.KeywordFragment
 import com.example.cherry_pick_android.presentation.ui.home.scrap.ScrapFragment
+import com.example.cherry_pick_android.presentation.ui.keyword.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.ui.mypage.MyPageFragment
 
 class HomeActivity: AppCompatActivity() {
@@ -40,7 +41,7 @@ class HomeActivity: AppCompatActivity() {
                 }
                 // 키워드
                 R.id.nav_fragment_keyword -> {
-                    KeywordFragment().changeFragment()
+                    FirstKeywordFragment().changeFragment()
                 }
                 // 스크랩
                 R.id.nav_fragment_scrap -> {
