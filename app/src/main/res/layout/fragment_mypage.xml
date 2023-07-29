@@ -28,11 +28,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <ImageView
-                android:id="@+id/iv_mypage_user_pic"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                app:srcCompat="@drawable/icon_user_img" />
+
 
             <TextView
                 android:id="@+id/tv_mypage_user_name"
