@@ -21,9 +21,11 @@ class HomeNewsFragment: Fragment(R.layout.fragment_home_news) {
     ): View? {
         _binding = FragmentHomeNewsBinding.inflate(inflater, container, false)
         val view = binding.root
+
         goToNewsSearch()
 
         return view
+
     }
 
     override fun onDestroyView() {
