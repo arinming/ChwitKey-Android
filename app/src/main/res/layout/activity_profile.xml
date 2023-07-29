@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/mypage_profile_setting"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:textColor="@color/black"
             android:layout_gravity="left" />
 
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/profile_leave_account"
-            android:textSize="14dp"
+            android:textSize="14sp"
             android:textColor="@color/gray_4"
             android:layout_margin="20dp"
             android:layout_gravity="right" />
@@ -60,6 +60,7 @@
             android:id="@+id/cl_profile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             app:layout_constraintBottom_toTopOf="@+id/ll_profile"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" >
@@ -151,7 +152,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="3px"
+                android:layout_height="0.3px"
                 android:layout_marginBottom="20dp"
                 android:background="@color/gray_3" />
 
@@ -183,7 +184,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="3px"
+                android:layout_height="0.3px"
                 android:background="@color/gray_3"
                 android:layout_marginBottom="20dp"/>
 
@@ -215,7 +216,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="3px"
+                android:layout_height="0.3px"
                 android:background="@color/gray_3"
                 android:layout_marginBottom="20dp" />
 
@@ -267,7 +268,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="3px"
+                android:layout_height="0.3px"
                 android:background="@color/gray_3" />
 
         </LinearLayout>
