@@ -4,17 +4,17 @@
     <item
         android:id="@+id/nav_fragment_home_news"
         android:title="@string/home_menu_home"
-        android:icon="@drawable/ic_home_menu" />
+        android:icon="@drawable/ic_home_true" />
     <item
         android:id="@+id/nav_fragment_keyword"
         android:title="@string/home_menu_keyword"
-        android:icon="@drawable/ic_keyword_menu"/>
+        android:icon="@drawable/ic_keyword_false"/>
     <item
         android:id="@+id/nav_fragment_scrap"
         android:title="@string/home_menu_scrap"
-        android:icon="@drawable/ic_scrap_menu"/>
+        android:icon="@drawable/ic_scrap_false"/>
     <item
         android:id="@+id/nav_fragment_my_page"
         android:title="@string/home_menu_my_page"
-        android:icon="@drawable/ic_my_page_menu"/>
+        android:icon="@drawable/ic_my_page_false" />
 </menu>

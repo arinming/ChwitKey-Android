@@ -19,11 +19,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_bottom_nav_home"
         app:labelVisibilityMode="labeled"
-        app:itemTextColor="#8E8E92"
-        app:itemIconTint="#8E8E92"
-        android:backgroundTint="@drawable/menu_state_checked"
-        app:itemRippleColor="@drawable/menu_state_checked"
-        android:background="@drawable/ic_bottom_nav_home_background"/>
+        app:itemTextColor="@color/main_pink"
+        app:itemIconTint="@color/main_pink"
+        app:itemBackground="@color/white"
+        app:itemActiveIndicatorStyle="@android:color/transparent"
+        android:backgroundTint="@color/main_pink"
+        app:itemRippleColor="@color/cardview_shadow_end_color"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
