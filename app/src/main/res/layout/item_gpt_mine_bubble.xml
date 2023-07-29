@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:background="@mipmap/ic_gpt_mine_bublle"
         android:gravity="center"
-        android:text="기사를 요약해줘"
+        android:text="@string/mine_bubble"
         android:textColor="@color/white"
         android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
