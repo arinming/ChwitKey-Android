@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
 import com.example.cherry_pick_android.presentation.adapter.KeywordAdapter
+import com.example.cherry_pick_android.presentation.adapter.RecyclerViewAdapter
+import com.example.cherry_pick_android.presentation.adapter.SearchRecodeAdapter
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.keyword.Keyword
 import com.example.cherry_pick_android.presentation.ui.searchList.SearchListActivity
@@ -20,11 +22,17 @@ class NewsSearchActivity: AppCompatActivity() {
         Keyword("소매유통"), Keyword("건설"), Keyword("철강"), Keyword("정유")
     )
 
+    private val records = listOf(
+        SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3")
+    )
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityNewsSearchBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
 
         initView()
 
@@ -47,8 +55,13 @@ class NewsSearchActivity: AppCompatActivity() {
         }
     }
 
-    fun initView(){
+    fun initView() {
+        // 키워드
         binding.rvSearchNewsList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
         binding.rvSearchNewsList.adapter = KeywordAdapter(keywords)
+
+        // 검색어
+        binding.rvRecordList.layoutManager = LinearLayoutManager(this)
+        binding.rvRecordList.adapter = SearchRecodeAdapter(records)
     }
 }

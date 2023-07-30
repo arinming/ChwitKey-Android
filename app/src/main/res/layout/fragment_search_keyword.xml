@@ -39,7 +39,7 @@
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:background="@drawable/ic_keyword_et"
-                android:paddingStart="20dp"
+                android:paddingStart="16dp"
                 android:paddingEnd="40dp" />
 
             <ImageView

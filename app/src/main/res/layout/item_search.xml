@@ -12,15 +12,18 @@
         tools:ignore="MissingConstraints">
 
 
-        <TextView
-            android:id="@+id/tv_recent_search_item"
+        <Button
+            android:id="@+id/btn_recent_search_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
             android:text="@string/recent_search_title"
             android:textColor="@color/black"
             android:textSize="16sp"
+            android:backgroundTint="@android:color/transparent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -29,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:backgroundTint="@android:color/transparent"
             android:src="@drawable/ic_delete" />
 
