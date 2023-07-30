@@ -6,8 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
 import com.example.cherry_pick_android.presentation.adapter.KeywordAdapter
-import com.example.cherry_pick_android.presentation.adapter.RecyclerViewAdapter
-import com.example.cherry_pick_android.presentation.adapter.SearchRecodeAdapter
+import com.example.cherry_pick_android.presentation.adapter.SearchRecordAdapter
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.keyword.Keyword
 import com.example.cherry_pick_android.presentation.ui.searchList.SearchListActivity
@@ -62,6 +61,6 @@ class NewsSearchActivity: AppCompatActivity() {
 
         // 검색어
         binding.rvRecordList.layoutManager = LinearLayoutManager(this)
-        binding.rvRecordList.adapter = SearchRecodeAdapter(records)
+        binding.rvRecordList.adapter = SearchRecordAdapter(records)
     }
 }

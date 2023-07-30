@@ -6,13 +6,22 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
+import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
+import com.example.cherry_pick_android.presentation.ui.home.News
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
+import com.example.cherry_pick_android.presentation.ui.newsSearch.SearchRecord
 
 class HomeNewsFragment: Fragment(R.layout.fragment_home_news) {
     private var _binding: FragmentHomeNewsBinding? = null
     private val binding get() = _binding!!
+
+    private val news = listOf(
+        News("뉴스1"), News("뉴스2"), News("뉴스3"), News("뉴스4"),
+        News("뉴스5"), News("뉴스6"), News("뉴스7"), News("뉴스8")
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -22,10 +31,19 @@ class HomeNewsFragment: Fragment(R.layout.fragment_home_news) {
         _binding = FragmentHomeNewsBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        goToNewsSearch()
+
 
         return view
 
+
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        goToNewsSearch()
+        initNewsList()
     }
 
     override fun onDestroyView() {
@@ -41,5 +59,10 @@ class HomeNewsFragment: Fragment(R.layout.fragment_home_news) {
                 it.startActivity(intent)
             }
         }
+    }
+
+
+    fun initNewsList() {
+        binding.rvNewsList.adapter = NewsRecyclerViewAdapter(news)
     }
 }
