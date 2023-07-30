@@ -28,7 +28,7 @@ class NewsSearchActivity: AppCompatActivity() {
     }
 
     private fun goToSearchList() {
-        binding.btnKeyWord1.setOnClickListener {
+        binding.btnAllDelete.setOnClickListener {
             startActivity(Intent(this, SearchListActivity::class.java))
             finish()
         }
