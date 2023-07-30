@@ -64,7 +64,12 @@
     <string name="home_news_search_hint">원하는 주제를 검색하세요</string>
 
 
+    <!-- keyword -->
+    <string name="keyword_title">키워드</string>
 
+
+    <!-- recent_search -->
+    <string name="recent_search_title">검색어</string>
 
 
 
