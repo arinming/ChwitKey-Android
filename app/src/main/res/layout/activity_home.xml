@@ -18,14 +18,14 @@
         android:id="@+id/btm_nav_view_home"
         android:layout_width="match_parent"
         android:layout_height="82dp"
+        android:layout_alignParentBottom="true"
+        android:scrollIndicators="left"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_bottom_nav_home"
+        android:background="@drawable/ic_nav_background"
         app:labelVisibilityMode="labeled"
-        app:itemTextColor="@color/main_pink"
-        app:itemIconTint="@color/main_pink"
-        app:itemBackground="@color/white"
+        app:itemBackground="@android:color/transparent"
         app:itemActiveIndicatorStyle="@android:color/transparent"
-        android:backgroundTint="@color/main_pink"
         app:itemRippleColor="@color/cardview_shadow_end_color"/>
 
 
