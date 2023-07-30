@@ -6,5 +6,7 @@
 
     <style name="Theme.Cherry_pick_android" parent="Base.Theme.Cherry_pick_android">
         <item name="colorPrimary">@color/main_pink</item>
+        <item name="android:windowBackground">@color/white</item>
+
     </style>
 </resources>
