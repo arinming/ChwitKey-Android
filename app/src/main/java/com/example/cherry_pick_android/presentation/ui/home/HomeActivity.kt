@@ -81,4 +81,5 @@ class HomeActivity: AppCompatActivity() {
             .add(R.id.fv_home, HomeNewsFragment()) // 뉴스 프래그먼트로 초기화
         transaction.commit()
     }
+
 }
