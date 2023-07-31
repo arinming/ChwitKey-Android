@@ -17,14 +17,19 @@
         android:id="@+id/btm_nav_view_home"
         android:layout_width="match_parent"
         android:layout_height="82dp"
+        android:clipChildren="false"
         android:layout_alignParentBottom="true"
         android:scrollIndicators="left"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_bottom_nav_home"
         android:background="@drawable/ic_nav_background"
+        android:backgroundTintMode="screen"
+        android:elevation="10dp"
         app:labelVisibilityMode="labeled"
+        app:itemIconTint="@color/bottom_nav_home_selector"
+        app:itemTextColor="@color/bottom_nav_home_selector"
         app:itemActiveIndicatorStyle="@android:color/transparent"
-        app:itemRippleColor="@color/cardview_shadow_end_color"/>
+        app:itemRippleColor="@android:color/transparent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

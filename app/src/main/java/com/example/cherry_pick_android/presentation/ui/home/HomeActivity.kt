@@ -1,6 +1,8 @@
 package com.example.cherry_pick_android.presentation.ui.home
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.cherry_pick_android.R
@@ -10,6 +12,7 @@ import com.example.cherry_pick_android.presentation.ui.keyword.KeywordFragment
 import com.example.cherry_pick_android.presentation.ui.home.scrap.ScrapFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.ui.mypage.MyPageFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class HomeActivity: AppCompatActivity() {
     // 뷰 바인딩
@@ -17,6 +20,9 @@ class HomeActivity: AppCompatActivity() {
 
     // 프래그먼트 매니저
     val mananger = supportFragmentManager
+
+    var bottomNavigationView: BottomNavigationView? = null
+    var menu: Menu? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,11 +32,17 @@ class HomeActivity: AppCompatActivity() {
 
         initFragment()
         initBottomNavigation()
+
+
+
     }
+
 
     // 바텀 네비게이션으로 프래그먼트 간 화면 전환
     private fun initBottomNavigation() {
         binding.btmNavViewHome.itemIconTintList = null
+        bottomNavigationView = binding.btmNavViewHome
+
 
         // 각 아이콘을 눌렀을 때 작용
         binding.btmNavViewHome.setOnItemSelectedListener {

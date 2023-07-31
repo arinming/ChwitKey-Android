@@ -23,6 +23,8 @@ class HomeNewsFragment: Fragment(R.layout.fragment_home_news) {
         News("뉴스5"), News("뉴스6"), News("뉴스7"), News("뉴스8")
     )
 
+
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -31,11 +33,7 @@ class HomeNewsFragment: Fragment(R.layout.fragment_home_news) {
         _binding = FragmentHomeNewsBinding.inflate(inflater, container, false)
         val view = binding.root
 
-
-
         return view
-
-
 
     }
 
