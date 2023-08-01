@@ -40,7 +40,6 @@ class HomeActivity: AppCompatActivity() {
 
     // 바텀 네비게이션으로 프래그먼트 간 화면 전환
     private fun initBottomNavigation() {
-        binding.btmNavViewHome.itemIconTintList = null
         bottomNavigationView = binding.btmNavViewHome
 
 
