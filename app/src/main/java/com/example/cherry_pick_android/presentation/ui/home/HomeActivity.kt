@@ -10,7 +10,9 @@ import com.example.cherry_pick_android.presentation.ui.keyword.KeywordFragment
 import com.example.cherry_pick_android.presentation.ui.home.scrap.ScrapFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.ui.mypage.MyPageFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeActivity: AppCompatActivity() {
     // 뷰 바인딩
     private lateinit var binding: ActivityHomeBinding
