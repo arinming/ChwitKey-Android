@@ -33,8 +33,6 @@ class HomeActivity: AppCompatActivity() {
         initFragment()
         initBottomNavigation()
 
-
-
     }
 
 

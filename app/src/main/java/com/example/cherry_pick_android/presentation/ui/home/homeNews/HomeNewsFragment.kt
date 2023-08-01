@@ -20,7 +20,8 @@ class HomeNewsFragment: Fragment(R.layout.fragment_home_news) {
 
     private val news = listOf(
         News("뉴스1"), News("뉴스2"), News("뉴스3"), News("뉴스4"),
-        News("뉴스5"), News("뉴스6"), News("뉴스7"), News("뉴스8")
+        News("뉴스5"), News("뉴스6"), News("뉴스7"), News("뉴스8"),
+        News("뉴스9"), News("뉴스10"), News("뉴스11"), News("뉴스12")
     )
 
 

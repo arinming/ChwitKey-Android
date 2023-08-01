@@ -7,7 +7,7 @@
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fv_home"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toTopOf="@+id/btm_nav_view_home"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -16,10 +16,10 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/btm_nav_view_home"
         android:layout_width="match_parent"
-        android:layout_height="84dp"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_bottom_nav_home"
-        android:background="@drawable/bg_nav"
+        android:background="@drawable/ic_nav_background2"
         app:labelVisibilityMode="labeled"
         app:itemIconTint="@color/bottom_nav_home_selector"
         app:itemTextColor="@color/bottom_nav_home_selector"
