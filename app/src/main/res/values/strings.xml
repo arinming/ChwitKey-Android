@@ -74,5 +74,14 @@
     <string name="recent_search_title">검색어</string>
 
 
+    <!-- article -->
+    <string name="article_news_title">6월 무역수지 16개월 만에 흑자,\n 전년비 자동차 수출 58% 선박 98% 늘어</string>
+    <string name="article_news_editor">박혜린</string>
+    <string name="article_editor">기자</string>
+    <string name="article_news_company">Business Post</string>
+    <string name="article_image_explain">항구에서 수출선박에 오를 준비를 하고 있는 완성차 모습</string>
+    <string name="article_news_dot">･</string>
+    <string name="article_news_time">59분</string>
+    <string name="article_news_previous">전</string>
 
 </resources>

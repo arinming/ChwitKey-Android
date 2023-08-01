@@ -16,14 +16,15 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/btm_nav_view_home"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:menu="@menu/menu_bottom_nav_home"
-        android:background="@drawable/ic_nav_background2"
+        android:background="@drawable/ic_nav_background"
         app:labelVisibilityMode="labeled"
         app:itemIconTint="@color/bottom_nav_home_selector"
         app:itemTextColor="@color/bottom_nav_home_selector"
         app:itemActiveIndicatorStyle="@android:color/transparent"
+        app:itemBackground="@android:color/transparent"
         app:itemRippleColor="@android:color/transparent"/>
 
 

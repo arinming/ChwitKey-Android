@@ -50,8 +50,6 @@
             app:layout_constraintEnd_toEndOf="@+id/et_search"
             app:layout_constraintTop_toTopOf="parent" />
 
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- 이런 키워드는 어때요?-->
