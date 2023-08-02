@@ -8,8 +8,6 @@ import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
 import com.example.cherry_pick_android.domain.model.Keyword
 import com.example.cherry_pick_android.presentation.adapter.KeywordAdapter
 import com.example.cherry_pick_android.presentation.adapter.SearchRecordAdapter
-import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
-import com.example.cherry_pick_android.presentation.ui.keyword.AddListener
 import com.example.cherry_pick_android.presentation.ui.searchList.SearchListActivity
 
 class NewsSearchActivity: AppCompatActivity() {
@@ -56,10 +54,11 @@ class NewsSearchActivity: AppCompatActivity() {
     fun initView() {
         // 키워드
         binding.rvSearchNewsList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        // binding.rvSearchNewsList.adapter = KeywordAdapter(keywords, this)
+        binding.rvSearchNewsList.adapter = KeywordAdapter(keywords)
 
         // 검색어
         binding.rvRecordList.layoutManager = LinearLayoutManager(this)
         binding.rvRecordList.adapter = SearchRecordAdapter(records)
     }
+
 }
