@@ -5,10 +5,11 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
+import com.example.cherry_pick_android.domain.model.Keyword
 import com.example.cherry_pick_android.presentation.adapter.KeywordAdapter
 import com.example.cherry_pick_android.presentation.adapter.SearchRecordAdapter
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
-import com.example.cherry_pick_android.presentation.ui.keyword.Keyword
+import com.example.cherry_pick_android.presentation.ui.keyword.AddListener
 import com.example.cherry_pick_android.presentation.ui.searchList.SearchListActivity
 
 class NewsSearchActivity: AppCompatActivity() {
@@ -42,7 +43,6 @@ class NewsSearchActivity: AppCompatActivity() {
     // 백 버튼 누르면 홈 화면으로
     private fun goToBack() {
         binding.ibtnBack.setOnClickListener {
-            startActivity(Intent(this, HomeActivity::class.java))
             finish()
         }
     }
@@ -50,14 +50,13 @@ class NewsSearchActivity: AppCompatActivity() {
     private fun goToSearchList() {
         binding.btnAllDelete.setOnClickListener {
             startActivity(Intent(this, SearchListActivity::class.java))
-            finish()
         }
     }
 
     fun initView() {
         // 키워드
         binding.rvSearchNewsList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.rvSearchNewsList.adapter = KeywordAdapter(keywords)
+        // binding.rvSearchNewsList.adapter = KeywordAdapter(keywords, this)
 
         // 검색어
         binding.rvRecordList.layoutManager = LinearLayoutManager(this)
