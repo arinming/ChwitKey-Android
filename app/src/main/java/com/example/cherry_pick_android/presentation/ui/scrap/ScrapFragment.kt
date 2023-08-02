@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.presentation.ui.home.scrap
+package com.example.cherry_pick_android.presentation.ui.scrap
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,10 +6,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.cherry_pick_android.R
-import com.example.cherry_pick_android.databinding.FragmentScrapBinding
+import com.example.cherry_pick_android.databinding.FragmentScrapNoneBinding
 
-class ScrapFragment: Fragment(R.layout.fragment_scrap) {
-    private var _binding: FragmentScrapBinding? = null
+class ScrapFragment: Fragment(R.layout.fragment_scrap_none) {
+    private var _binding: FragmentScrapNoneBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -17,7 +17,7 @@ class ScrapFragment: Fragment(R.layout.fragment_scrap) {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        _binding = FragmentScrapBinding.inflate(inflater, container, false)
+        _binding = FragmentScrapNoneBinding.inflate(inflater, container, false)
         val view = binding.root
 
         return view

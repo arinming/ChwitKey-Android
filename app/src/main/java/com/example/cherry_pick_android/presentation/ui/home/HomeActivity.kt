@@ -9,7 +9,7 @@ import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.ActivityHomeBinding
 import com.example.cherry_pick_android.presentation.ui.home.homeNews.HomeNewsFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.KeywordFragment
-import com.example.cherry_pick_android.presentation.ui.home.scrap.ScrapFragment
+import com.example.cherry_pick_android.presentation.ui.scrap.ScrapFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.ui.mypage.MyPageFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
