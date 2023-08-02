@@ -8,6 +8,7 @@
         android:id="@+id/btn_keyword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_regular"
         android:background="@drawable/ic_keyword_btn"
         android:minHeight="0dp"
         android:minWidth="0dp"

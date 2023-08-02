@@ -21,6 +21,8 @@
         app:menu="@menu/menu_bottom_nav_home"
         android:background="@drawable/ic_nav_background"
         app:labelVisibilityMode="labeled"
+        app:itemTextAppearanceInactive="@style/BottomNavFont"
+        app:itemTextAppearanceActive="@font/pretendard_semi_bold"
         app:itemIconTint="@color/bottom_nav_home_selector"
         app:itemTextColor="@color/bottom_nav_home_selector"
         app:itemActiveIndicatorStyle="@android:color/transparent"

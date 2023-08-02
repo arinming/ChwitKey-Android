@@ -16,6 +16,8 @@
             android:id="@+id/btn_recent_search_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_regular"
+            android:letterSpacing="-0.05"
             android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:minWidth="0dp"
