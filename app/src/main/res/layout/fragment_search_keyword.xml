@@ -21,8 +21,8 @@
 
         <ImageView
             android:id="@+id/iv_back"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
+            android:layout_width="9dp"
+            android:layout_height="18dp"
             android:layout_gravity="center"
             android:layout_marginTop="4dp"
             android:layout_marginEnd="16dp"
@@ -40,7 +40,12 @@
                 android:background="@drawable/ic_keyword_et"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
+<<<<<<< HEAD
+                android:background="@drawable/ic_keyword_et"
+                android:paddingStart="16dp"
+=======
                 android:paddingStart="20dp"
+>>>>>>> main
                 android:paddingEnd="40dp" />
 
             <ImageView

@@ -74,7 +74,12 @@
     <string name="keyword_search_hint">키워드를 추가해보세요 ex) IT</string>
     <string name="keyword_view">최신순으로 일주일의 키워드를 보여드려요</string>
 
+    <!-- keyword -->
+    <string name="keyword_title">키워드</string>
 
+
+    <!-- recent_search -->
+    <string name="recent_search_title">검색어</string>
 
 
 

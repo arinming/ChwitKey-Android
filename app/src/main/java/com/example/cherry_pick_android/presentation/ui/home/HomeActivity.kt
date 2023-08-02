@@ -1,6 +1,8 @@
 package com.example.cherry_pick_android.presentation.ui.home
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +14,7 @@ import com.example.cherry_pick_android.presentation.ui.keyword.KeywordFragment
 import com.example.cherry_pick_android.presentation.ui.home.scrap.ScrapFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.ui.mypage.MyPageFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,6 +26,8 @@ class HomeActivity: AppCompatActivity() {
     // 프래그먼트 매니저
     val mananger = supportFragmentManager
 
+    var bottomNavigationView: BottomNavigationView? = null
+    var menu: Menu? = null
     // 뷰 모델 가져오기
     private val searchKeywordViewModel: SearchKeywordViewModel by viewModels()
 
@@ -35,11 +40,14 @@ class HomeActivity: AppCompatActivity() {
         searchKeywordViewModel.loadKeyword().observe(this){} // DB 업데이트
         initFragment()
         initBottomNavigation()
+
     }
+
 
     // 바텀 네비게이션으로 프래그먼트 간 화면 전환
     private fun initBottomNavigation() {
-        binding.btmNavViewHome.itemIconTintList = null
+        bottomNavigationView = binding.btmNavViewHome
+
 
         // 각 아이콘을 눌렀을 때 작용
         binding.btmNavViewHome.setOnItemSelectedListener {
@@ -81,4 +89,5 @@ class HomeActivity: AppCompatActivity() {
             .add(R.id.fv_home, HomeNewsFragment()) // 뉴스 프래그먼트로 초기화
         transaction.commit()
     }
+
 }

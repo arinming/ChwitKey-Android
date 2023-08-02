@@ -10,16 +10,17 @@
     <!-- 검색창-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_search"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/ibtn_back"
             android:layout_width="9dp"
-            android:layout_height="18dp"
-            android:layout_margin="16dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="16dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_back"
@@ -27,16 +28,31 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <androidx.appcompat.widget.SearchView
-            android:id="@+id/sv_search_news"
+        <EditText
+            android:id="@+id/et_search"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:background="@color/gray_1"
+            android:paddingStart="16dp"
+            android:background="@drawable/ic_keyword_et"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ibtn_back"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/iv_delete"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_keyword_et_delete"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/et_search"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -104,5 +120,23 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cl_search_list_count">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_search_news_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
