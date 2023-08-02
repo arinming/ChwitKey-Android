@@ -5,13 +5,14 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
+import com.example.cherry_pick_android.domain.model.Keyword
 import com.example.cherry_pick_android.presentation.adapter.KeywordAdapter
 import com.example.cherry_pick_android.presentation.adapter.SearchRecordAdapter
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
-import com.example.cherry_pick_android.presentation.ui.keyword.Keyword
+import com.example.cherry_pick_android.presentation.ui.keyword.AddListener
 import com.example.cherry_pick_android.presentation.ui.searchList.SearchListActivity
 
-class NewsSearchActivity: AppCompatActivity() {
+class NewsSearchActivity: AppCompatActivity(), AddListener {
     private lateinit var binding: ActivityNewsSearchBinding
 
     private val keywords = listOf(
@@ -57,10 +58,12 @@ class NewsSearchActivity: AppCompatActivity() {
     fun initView() {
         // 키워드
         binding.rvSearchNewsList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.rvSearchNewsList.adapter = KeywordAdapter(keywords)
+        binding.rvSearchNewsList.adapter = KeywordAdapter(keywords, this)
 
         // 검색어
         binding.rvRecordList.layoutManager = LinearLayoutManager(this)
         binding.rvRecordList.adapter = SearchRecordAdapter(records)
     }
+
+    override fun onAddClick(keyword: String) {}
 }

@@ -40,12 +40,7 @@
                 android:background="@drawable/ic_keyword_et"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-<<<<<<< HEAD
-                android:background="@drawable/ic_keyword_et"
                 android:paddingStart="16dp"
-=======
-                android:paddingStart="20dp"
->>>>>>> main
                 android:paddingEnd="40dp" />
 
             <ImageView
