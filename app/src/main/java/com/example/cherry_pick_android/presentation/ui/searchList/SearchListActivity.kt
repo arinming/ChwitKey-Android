@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.cherry_pick_android.databinding.ActivitySearchListBinding
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.ui.article.ArticleActivity
-import com.example.cherry_pick_android.presentation.ui.home.News
+import com.example.cherry_pick_android.domain.model.News
 
 class SearchListActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchListBinding

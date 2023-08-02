@@ -8,9 +8,9 @@ import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.ActivityHomeBinding
 import com.example.cherry_pick_android.presentation.ui.home.homeNews.HomeNewsFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.KeywordFragment
-import com.example.cherry_pick_android.presentation.ui.scrap.ScrapNoneFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.ui.mypage.MyPageFragment
+import com.example.cherry_pick_android.presentation.ui.scrap.ScrapTrueFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -56,7 +56,7 @@ class HomeActivity: AppCompatActivity() {
                 }
                 // 스크랩
                 R.id.nav_fragment_scrap -> {
-                    ScrapNoneFragment().changeFragment()
+                    ScrapTrueFragment().changeFragment()
                 }
                 // 마이페이지
                 R.id.nav_fragment_my_page -> {
