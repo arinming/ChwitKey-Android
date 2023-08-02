@@ -4,9 +4,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.databinding.ItemKeywordBtnBinding
-import com.example.cherry_pick_android.presentation.ui.keyword.Keyword
+import com.example.cherry_pick_android.domain.model.Keyword
+import com.example.cherry_pick_android.presentation.ui.keyword.AddListener
 
-class KeywordAdapter(private val keywords: List<Keyword>): RecyclerView.Adapter<KeywordAdapter.KeywordHolder>() {
+class KeywordAdapter(private val keywords: List<Keyword>, private val addListener: AddListener): RecyclerView.Adapter<KeywordAdapter.KeywordHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KeywordHolder {
         val binding = ItemKeywordBtnBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -17,6 +18,9 @@ class KeywordAdapter(private val keywords: List<Keyword>): RecyclerView.Adapter<
 
     override fun onBindViewHolder(holder: KeywordHolder, position: Int) {
         holder.setItem(keywords[position].keyword)
+        holder.binding.btnKeyword.setOnClickListener {
+            addListener.onAddClick(keywords[position].keyword)
+        }
     }
 
     class KeywordHolder(val binding: ItemKeywordBtnBinding): RecyclerView.ViewHolder(binding.root){
