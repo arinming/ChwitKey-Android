@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.presentation.ui.keyword
+package com.example.cherry_pick_android.presentation.ui.keyword.search
 
 import android.content.Context
 import android.os.Bundle
@@ -11,11 +11,17 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.FragmentSearchKeywordBinding
 import com.example.cherry_pick_android.presentation.adapter.SearchKeywordAdapter
+import com.example.cherry_pick_android.presentation.ui.keyword.DeleteListener
+import com.example.cherry_pick_android.presentation.ui.keyword.dialog.KeywordDialog
+import com.example.cherry_pick_android.presentation.ui.keyword.KeywordFragment
+import com.example.cherry_pick_android.presentation.ui.keyword.dialog.DotLoadingFragment
+import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -99,12 +105,26 @@ class SearchKeywordFragment: Fragment(), DeleteListener {
         return bindig.root
     }
 
+    // 키워드가 존재 유무에 따른 프래그먼트 전환
+    override fun onDestroyView() {
+        Log.d(TAG, "onDestoryView")
+        if(searchKeywordViewModel.loadKeyword().value!!.isNotEmpty()){
+            showFragment(KeywordFragment.newInstance(), KeywordFragment.TAG)
+        }else{
+            showFragment(FirstKeywordFragment.newInstance(), FirstKeywordFragment.TAG)
+        }
+        super.onDestroyView()
+    }
+
+
     // 검색 세부사항 프래그먼트 전환 함수
     private fun addDetailFragment() {
         if (searchKeywordDetailFragment == null) {
             searchKeywordDetailFragment = SearchKeywordDetailFragment.newInstance()
             childFragmentManager.beginTransaction()
-                .replace(R.id.fv_search_keyword, searchKeywordDetailFragment!!, SearchKeywordDetailFragment.TAG)
+                .replace(R.id.fv_search_keyword, searchKeywordDetailFragment!!,
+                    SearchKeywordDetailFragment.TAG
+                )
                 .commitAllowingStateLoss()
         }
     }
@@ -130,10 +150,19 @@ class SearchKeywordFragment: Fragment(), DeleteListener {
         bindig.rvKeyword.adapter = searchKeywordAdapter
     }
 
+
     // 키워드 제거 함수
     override fun onDeleteClick(keyword: String) {
         Log.d(TAG, "Delete")
         searchKeywordViewModel.deleteKeyword(keyword)
+    }
+
+    // 프래그먼트 전환 함수
+    fun showFragment(fragment: Fragment, tag: String){
+        val transaction: FragmentTransaction =
+            requireActivity().supportFragmentManager.beginTransaction()
+                .replace(R.id.fv_home, fragment, tag)
+        transaction.commitAllowingStateLoss()
     }
 
 }

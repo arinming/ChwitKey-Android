@@ -1,6 +1,8 @@
 package com.example.cherry_pick_android.presentation.ui.home
 
 import android.os.Bundle
+import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.cherry_pick_android.R
@@ -8,8 +10,9 @@ import com.example.cherry_pick_android.databinding.ActivityHomeBinding
 import com.example.cherry_pick_android.presentation.ui.home.homeNews.HomeNewsFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.KeywordFragment
 import com.example.cherry_pick_android.presentation.ui.home.scrap.ScrapFragment
-import com.example.cherry_pick_android.presentation.ui.keyword.FirstKeywordFragment
+import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.ui.mypage.MyPageFragment
+import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,12 +23,16 @@ class HomeActivity: AppCompatActivity() {
     // 프래그먼트 매니저
     val mananger = supportFragmentManager
 
+    // 뷰 모델 가져오기
+    private val searchKeywordViewModel: SearchKeywordViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
 
+        searchKeywordViewModel.loadKeyword().observe(this){} // DB 업데이트
         initFragment()
         initBottomNavigation()
     }
@@ -41,9 +48,13 @@ class HomeActivity: AppCompatActivity() {
                 R.id.nav_fragment_home_news -> {
                     HomeNewsFragment().changeFragment()
                 }
-                // 키워드
+                // 조건에 맞는 키워드 프래그먼트로 이동
                 R.id.nav_fragment_keyword -> {
-                    FirstKeywordFragment().changeFragment()
+                    if(searchKeywordViewModel.loadKeyword().value!!.isNotEmpty()){
+                        KeywordFragment().changeFragment()
+                    }else{
+                        FirstKeywordFragment().changeFragment()
+                    }
                 }
                 // 스크랩
                 R.id.nav_fragment_scrap -> {
