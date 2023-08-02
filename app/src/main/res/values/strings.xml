@@ -64,7 +64,15 @@
 
     <!-- home_news -->
     <string name="home_news_search_hint">원하는 주제를 검색하세요</string>
-
+    
+    <!-- keyword -->
+    <string name="first_keyword_title">앗! 아직 등록된 키워드가 없어요</string>
+    <string name="first_keyword_recom">이런 키워드는 어때요</string>
+    <string name="keyword_isKeyword">등록된 키워드</string>
+    <string name="first_keyword_search">이런 기사를 알려줘요!</string>
+    <string name="first_keyword_search_sub">* 최신 기사 5개</string>
+    <string name="keyword_search_hint">키워드를 추가해보세요 ex) IT</string>
+    <string name="keyword_view">최신순으로 일주일의 키워드를 보여드려요</string>
 
     <!-- keyword -->
     <string name="keyword_title">키워드</string>
