@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.presentation.ui.keyword
+package com.example.cherry_pick_android.presentation.ui.keyword.first
 
 import android.graphics.Color
 import android.os.Bundle
@@ -19,10 +19,14 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.FragmentFirstKeywordBinding
-import com.example.cherry_pick_android.domain.model.Keyword
 
 import com.example.cherry_pick_android.presentation.adapter.KeywordAdapter
 import com.example.cherry_pick_android.presentation.adapter.SearchKeywordAdapter
+import com.example.cherry_pick_android.presentation.ui.keyword.AddListener
+import com.example.cherry_pick_android.presentation.ui.keyword.DeleteListener
+import com.example.cherry_pick_android.presentation.ui.keyword.Keywords
+import com.example.cherry_pick_android.presentation.ui.keyword.dialog.DotLoadingFragment
+import com.example.cherry_pick_android.presentation.ui.keyword.search.SearchKeywordFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,7 +45,7 @@ class FirstKeywordFragment : Fragment(), AddListener, DeleteListener {
 
     // 프래그먼트 인스턴스 및 TAG
     companion object{
-        const val TAG = "homeFragment"
+        const val TAG = "firstKeywordFragment"
         fun newInstance(): FirstKeywordFragment = FirstKeywordFragment()
     }
 
@@ -50,8 +54,8 @@ class FirstKeywordFragment : Fragment(), AddListener, DeleteListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        // 어뎁터 연결 관련 함수 호출
-        initView()
+        Log.d(TAG, "onCreateView")
+        initView() // 어뎁터 연결 관련 함수 호출
 
         // 특정 텍스트 부분 색상 변경
         val builder = SpannableStringBuilder(binding.tvKeywordTitle.text.toString())
@@ -67,7 +71,6 @@ class FirstKeywordFragment : Fragment(), AddListener, DeleteListener {
         bottomNavigationView = requireActivity().findViewById(R.id.btm_nav_view_home)
         binding.tvSearch.setOnClickListener {
             showFragment(SearchKeywordFragment.newInstance(), SearchKeywordFragment.TAG)
-            bottomNavigationView.isGone = true
         }
 
         // searchKeywordAdapter에 적용하기 위한 코드
@@ -81,8 +84,9 @@ class FirstKeywordFragment : Fragment(), AddListener, DeleteListener {
 
     // 전환 후 돌아올때 네비게이션 뷰 다시 활성화
     override fun onResume() {
-        super.onResume()
+        Log.d(TAG, "onResume")
         bottomNavigationView.isVisible = true
+        super.onResume()
     }
 
     // 프래그먼트 전환 함수
@@ -129,4 +133,5 @@ class FirstKeywordFragment : Fragment(), AddListener, DeleteListener {
 
     // 구현필요 x
     override fun onDeleteClick(keyword: String) {}
+
 }
