@@ -52,7 +52,7 @@ class HomeNewsFragment: Fragment(R.layout.fragment_home_news) {
 
     // 검색창 누르면 NewsSearch 액티비티로 이동
     private fun goToNewsSearch() {
-        binding.btnHomeSearchBackground.setOnClickListener {
+        binding.ibtnHomeSearchBackground.setOnClickListener {
             activity?.let {
                 val intent = Intent(it, NewsSearchActivity::class.java)
                 it.startActivity(intent)

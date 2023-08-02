@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- 상단 로고, 정렬 기준-->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_toolbar"
         android:layout_width="match_parent"
@@ -13,49 +12,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" >
 
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline_horizontal"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.3" />
-
         <ImageView
-            android:id="@+id/iv_logo"
+            android:id="@+id/iv_app_icon"
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginStart="16dp"
-            android:src="@drawable/ic_logo_sample"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/guideline_horizontal" />
-
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/main_logo" />
 
         <TextView
             android:id="@+id/tv_sorting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="2dp"
-            android:textColor="@color/gray_5"
-            android:letterSpacing="-0.05"
+            android:layout_marginEnd="8dp"
             android:fontFamily="@font/pretendard_semi_bold"
+            android:letterSpacing="-0.05"
             android:text="@string/search_sorting"
+            android:textColor="@color/gray_5"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/ibtn_sorting_menu"
-            app:layout_constraintTop_toTopOf="@id/guideline_horizontal" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.9" />
 
         <ImageButton
             android:id="@+id/ibtn_sorting_menu"
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginEnd="16dp"
-            android:scaleType="fitCenter"
-            android:contentDescription="@string/search_menu"
-            android:src="@drawable/ic_sort_down"
             android:background="@android:color/transparent"
+            android:contentDescription="@string/search_menu"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_bottom_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/guideline_horizontal" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.88" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -69,28 +63,57 @@
         app:layout_constraintTop_toBottomOf="@+id/cl_toolbar">
 
 
-        <Button
-            android:id="@+id/btn_home_search_background"
+        <ImageButton
+            android:id="@+id/ibtn_home_search_background"
             android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:layout_margin="16dp"
-            android:fontFamily="@font/pretendard_regular"
-            android:backgroundTint="@color/gray_1"
-            android:text="@string/home_news_search_hint"
-            android:textAlignment="viewStart"
-            android:textColor="@color/search_hint"
-            android:drawableEnd="@drawable/ic_home_search"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/ic_keyword_search_background"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
+        <TextView
+            android:id="@+id/tv_search_hint"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
+            android:fontFamily="@font/pretendard_regular"
+            android:text="원하는 주제를 검색하세요"
+            android:textColor="@color/search_hint"
+            app:layout_constraintBottom_toBottomOf="@+id/ibtn_home_search_background"
+            app:layout_constraintStart_toStartOf="@+id/ibtn_home_search_background"
+            app:layout_constraintTop_toTopOf="@+id/ibtn_home_search_background" />
+
+        <ImageView
+            android:id="@+id/iv_search_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_search"
+            app:layout_constraintBottom_toBottomOf="@+id/ibtn_home_search_background"
+            app:layout_constraintEnd_toEndOf="@+id/ibtn_home_search_background"
+            app:layout_constraintTop_toTopOf="@+id/ibtn_home_search_background" />
+
+        <TextView
             android:id="@+id/ibtn_key_word_1"
-            android:layout_width="48dp"
-            android:layout_height="32dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="8dp"
+            android:background="@drawable/ic_keyword_btn"
+            android:fontFamily="@font/pretendard_semi_bold"
+            android:gravity="center"
+            android:letterSpacing="-0.017"
+            android:text="2차전지"
+            android:textColor="@color/white"
+            android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/btn_home_search_background" />
+            app:layout_constraintTop_toBottomOf="@+id/ibtn_home_search_background" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

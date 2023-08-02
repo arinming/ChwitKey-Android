@@ -36,7 +36,7 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:backgroundTint="@android:color/transparent"
-            android:src="@drawable/ic_delete" />
+            android:src="@drawable/ic_x" />
 
     </RelativeLayout>
 
