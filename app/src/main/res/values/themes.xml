@@ -10,4 +10,8 @@
         <item name="android:windowBackground">@color/white</item>
 
     </style>
+
+    <style name="BottomNavFont" parent="android:TextAppearance.Widget.IconMenu.Item">
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+    </style>
 </resources>

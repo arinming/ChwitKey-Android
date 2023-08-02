@@ -2,7 +2,7 @@
     <string name="app_name">cherry_pick_android</string>
 
     <!-- gpt -->
-    <string name="gpt_app_name">(앱이름)GPT</string>
+    <string name="gpt_app_name">취트키 GPT</string>
     <string name="gpt_et">궁금한 내용을 입력하세요.</string>
     <string name="gpt_bubble">안녕하세요 (앱이름) GPT입니다.</string>
     <string name="mine_bubble">기사를 요약해줘</string>

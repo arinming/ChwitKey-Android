@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -8,6 +9,7 @@
         android:id="@+id/cl_news_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -16,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:fontFamily="@font/pretendard_regular"
             android:text="@string/item_news_title"
             android:textColor="@android:color/black"
             app:layout_constraintStart_toStartOf="parent"
@@ -28,7 +30,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:fontFamily="@font/pretendard_regular"
             android:text="@string/item_news_editor"
+            android:textColor="@color/gray_4"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tv_news_title" />
 
@@ -36,8 +40,10 @@
             android:id="@+id/tv_news_dot"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="2dp"
+            android:fontFamily="@font/pretendard_regular"
             android:text="@string/item_news_dot"
+            android:textColor="@color/gray_4"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_news_editor" />
 
@@ -45,8 +51,10 @@
             android:id="@+id/tv_news_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="2dp"
+            android:fontFamily="@font/pretendard_regular"
             android:text="@string/item_news_time"
+            android:textColor="@color/gray_4"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_news_dot" />
 
@@ -54,8 +62,10 @@
             android:id="@+id/tv_news_time_previous"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
+            android:layout_marginStart="2dp"
+            android:fontFamily="@font/pretendard_regular"
             android:text="@string/item_news_previous"
+            android:textColor="@color/gray_4"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_news_time" />
 
@@ -63,12 +73,26 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ImageView
-        android:layout_width="100dp"
-        android:layout_height="70dp"
+        android:id="@+id/iv_news_image_preview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:src="@mipmap/ic_launcher"
+        android:layout_marginBottom="16dp"
+        android:src="@drawable/image_news_sample_preview"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@color/gray_3"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

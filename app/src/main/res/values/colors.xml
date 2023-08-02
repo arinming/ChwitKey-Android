@@ -14,4 +14,5 @@
 
     <!-- 뉴스 페이지 -->
     <color name="news_intro">#96969A</color>
+    <color name="search_hint">#9F9F9F</color>
 </resources>
