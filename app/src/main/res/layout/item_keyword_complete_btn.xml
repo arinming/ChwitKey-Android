@@ -24,7 +24,7 @@
             android:minHeight="0dp"
             android:paddingStart="5dp"
             android:paddingEnd="30dp"
-            android:text="키워드"
+            android:text="@string/keyword_title"
             android:textColor="@color/white"
             android:textSize="14sp"
             />

@@ -8,37 +8,26 @@
         android:id="@+id/fv_home"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btm_nav_view_home"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cl_bottom_nav"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/btm_nav_view_home"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/btm_nav_view_home"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@drawable/ic_nav_background"
-            app:itemActiveIndicatorStyle="@android:color/transparent"
-            app:itemBackground="@android:color/transparent"
-            app:itemIconTint="@color/bottom_nav_home_selector"
-            app:itemRippleColor="@android:color/transparent"
-            app:itemTextAppearanceActive="@font/pretendard_semi_bold"
-            app:itemTextAppearanceInactive="@style/BottomNavFont"
-            app:itemTextColor="@color/bottom_nav_home_selector"
-            app:labelVisibilityMode="labeled"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:menu="@menu/menu_bottom_nav_home" />
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:menu="@menu/menu_bottom_nav_home"
+        android:background="@drawable/ic_nav_background"
+        app:labelVisibilityMode="labeled"
+        app:itemTextAppearanceInactive="@style/BottomNavFont"
+        app:itemTextAppearanceActive="@font/pretendard_semi_bold"
+        app:itemIconTint="@color/bottom_nav_home_selector"
+        app:itemTextColor="@color/bottom_nav_home_selector"
+        app:itemActiveIndicatorStyle="@android:color/transparent"
+        app:itemBackground="@android:color/transparent"
+        app:itemRippleColor="@android:color/transparent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,6 @@
 package com.example.cherry_pick_android.presentation.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -9,7 +8,7 @@ import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.ActivityHomeBinding
 import com.example.cherry_pick_android.presentation.ui.home.homeNews.HomeNewsFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.KeywordFragment
-import com.example.cherry_pick_android.presentation.ui.scrap.ScrapFragment
+import com.example.cherry_pick_android.presentation.ui.scrap.ScrapNoneFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.ui.mypage.MyPageFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
@@ -57,7 +56,7 @@ class HomeActivity: AppCompatActivity() {
                 }
                 // 스크랩
                 R.id.nav_fragment_scrap -> {
-                    ScrapFragment().changeFragment()
+                    ScrapNoneFragment().changeFragment()
                 }
                 // 마이페이지
                 R.id.nav_fragment_my_page -> {
