@@ -17,8 +17,8 @@
 
         <ImageButton
             android:id="@+id/ibtn_profile_back"
-            android:layout_width="9dp"
-            android:layout_height="18dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"

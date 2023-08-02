@@ -18,6 +18,9 @@ class GptActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        goToBack()
+
         Log.d(TAG, "onCreate")
         // 텍스트 감지
         binding.etSendMessage.addTextChangedListener(object : TextWatcher{
@@ -39,5 +42,11 @@ class GptActivity: AppCompatActivity() {
             }
 
         })
+    }
+
+    fun goToBack() {
+        binding.ibtnBack.setOnClickListener {
+            finish()
+        }
     }
 }

@@ -26,6 +26,7 @@ class HomeActivity: AppCompatActivity() {
     // 프래그먼트 매니저
     val mananger = supportFragmentManager
 
+
     var bottomNavigationView: BottomNavigationView? = null
     var menu: Menu? = null
     // 뷰 모델 가져오기
@@ -40,14 +41,10 @@ class HomeActivity: AppCompatActivity() {
         searchKeywordViewModel.loadKeyword().observe(this){} // DB 업데이트
         initFragment()
         initBottomNavigation()
-
     }
-
 
     // 바텀 네비게이션으로 프래그먼트 간 화면 전환
     private fun initBottomNavigation() {
-        bottomNavigationView = binding.btmNavViewHome
-
 
         // 각 아이콘을 눌렀을 때 작용
         binding.btmNavViewHome.setOnItemSelectedListener {

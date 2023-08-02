@@ -1,10 +1,12 @@
 package com.example.cherry_pick_android.presentation.ui.searchList
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.databinding.ActivitySearchListBinding
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
+import com.example.cherry_pick_android.presentation.ui.article.ArticleActivity
 import com.example.cherry_pick_android.presentation.ui.home.News
 
 class SearchListActivity : AppCompatActivity() {
@@ -22,13 +24,26 @@ class SearchListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivitySearchListBinding.inflate(layoutInflater)
         val view = binding.root
+        setContentView(view)
 
         initNewsList()
-
-        setContentView(view)
+        goToBack()
+        goToArticle()
     }
 
     fun initNewsList() {
         binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(news)
+    }
+
+    private fun goToBack() {
+        binding.ibtnBack.setOnClickListener {
+            finish()
+        }
+    }
+
+    private fun goToArticle() {
+        binding.ibtnSortingMenu.setOnClickListener {
+            startActivity(Intent(this, ArticleActivity::class.java))
+        }
     }
 }

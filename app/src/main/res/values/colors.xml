@@ -10,4 +10,8 @@
     <color name="gpt_background_pink">#FFF4F6</color>
     <color name="sub_bage">#FEFFDE</color>
     <color name="black">#000000</color>
+
+
+    <!-- 뉴스 페이지 -->
+    <color name="news_intro">#96969A</color>
 </resources>

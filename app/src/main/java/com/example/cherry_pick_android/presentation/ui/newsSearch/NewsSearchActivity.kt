@@ -43,7 +43,6 @@ class NewsSearchActivity: AppCompatActivity(), AddListener {
     // 백 버튼 누르면 홈 화면으로
     private fun goToBack() {
         binding.ibtnBack.setOnClickListener {
-            startActivity(Intent(this, HomeActivity::class.java))
             finish()
         }
     }
@@ -51,7 +50,6 @@ class NewsSearchActivity: AppCompatActivity(), AddListener {
     private fun goToSearchList() {
         binding.btnAllDelete.setOnClickListener {
             startActivity(Intent(this, SearchListActivity::class.java))
-            finish()
         }
     }
 
@@ -64,6 +62,7 @@ class NewsSearchActivity: AppCompatActivity(), AddListener {
         binding.rvRecordList.layoutManager = LinearLayoutManager(this)
         binding.rvRecordList.adapter = SearchRecordAdapter(records)
     }
+
 
     override fun onAddClick(keyword: String) {}
 }
