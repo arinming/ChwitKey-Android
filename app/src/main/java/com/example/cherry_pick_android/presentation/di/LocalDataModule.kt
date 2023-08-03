@@ -2,8 +2,8 @@ package com.example.cherry_pick_android.presentation.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.cherry_pick_android.data.remote.request.KeywordDAO
-import com.example.cherry_pick_android.data.remote.request.KeywordDB
+import com.example.cherry_pick_android.data.db.KeywordDAO
+import com.example.cherry_pick_android.data.db.KeywordDB
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.data.remote.service
+package com.example.cherry_pick_android.data.remote.request
 
 import com.google.gson.GsonBuilder
 import dagger.Module
