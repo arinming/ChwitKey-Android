@@ -4,7 +4,7 @@
     <!-- gpt -->
     <string name="gpt_app_name">취트키 GPT</string>
     <string name="gpt_et">궁금한 내용을 입력하세요.</string>
-    <string name="gpt_bubble">안녕하세요 (앱이름) GPT입니다.</string>
+    <string name="gpt_bubble">안녕하세요 취트키 GPT입니다.</string>
     <string name="mine_bubble">기사를 요약해줘</string>
 
 
@@ -17,6 +17,9 @@
     <!-- news_search -->
     <string name="news_search_sub_title">이런 키워드는 어때요?</string>
     <string name="news_search_recent">최근 검색어</string>
+    <string name="news_search_all_delete">모두 지우기</string>
+    <string name="news_search_keyword">2차전지</string>
+
 
 
     <!-- mypage -->
@@ -68,6 +71,11 @@
     <string name="first_keyword_title">앗! 아직 등록된 키워드가 없어요</string>
     <string name="first_keyword_recom">이런 키워드는 어때요</string>
     <string name="keyword_isKeyword">등록된 키워드</string>
+    <string name="keyword_count_none">0</string>
+    <string name="keyword_count_true">2</string>
+    <string name="keyword_count_max">/10</string>
+    <string name="keyword_up_lode_button">키워드 등록</string>
+
     <string name="first_keyword_search">이런 기사를 알려줘요!</string>
     <string name="first_keyword_search_sub">* 최신 기사 5개</string>
     <string name="keyword_search_hint">키워드를 추가해보세요 ex) IT</string>
@@ -99,5 +107,17 @@
 반면 한국 최대 수출품목인 반도체 6월 수출액은 89억 달러(11조7391억 원)로 2022년 같은 기간보다 28% 감소했다. 석유제품(33억 달러)과 석유화학(35억6천만 달러) 수출액도 단가하락 영향으로 각각 40.9%, 22% 줄었다.지역별로는 유럽과 중동, 중남미에서 자동차, 일반기계 호조에 힘입어 수출이 늘었다. 6월 유럽과 중동, 중남미 수출액은 각각 61억9천만 달러, 16억4천만 달러, 25억4천만 달러로 2022년 6월보다 18.2%, 14%, 9.2% 증가했다.중국과 아세안지역에서는 반도체 등 IT업황 부진이 계속되면서 수출액이 각각 19%, 16.6% 줄었다.\n\n
 
 6월 수입액은 원유(-28.6%), 석탄(-45.5%), 에너지(-27.3%), 가스(-0.3%) 수입 감소 등의 영향으로 2022년 같은 기간보다 11.7% 줄었다.에너지분야 외 반도체(-19.5%), 컴퓨터(-18.3%), 철강(-10.2%) 등 주요 품목의 수입도 감소했다. 산업부 관계자는 “이번 무역흑자 흐름을 이어나가며 하반기 수출 ‘플러스 전환’을 달성할 수 있도록 수출확대 노력과 에너지 절약확산 및 효율개선 추진에 박차를 가하겠다”며 “30대 수출 유망품목을 중심으로 마케팅 지원을 대폭 늘려가고 수출에 어려움을 겪는 중소·중견기업 대상 맞춤형 수출기업화 지원을 추진하겠다”고 말했다.</string>
+
+
+    <!-- scrap -->
+    <string name="scrap_name">채영</string>
+    <string name="scrap_toolbar">님이 스크랩한 기사</string>
+    <string name="scrap_count_none">0</string>
+    <string name="scrap_count_true">23</string>
+    <string name="scrap_none_message">스크랩한 기사가 없어요 :(</string>
+    <string name="item_scrap_news_title">6월 무역수지 16개월 만에 흑자, 전년비\n자동차 수출 58% 선박 98% 늘어</string>
+    <string name="scrap_snackbar_true">기사를 스크랩했어요!</string>
+    <string name="scrap_snackbar_false">기사 스크랩을 해제했어요!</string>
+
 
 </resources>

@@ -1,6 +1,6 @@
 package com.example.cherry_pick_android.presentation.ui.keyword
 
-import com.example.cherry_pick_android.domain.model.Keyword
+import com.example.cherry_pick_android.data.data.Keyword
 
 object Keywords {
     val keywords = listOf(

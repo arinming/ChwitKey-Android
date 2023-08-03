@@ -101,7 +101,7 @@ class SearchKeywordFragment: Fragment(), DeleteListener {
                 Toast.makeText(context, "이미 존재하는 키워드입니다", Toast.LENGTH_SHORT).show()
             }
         }
-        
+
         return bindig.root
     }
 

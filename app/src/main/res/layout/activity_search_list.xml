@@ -33,10 +33,10 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
-            android:paddingStart="16dp"
             android:background="@drawable/ic_keyword_et"
             android:focusable="true"
             android:focusableInTouchMode="true"
+            android:paddingStart="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/ibtn_back"
@@ -51,7 +51,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@+id/et_search"
             app:layout_constraintTop_toTopOf="parent" />
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -69,9 +68,9 @@
             android:id="@+id/tv_search_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
             android:fontFamily="@font/pretendard_semi_bold"
             android:letterSpacing="-0.05"
-            android:layout_marginStart="16dp"
             android:text="@string/search_title"
             android:textColor="@color/black"
             android:textSize="18sp"
@@ -84,9 +83,9 @@
             android:id="@+id/tv_search_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="8dp"
             android:fontFamily="@font/pretendard_semi_bold"
             android:letterSpacing="-0.05"
-            android:layout_margin="8dp"
             android:text="@string/search_count"
             android:textColor="@color/main_pink"
             android:textSize="18sp"
@@ -99,9 +98,9 @@
             android:id="@+id/tv_sorting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:fontFamily="@font/pretendard_semi_bold"
             android:letterSpacing="-0.05"
-            android:layout_marginEnd="8dp"
             android:text="@string/search_sorting"
             android:textColor="@color/gray_5"
             android:textSize="14sp"
@@ -126,6 +125,7 @@
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_search_news_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

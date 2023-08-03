@@ -1,11 +1,9 @@
-package com.example.cherry_pick_android.data.di
+package com.example.cherry_pick_android.presentation.di
 
 import android.app.Application
 import androidx.room.Room
 import com.example.cherry_pick_android.data.db.KeywordDAO
 import com.example.cherry_pick_android.data.db.KeywordDB
-import com.example.cherry_pick_android.domain.model.Keyword
-import com.example.cherry_pick_android.domain.repository.KeywordRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +16,7 @@ import javax.inject.Singleton
 class LocalDataModule {
     @Singleton
     @Provides
-    fun provideKeywordDatabase(application: Application): KeywordDB{
+    fun provideKeywordDatabase(application: Application): KeywordDB {
         return Room.databaseBuilder(
             application,
             KeywordDB::class.java,
@@ -30,7 +28,7 @@ class LocalDataModule {
 
     @Singleton
     @Provides
-    fun provideKeywordDAO(keywordDB: KeywordDB): KeywordDAO{
+    fun provideKeywordDAO(keywordDB: KeywordDB): KeywordDAO {
         return keywordDB.keywordDAO()
     }
 }
