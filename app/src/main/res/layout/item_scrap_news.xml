@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:fontFamily="@font/pretendard_regular"
-            android:text="@string/item_news_title"
+            android:text="@string/item_scrap_news_title"
             android:textColor="@android:color/black"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
@@ -83,10 +83,21 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:src="@drawable/image_news_sample_preview"
+        android:src="@drawable/image_scrap_article_sample"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageButton
+        android:id="@+id/ibtn_scrap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:background="@android:color/transparent"
+        android:src="@drawable/ic_scrap_article_true"
+        app:layout_constraintEnd_toEndOf="@+id/iv_news_image_preview"
+        app:layout_constraintTop_toTopOf="@+id/iv_news_image_preview" />
 
     <View
         android:id="@+id/divider"

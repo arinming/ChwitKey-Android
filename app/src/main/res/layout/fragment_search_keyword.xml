@@ -84,7 +84,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="7dp"
-                android:text="0"
+                android:text="@string/keyword_count_none"
                 android:textColor="@color/main_pink"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -92,7 +92,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="/10"
+                android:text="@string/keyword_count_max"
                 android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -136,15 +136,14 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:background="@drawable/ic_keyword_complete"
-        android:text="키워드 등록"
+        android:text="@string/keyword_up_lode_button"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fv_search_keyword"
-       />
+        app:layout_constraintTop_toBottomOf="@+id/fv_search_keyword" />
 
 
 

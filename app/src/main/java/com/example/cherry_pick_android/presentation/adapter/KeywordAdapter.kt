@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.databinding.ItemKeywordBtnBinding
-import com.example.cherry_pick_android.domain.model.Keyword
+import com.example.cherry_pick_android.data.data.Keyword
 import com.example.cherry_pick_android.presentation.ui.keyword.AddListener
 
 

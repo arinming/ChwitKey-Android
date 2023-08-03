@@ -40,7 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="7dp"
-            android:text="0"
+            android:text="@string/scrap_count_none"
             android:textColor="@color/main_pink"
             android:textSize="20sp"
             android:textStyle="bold" />
@@ -48,7 +48,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="/10"
+            android:text="@string/keyword_count_max"
             android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>

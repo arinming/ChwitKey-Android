@@ -3,13 +3,9 @@ package com.example.cherry_pick_android.presentation.adapter
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.model.KeywordEntity
-import com.example.cherry_pick_android.databinding.ItemKeywordBtnBinding
 import com.example.cherry_pick_android.databinding.ItemKeywordCompleteBtnBinding
-import com.example.cherry_pick_android.domain.model.Keyword
 import com.example.cherry_pick_android.presentation.ui.keyword.DeleteListener
 
 class SearchKeywordAdapter(private val deleteListener: DeleteListener): RecyclerView.Adapter<SearchKeywordAdapter.SearchKeywordHolder>() {

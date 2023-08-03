@@ -6,15 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
+import com.example.cherry_pick_android.data.data.News
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
-import com.example.cherry_pick_android.presentation.ui.home.News
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
-import com.example.cherry_pick_android.presentation.ui.newsSearch.SearchRecord
 
-class HomeNewsFragment: Fragment(R.layout.fragment_home_news) {
+class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     private var _binding: FragmentHomeNewsBinding? = null
     private val binding get() = _binding!!
 
@@ -23,7 +21,6 @@ class HomeNewsFragment: Fragment(R.layout.fragment_home_news) {
         News("뉴스5"), News("뉴스6"), News("뉴스7"), News("뉴스8"),
         News("뉴스9"), News("뉴스10"), News("뉴스11"), News("뉴스12")
     )
-
 
 
     override fun onCreateView(
