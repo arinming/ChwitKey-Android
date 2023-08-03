@@ -116,7 +116,8 @@
     <string name="scrap_count_true">23</string>
     <string name="scrap_none_message">스크랩한 기사가 없어요 :(</string>
     <string name="item_scrap_news_title">6월 무역수지 16개월 만에 흑자, 전년비\n자동차 수출 58% 선박 98% 늘어</string>
-
+    <string name="scrap_snackbar_true">기사를 스크랩했어요!</string>
+    <string name="scrap_snackbar_false">기사 스크랩을 해제했어요!</string>
 
 
 </resources>
