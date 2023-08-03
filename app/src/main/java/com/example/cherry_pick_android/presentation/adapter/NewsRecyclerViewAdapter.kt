@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.databinding.ItemNewsBinding
-import com.example.cherry_pick_android.domain.model.News
+import com.example.cherry_pick_android.data.data.News
 
 class NewsRecyclerViewAdapter(private val newsDataSet: List<News>):
     RecyclerView.Adapter<NewsRecyclerViewAdapter.ViewHolder>() {

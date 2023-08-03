@@ -6,7 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.cherry_pick_android.databinding.FragmentScrapTrueBinding
-import com.example.cherry_pick_android.domain.model.ScrapNews
+import com.example.cherry_pick_android.data.data.ScrapNews
 import com.example.cherry_pick_android.presentation.adapter.ScrapAdapter
 
 class ScrapTrueFragment : Fragment() {

@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.domain.usecase.keyword
+package com.example.cherry_pick_android.domain.usecase
 
 import androidx.lifecycle.LiveData
 import com.example.cherry_pick_android.data.model.KeywordEntity

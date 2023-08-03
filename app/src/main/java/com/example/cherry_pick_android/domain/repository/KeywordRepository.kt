@@ -2,7 +2,7 @@ package com.example.cherry_pick_android.domain.repository
 
 import androidx.lifecycle.LiveData
 import com.example.cherry_pick_android.data.model.KeywordEntity
-import com.example.cherry_pick_android.domain.model.Keyword
+import com.example.cherry_pick_android.data.data.Keyword
 import javax.inject.Inject
 
 interface KeywordRepository {
