@@ -9,10 +9,24 @@
 
 
     <!-- login -->
-    <string name="login_title">취업 성공의 치트키</string>
-    <string name="login_intro">직군별 추천으로 oooo 해보세요</string>
-    <string name="login_explain">계정 생성시 개인정보 처리방침 및 이용약관 및 사용자 정책에</string>
-    <string name="login_explain_2">동의하게 됩니다</string>
+    <string name="login_intro">취업 성공의 치트키,</string>
+    <string name="login_intro_2">취트키!</string>
+    <string name="login_kakao">카카오로 시작하기</string>
+    <string name="login_naver">네이버로 시작하기</string>
+    <string name="login_explain">계정 생성시 개인정보 처리방침 및</string>
+    <string name="login_explain_2">이용약관 및 사용자 정책에 동의하게 됩니다</string>
+
+    <!-- setting-->
+    <string name="setting_subtitle">반가워요!</string>
+    <string name="setting_nick">이름</string>
+    <string name="setting_nik_hint">닉네임을 설정해주세요.</string>
+    <string name="setting_gender">성별</string>
+    <string name="setting_gender_hint">성별을 선택해주세요.</string>
+    <string name="setting_birth">생년월일</string>
+    <string name="setting_birth_hint">YYYYMMDD</string>
+    <string name="setting_woman">여성</string>
+    <string name="setting_man">남성</string>
+    <string name="setting_next">다음</string>
 
     <!-- news_search -->
     <string name="news_search_sub_title">이런 키워드는 어때요?</string>

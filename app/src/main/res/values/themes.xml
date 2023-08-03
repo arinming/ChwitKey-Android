@@ -14,4 +14,22 @@
     <style name="BottomNavFont" parent="android:TextAppearance.Widget.IconMenu.Item">
         <item name="android:fontFamily">@font/pretendard_regular</item>
     </style>
+
+
+    <style name="TextInputLayoutStyle" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="boxStrokeColor">@color/gray_4</item>
+        <!-- 상단에 있을때의 Hint -->
+        <item name="hintTextColor">@color/gray_4</item>
+        <item name="endIconTint">@color/main_pink</item>
+        <item name="errorIconDrawable">@drawable/ic_setting_error</item>
+
+    </style>
+    
+    <style name="TextInputEditTextStyle" parent="TextInputLayoutStyle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+        <item name="boxBackgroundMode">none</item>
+    </style>
+
 </resources>
