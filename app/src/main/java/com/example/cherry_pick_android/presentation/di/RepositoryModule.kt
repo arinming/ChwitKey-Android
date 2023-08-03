@@ -1,7 +1,7 @@
 package com.example.cherry_pick_android.presentation.di
 
 import com.example.cherry_pick_android.data.remote.repository.KeywordRepositoryImpl
-import com.example.cherry_pick_android.data.remote.request.KeywordDAO
+import com.example.cherry_pick_android.data.db.KeywordDAO
 import com.example.cherry_pick_android.domain.repository.KeywordRepository
 import dagger.Module
 import dagger.Provides

@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.data.remote.request
+package com.example.cherry_pick_android.data.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
