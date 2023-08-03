@@ -21,7 +21,7 @@ class NewsSearchActivity: AppCompatActivity() {
         Keyword("소매유통"), Keyword("건설"), Keyword("철강"), Keyword("정유")
     )
 
-    private val records = mutableListOf( // MutableList로 변경
+    private val records = mutableListOf(
         SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3"),
         SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3"),
         SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3")
