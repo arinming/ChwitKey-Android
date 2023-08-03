@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.databinding.ItemScrapNewsBinding
-import com.example.cherry_pick_android.domain.model.ScrapNews
+import com.example.cherry_pick_android.data.data.ScrapNews
 
 class ScrapAdapter(private val scrapNewsData: List<ScrapNews>) :
     RecyclerView.Adapter<ScrapAdapter.ViewHolder>() {

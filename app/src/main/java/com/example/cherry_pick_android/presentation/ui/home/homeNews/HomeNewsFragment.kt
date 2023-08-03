@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
-import com.example.cherry_pick_android.domain.model.News
+import com.example.cherry_pick_android.data.data.News
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
 

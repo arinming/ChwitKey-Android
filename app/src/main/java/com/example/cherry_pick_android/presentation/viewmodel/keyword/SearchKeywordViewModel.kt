@@ -1,14 +1,13 @@
 package com.example.cherry_pick_android.presentation.viewmodel.keyword
 
 import android.util.Log
-import android.widget.Toast
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cherry_pick_android.data.model.KeywordEntity
-import com.example.cherry_pick_android.domain.usecase.keyword.DeleteKeywordUseCase
-import com.example.cherry_pick_android.domain.usecase.keyword.ReadKeywordUseCase
-import com.example.cherry_pick_android.domain.usecase.keyword.WriteKeywordUseCase
+import com.example.cherry_pick_android.domain.usecase.DeleteKeywordUseCase
+import com.example.cherry_pick_android.domain.usecase.ReadKeywordUseCase
+import com.example.cherry_pick_android.domain.usecase.WriteKeywordUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

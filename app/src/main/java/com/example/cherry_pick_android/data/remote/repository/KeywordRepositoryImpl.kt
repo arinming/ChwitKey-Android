@@ -1,12 +1,10 @@
-package com.example.cherry_pick_android.data
+package com.example.cherry_pick_android.data.remote.repository
 
 import androidx.lifecycle.LiveData
-import com.example.cherry_pick_android.data.db.KeywordDAO
+import com.example.cherry_pick_android.data.remote.request.KeywordDAO
 import com.example.cherry_pick_android.data.mapper.KeywordMapper
 import com.example.cherry_pick_android.data.model.KeywordEntity
-import com.example.cherry_pick_android.domain.model.Keyword
 import com.example.cherry_pick_android.domain.repository.KeywordRepository
-import javax.inject.Inject
 
 // 키워드 Repository 구현체
 class KeywordRepositoryImpl(
