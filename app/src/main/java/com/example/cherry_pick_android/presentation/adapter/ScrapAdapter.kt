@@ -1,10 +1,12 @@
 package com.example.cherry_pick_android.presentation.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.databinding.ItemScrapNewsBinding
 import com.example.cherry_pick_android.data.data.ScrapNews
+import com.example.cherry_pick_android.presentation.ui.article.ArticleActivity
 
 class ScrapAdapter(private val scrapNewsData: List<ScrapNews>) :
     RecyclerView.Adapter<ScrapAdapter.ViewHolder>() {
@@ -13,6 +15,14 @@ class ScrapAdapter(private val scrapNewsData: List<ScrapNews>) :
     class ViewHolder(val binding: ItemScrapNewsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun setNewsItem(scrapNewsData: String) {
             binding.tvNewsTitle.text = scrapNewsData
+        }
+        // 아이템 클릭 이벤트 설정
+        init {
+            binding.root.setOnClickListener { view ->
+                val context = view.context
+                val intent = Intent(context, ArticleActivity::class.java)
+                context.startActivity(intent)
+            }
         }
     }
 
