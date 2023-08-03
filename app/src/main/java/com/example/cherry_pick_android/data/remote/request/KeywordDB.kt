@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.data.db
+package com.example.cherry_pick_android.data.remote.request
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
