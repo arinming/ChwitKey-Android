@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
 import com.example.cherry_pick_android.domain.model.Keyword
+import com.example.cherry_pick_android.domain.model.SearchRecord
 import com.example.cherry_pick_android.presentation.adapter.KeywordAdapter
 import com.example.cherry_pick_android.presentation.adapter.SearchRecordAdapter
 import com.example.cherry_pick_android.presentation.ui.searchList.SearchListActivity
@@ -21,6 +22,8 @@ class NewsSearchActivity: AppCompatActivity() {
     )
 
     private val records = listOf(
+        SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3"),
+        SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3"),
         SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3")
     )
 
@@ -46,7 +49,7 @@ class NewsSearchActivity: AppCompatActivity() {
     }
 
     private fun goToSearchList() {
-        binding.btnAllDelete.setOnClickListener {
+        binding.btnSearch.setOnClickListener {
             startActivity(Intent(this, SearchListActivity::class.java))
         }
     }

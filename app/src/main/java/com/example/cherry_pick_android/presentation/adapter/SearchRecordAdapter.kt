@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.databinding.ItemSearchBinding
-import com.example.cherry_pick_android.presentation.ui.newsSearch.SearchRecord
+import com.example.cherry_pick_android.domain.model.SearchRecord
 
 class SearchRecordAdapter(private val record: List<SearchRecord>): RecyclerView.Adapter<SearchRecordAdapter.ViewHolder>() {
 
