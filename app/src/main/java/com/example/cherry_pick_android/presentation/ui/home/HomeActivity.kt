@@ -1,6 +1,9 @@
 package com.example.cherry_pick_android.presentation.ui.home
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -11,6 +14,7 @@ import com.example.cherry_pick_android.presentation.ui.keyword.KeywordFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.ui.mypage.MyPageFragment
 import com.example.cherry_pick_android.presentation.ui.scrap.ScrapTrueFragment
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,6 +26,9 @@ class HomeActivity: AppCompatActivity() {
     // 프래그먼트 매니저
     val mananger = supportFragmentManager
 
+
+    var bottomNavigationView: BottomNavigationView? = null
+    var menu: Menu? = null
     // 뷰 모델 가져오기
     private val searchKeywordViewModel: SearchKeywordViewModel by viewModels()
 

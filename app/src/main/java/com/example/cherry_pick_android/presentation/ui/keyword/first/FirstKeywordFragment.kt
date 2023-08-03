@@ -71,6 +71,7 @@ class FirstKeywordFragment : Fragment(), AddListener, DeleteListener {
         bottomNavigationView = requireActivity().findViewById(R.id.btm_nav_view_home)
         binding.tvSearch.setOnClickListener {
             showFragment(SearchKeywordFragment.newInstance(), SearchKeywordFragment.TAG)
+            bottomNavigationView.isGone = true
         }
 
         // searchKeywordAdapter에 적용하기 위한 코드

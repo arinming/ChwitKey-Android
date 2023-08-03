@@ -14,6 +14,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="20dp"
         android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -36,9 +37,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:background="@drawable/ic_keyword_et"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:background="@drawable/ic_keyword_et"
                 android:paddingStart="16dp"
                 android:paddingEnd="40dp" />
 
@@ -64,18 +65,20 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linear_search">
+
         <LinearLayout
             android:id="@+id/linear_subTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/keyword_isKeyword"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+
             <TextView
                 android:id="@+id/tv_keyword_cnt"
                 android:layout_width="wrap_content"
@@ -85,6 +88,7 @@
                 android:textColor="@color/main_pink"
                 android:textSize="16sp"
                 android:textStyle="bold" />
+
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -96,8 +100,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            >
+            android:layout_marginTop="14dp">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rv_keyword"
@@ -105,6 +108,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
