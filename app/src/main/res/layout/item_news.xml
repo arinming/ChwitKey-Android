@@ -25,7 +25,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/tv_news_editor"
+            android:id="@+id/tv_news_company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -47,7 +47,7 @@
             android:textColor="@color/gray_4"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_news_editor" />
+            app:layout_constraintStart_toEndOf="@+id/tv_news_company" />
 
         <TextView
             android:id="@+id/tv_news_time"

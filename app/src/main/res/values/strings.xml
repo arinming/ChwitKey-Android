@@ -63,6 +63,7 @@
     <string name="search_count">23</string>
     <string name="search_sorting">인기순</string>
     <string name="search_menu">정렬 메뉴 버튼</string>
+    <string name="search_button">검색</string>
 
     <!-- home_news -->
     <string name="home_news_search_hint">원하는 주제를 검색하세요</string>

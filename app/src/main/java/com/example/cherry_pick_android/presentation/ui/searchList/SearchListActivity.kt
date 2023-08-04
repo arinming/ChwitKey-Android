@@ -25,24 +25,17 @@ class SearchListActivity : AppCompatActivity() {
 
         initNewsList()
         goToBack()
-        goToArticle()
 
         setContentView(view)
     }
 
-    fun initNewsList() {
+    private fun initNewsList() {
         binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(news)
     }
 
     private fun goToBack() {
         binding.ibtnBack.setOnClickListener {
             finish()
-        }
-    }
-
-    private fun goToArticle() {
-        binding.ibtnSortingMenu.setOnClickListener {
-            startActivity(Intent(this, ArticleActivity::class.java))
         }
     }
 }

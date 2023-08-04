@@ -1,18 +1,17 @@
 package com.example.cherry_pick_android.presentation.ui.newsSearch
 
+import SearchRecordAdapter
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
 import com.example.cherry_pick_android.data.data.Keyword
+import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
+import com.example.cherry_pick_android.domain.model.SearchRecord
 import com.example.cherry_pick_android.presentation.adapter.KeywordAdapter
-import com.example.cherry_pick_android.presentation.adapter.SearchRecordAdapter
-import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
-import com.example.cherry_pick_android.presentation.ui.keyword.AddListener
 import com.example.cherry_pick_android.presentation.ui.searchList.SearchListActivity
 
-class NewsSearchActivity: AppCompatActivity(), AddListener {
+class NewsSearchActivity: AppCompatActivity() {
     private lateinit var binding: ActivityNewsSearchBinding
 
     private val keywords = listOf(
@@ -22,7 +21,9 @@ class NewsSearchActivity: AppCompatActivity(), AddListener {
         Keyword("소매유통"), Keyword("건설"), Keyword("철강"), Keyword("정유")
     )
 
-    private val records = listOf(
+    private val records = mutableListOf(
+        SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3"),
+        SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3"),
         SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3")
     )
 
@@ -38,6 +39,7 @@ class NewsSearchActivity: AppCompatActivity(), AddListener {
 
         goToBack()
         goToSearchList()
+        allDelete()
     }
 
     // 백 버튼 누르면 홈 화면으로
@@ -48,21 +50,27 @@ class NewsSearchActivity: AppCompatActivity(), AddListener {
     }
 
     private fun goToSearchList() {
-        binding.btnAllDelete.setOnClickListener {
+        binding.btnSearch.setOnClickListener {
             startActivity(Intent(this, SearchListActivity::class.java))
         }
     }
 
-    fun initView() {
+    private fun initView() {
         // 키워드
-        binding.rvSearchNewsList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.rvSearchNewsList.adapter = KeywordAdapter(keywords, this)
+        binding.rvSearchNewsList.layoutManager =
+            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvSearchNewsList.adapter = KeywordAdapter(keywords)
 
         // 검색어
         binding.rvRecordList.layoutManager = LinearLayoutManager(this)
-        binding.rvRecordList.adapter = SearchRecordAdapter(records)
+        binding.rvRecordList.adapter = SearchRecordAdapter(records) // MutableList 전달    }
     }
 
-
-    override fun onAddClick(keyword: String) {}
+    private fun allDelete() {
+        // 모두 지우기 버튼 클릭 이벤트 설정
+        binding.btnAllDelete.setOnClickListener {
+            records.clear() // 검색어 아이템 모두 삭제
+            binding.rvRecordList.adapter?.notifyDataSetChanged() // 어댑터에 변경 알림
+        }
+    }
 }
