@@ -83,7 +83,7 @@
     
     <!-- keyword -->
     <string name="first_keyword_title">앗! 아직 등록된 키워드가 없어요</string>
-    <string name="first_keyword_recom">이런 키워드는 어때요</string>
+    <string name="first_keyword_recom">이런 키워드는 어때요?</string>
     <string name="keyword_isKeyword">등록된 키워드</string>
     <string name="keyword_count_none">0</string>
     <string name="keyword_count_true">2</string>

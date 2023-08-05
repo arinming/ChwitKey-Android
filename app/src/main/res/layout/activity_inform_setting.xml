@@ -22,6 +22,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="70dp"
         android:text="@string/setting_subtitle"
+        android:fontFamily="@font/pretendard_bold"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,6 +45,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingStart="5dp"
+            android:fontFamily="@font/pretendard_regular"
             android:text="@string/setting_nick"
             android:textColor="@color/gray_4" />
 
@@ -89,6 +91,7 @@
                 android:paddingTop="5dp"
                 android:paddingBottom="8dp"
                 android:text="@string/setting_gender_hint"
+                android:fontFamily="@font/pretendard_regular"
                 android:textSize="18sp" />
             <ImageView
                 android:id="@+id/iv_gender_ck"
@@ -147,18 +150,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="100dp"
         android:layout_marginEnd="20dp"
+        android:layout_marginBottom="70dp"
         android:background="@drawable/ic_setting_no_complete"
+        android:enabled="false"
+        android:fontFamily="@font/pretendard_bold"
         android:gravity="center"
         android:text="@string/setting_next"
         android:textColor="@color/white"
         android:textSize="16sp"
         android:textStyle="bold"
-        android:enabled="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_setting" />
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

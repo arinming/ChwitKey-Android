@@ -21,6 +21,7 @@
         <!-- 상단에 있을때의 Hint -->
         <item name="hintTextColor">@color/gray_4</item>
         <item name="endIconTint">@color/main_pink</item>
+        <item name="android:fontFamily">@font/pretendard_regular</item>
         <item name="errorIconDrawable">@drawable/ic_setting_error</item>
 
     </style>

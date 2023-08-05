@@ -29,6 +29,7 @@
                 android:id="@+id/tv_main_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
                 android:layout_marginTop="23dp"
                 android:text="@string/login_intro"
                 android:textSize="24sp"
@@ -39,6 +40,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="@string/login_intro_2"
                 android:textColor="@color/main_pink"
                 android:textSize="24sp"
@@ -71,6 +73,7 @@
                         android:id="@+id/tv_kakao"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/pretendard_regular"
                         android:layout_marginStart="6dp"
                         android:text="@string/login_kakao"
                         android:textStyle="bold" />
@@ -96,6 +99,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="6dp"
+                        android:fontFamily="@font/pretendard_regular"
                         android:text="@string/login_naver"
                         android:textColor="@color/white"
                         android:textStyle="bold" />
@@ -115,6 +119,7 @@
                     android:id="@+id/tv_explain"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_regular"
                     android:text="@string/login_explain"
                     android:textSize="14sp" />
 
@@ -122,6 +127,7 @@
                     android:id="@+id/tv_explain_2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/pretendard_regular"
                     android:layout_marginTop="5dp"
                     android:text="@string/login_explain_2"
                     android:textSize="14sp" />
