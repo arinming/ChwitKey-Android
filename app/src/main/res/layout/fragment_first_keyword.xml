@@ -33,6 +33,7 @@
             android:id="@+id/tv_keyword_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_regular"
             android:text="@string/first_keyword_title"
             android:textSize="20sp" />
 
@@ -70,9 +71,10 @@
             android:layout_height="wrap_content"
             android:layout_gravity="start|center"
             android:layout_marginTop="60dp"
+            android:fontFamily="@font/pretendard_bold"
             android:text="@string/first_keyword_recom"
             android:textSize="16sp"
-            android:textStyle="bold" />
+            />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_keyword"
