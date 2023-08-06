@@ -31,7 +31,8 @@ class LoginActivity: AppCompatActivity() {
 
     private fun goToHome() {
         binding.linearKakaoLoginBtn.setOnClickListener {
-            startActivity(Intent(this, InformSettingActivity::class.java))
+            //startActivity(Intent(this, InformSettingActivity::class.java))
+            startActivity(Intent(this, HomeActivity::class.java))
         }
     }
 
