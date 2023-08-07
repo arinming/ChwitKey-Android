@@ -4,25 +4,29 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cherry_pick_android.data.data.Article
 import com.example.cherry_pick_android.databinding.ItemScrapNewsBinding
-import com.example.cherry_pick_android.data.data.ScrapNews
 import com.example.cherry_pick_android.presentation.ui.article.ArticleActivity
 import com.google.android.material.snackbar.Snackbar
 
-class ScrapAdapter(private val scrapNewsData: MutableList<ScrapNews>) :
+class ScrapAdapter(private val scrapNewsData: MutableList<Article>) :
     RecyclerView.Adapter<ScrapAdapter.ViewHolder>() {
 
     // 뷰 유형에 대한 참조 클래스
     class ViewHolder(val binding: ItemScrapNewsBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun setNewsItem(scrapNewsData: String) {
-            binding.tvNewsTitle.text = scrapNewsData
-        }
+        val title = binding.tvNewsTitle
+        val company = binding.tvNewsCompany
+        val time = binding.tvNewsTime
+
         // 뉴스 클릭 이벤트 설정
         init {
             binding.root.setOnClickListener { view ->
                 val context = view.context
                 val intent = Intent(context, ArticleActivity::class.java)
                 intent.putExtra("제목", binding.tvNewsTitle.text)
+                intent.putExtra("회사", binding.tvNewsCompany.text)
+                intent.putExtra("시간", binding.tvNewsTime.text)
+
                 context.startActivity(intent)
             }
         }
@@ -39,7 +43,9 @@ class ScrapAdapter(private val scrapNewsData: MutableList<ScrapNews>) :
 
     // 호출한 내용으로 bind
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.setNewsItem(scrapNewsData[position].scrapNews)
+        viewHolder.title.text = scrapNewsData[position].title
+        viewHolder.company.text = scrapNewsData[position].company
+        viewHolder.time.text = scrapNewsData[position].time
 
         // 스크랩 버튼 클릭 이벤트 설정
         viewHolder.binding.ibtnScrap.setOnClickListener {

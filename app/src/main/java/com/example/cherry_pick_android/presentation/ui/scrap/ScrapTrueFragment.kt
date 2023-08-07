@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.cherry_pick_android.data.data.ScrapNews
+import com.example.cherry_pick_android.data.data.Article
 import com.example.cherry_pick_android.databinding.FragmentScrapTrueBinding
 import com.example.cherry_pick_android.presentation.adapter.ScrapAdapter
 
@@ -14,9 +14,13 @@ class ScrapTrueFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val scrapNews = mutableListOf(
-        ScrapNews("뉴스1"), ScrapNews("뉴스2"), ScrapNews("뉴스3"), ScrapNews("뉴스4"),
-        ScrapNews("뉴스5"), ScrapNews("뉴스6"), ScrapNews("뉴스7"), ScrapNews("뉴스8"),
-        ScrapNews("뉴스9"), ScrapNews("뉴스10"), ScrapNews("뉴스11"), ScrapNews("뉴스12")
+        Article("1", "뉴스1", "회사1", "9분"),
+        Article("2", "뉴스2", "회사2", "19분"),
+        Article("3", "뉴스3", "회사3", "29분"),
+        Article("4", "뉴스4", "회사4", "39분"),
+        Article("5", "뉴스5", "회사5", "49분"),
+        Article("6", "뉴스6", "회사6", "59분"),
+        Article("7", "뉴스7", "회사7", "1시간"),
     )
 
     override fun onCreateView(

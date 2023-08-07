@@ -34,7 +34,13 @@ class ArticleActivity : AppCompatActivity() {
     private fun initArticle() {
         val articleIntent: Intent = intent
         val articleTitle: String? = articleIntent.getStringExtra("제목")
+        val articleCompany: String? = articleIntent.getStringExtra("회사")
+        val articleTime: String? = articleIntent.getStringExtra("시간")
+
         binding.tvArticleTitle.text = articleTitle.toString()
+        binding.tvArticleCompany.text = articleCompany.toString()
+        binding.tvArticleTime.text = articleTime.toString()
+
     }
 
 

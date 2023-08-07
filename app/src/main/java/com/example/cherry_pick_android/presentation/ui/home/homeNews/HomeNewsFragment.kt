@@ -20,9 +20,13 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     private val binding get() = _binding!!
 
     private val articles = listOf(
-        Article("1", "뉴스1"), Article("2", "뉴스2"), Article("3", "뉴스3"), Article("4", "뉴스4"),
-        Article("5", "뉴스5"), Article("6", "뉴스6"), Article("7", "뉴스7"), Article("8", "뉴스8"),
-        Article("9", "뉴스9"), Article("9", "뉴스10")
+        Article("1", "뉴스1", "회사1", "9분"),
+        Article("2", "뉴스2", "회사2", "19분"),
+        Article("3", "뉴스3", "회사3", "29분"),
+        Article("4", "뉴스4", "회사4", "39분"),
+        Article("5", "뉴스5", "회사5", "49분"),
+        Article("6", "뉴스6", "회사6", "59분"),
+        Article("7", "뉴스7", "회사7", "1시간"),
     )
 
 

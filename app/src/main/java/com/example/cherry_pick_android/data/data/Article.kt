@@ -6,5 +6,7 @@ import androidx.room.PrimaryKey
 
 data class Article(
     @PrimaryKey @ColumnInfo(name = "id") val articleId: String,
-    val title: String
+    val title: String,
+    val company: String,
+    val time: String,
 )
