@@ -25,9 +25,8 @@ class ScrapTrueFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentScrapTrueBinding.inflate(inflater, container, false)
-        val view = binding.root
 
-        return view
+        return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -42,7 +41,9 @@ class ScrapTrueFragment : Fragment() {
         _binding = null
     }
 
+
     private fun initScrapList() {
         binding.rvScrapNewsList.adapter = ScrapAdapter(scrapNews)
+        binding.tvScrapCount.text = scrapNews.size.toString()
     }
 }
