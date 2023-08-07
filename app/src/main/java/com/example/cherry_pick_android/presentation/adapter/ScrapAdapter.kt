@@ -22,6 +22,7 @@ class ScrapAdapter(private val scrapNewsData: MutableList<ScrapNews>) :
             binding.root.setOnClickListener { view ->
                 val context = view.context
                 val intent = Intent(context, ArticleActivity::class.java)
+                intent.putExtra("제목", binding.tvNewsTitle.text)
                 context.startActivity(intent)
             }
         }

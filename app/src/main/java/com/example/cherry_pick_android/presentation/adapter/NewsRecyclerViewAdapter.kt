@@ -3,6 +3,7 @@ package com.example.cherry_pick_android.presentation.adapter
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.databinding.ItemNewsBinding
 import com.example.cherry_pick_android.data.data.Article
@@ -21,7 +22,8 @@ class NewsRecyclerViewAdapter(private val articleDataSet: List<Article>):
             binding.root.setOnClickListener { view ->
                 val context = view.context
                 val intent = Intent(context, ArticleActivity::class.java)
-                context.startActivity(intent)
+                intent.putExtra("제목", binding.tvNewsTitle.text)
+                ContextCompat.startActivity(context, intent, null)
             }
         }
     }
