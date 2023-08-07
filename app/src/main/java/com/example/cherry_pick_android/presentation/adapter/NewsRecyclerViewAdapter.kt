@@ -9,7 +9,7 @@ import com.example.cherry_pick_android.databinding.ItemNewsBinding
 import com.example.cherry_pick_android.data.data.Article
 import com.example.cherry_pick_android.presentation.ui.article.ArticleActivity
 
-class NewsRecyclerViewAdapter(private val articleDataSet: List<Article>):
+class NewsRecyclerViewAdapter(private val articleDataSet: List<Article>) :
     RecyclerView.Adapter<NewsRecyclerViewAdapter.ViewHolder>() {
 
     // 뷰 유형에 대한 참조 클래스

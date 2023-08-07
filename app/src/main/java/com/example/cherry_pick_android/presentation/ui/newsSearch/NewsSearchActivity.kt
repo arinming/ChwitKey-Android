@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.data.data.Keyword
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
 import com.example.cherry_pick_android.domain.model.SearchRecord
+import com.example.cherry_pick_android.presentation.adapter.ArticleKeywordAdapter
 import com.example.cherry_pick_android.presentation.adapter.KeywordAdapter
 import com.example.cherry_pick_android.presentation.ui.searchList.SearchListActivity
 
@@ -59,7 +60,7 @@ class NewsSearchActivity: AppCompatActivity() {
         // 키워드
         binding.rvSearchNewsList.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.rvSearchNewsList.adapter = KeywordAdapter(keywords)
+        binding.rvSearchNewsList.adapter = ArticleKeywordAdapter(keywords)
 
         // 검색어
         binding.rvRecordList.layoutManager = LinearLayoutManager(this)
