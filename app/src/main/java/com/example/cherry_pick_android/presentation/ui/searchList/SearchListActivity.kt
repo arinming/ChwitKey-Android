@@ -29,6 +29,7 @@ class SearchListActivity : AppCompatActivity() {
 
     private fun initNewsList() {
         binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(articles)
+        binding.tvSearchCount.text = articles.size.toString()
     }
 
     private fun goToBack() {
