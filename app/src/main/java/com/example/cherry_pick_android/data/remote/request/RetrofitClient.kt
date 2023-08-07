@@ -32,7 +32,7 @@ object RetrofitClient {
     private val client = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create(gson))
-        .client(okHttpClient(AppInterceptor()))
+        // .client(okHttpClient(AppInterceptor()))
         .build()
 
     fun getInstance(): Retrofit {

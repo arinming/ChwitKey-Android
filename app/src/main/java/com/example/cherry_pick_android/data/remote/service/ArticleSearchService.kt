@@ -16,7 +16,7 @@ interface ArticleSearchService {
         @Query("cond") cond: String,
         @Query("sortType") sortType: String,
         @Query("pageable") pageable: Pageable
-    ): Response<ArticleCommendResponse>
+    ): ArticleCommendResponse
 
 
     // 직군 & 정렬

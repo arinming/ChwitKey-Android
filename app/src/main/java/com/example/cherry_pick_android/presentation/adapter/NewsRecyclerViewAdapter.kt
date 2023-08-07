@@ -5,10 +5,10 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.databinding.ItemNewsBinding
-import com.example.cherry_pick_android.data.data.News
+import com.example.cherry_pick_android.data.data.Article
 import com.example.cherry_pick_android.presentation.ui.article.ArticleActivity
 
-class NewsRecyclerViewAdapter(private val newsDataSet: List<News>):
+class NewsRecyclerViewAdapter(private val articleDataSet: List<Article>):
     RecyclerView.Adapter<NewsRecyclerViewAdapter.ViewHolder>() {
 
     // 뷰 유형에 대한 참조 클래스
@@ -37,10 +37,10 @@ class NewsRecyclerViewAdapter(private val newsDataSet: List<News>):
 
     // 호출한 내용으로 bind
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.setNewsItem(newsDataSet[position].title)
+        viewHolder.setNewsItem(articleDataSet[position].title)
     }
 
     // 데이터 크기 반환
-    override fun getItemCount() = newsDataSet.size
+    override fun getItemCount() = articleDataSet.size
 
 }
