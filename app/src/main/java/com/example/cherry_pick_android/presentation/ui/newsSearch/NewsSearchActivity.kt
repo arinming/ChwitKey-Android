@@ -18,8 +18,7 @@ class NewsSearchActivity: AppCompatActivity() {
     private val keywords = listOf(
         Keyword("2차전지"), Keyword("IT"), Keyword("철강"), Keyword("정유"),
         Keyword("석유"), Keyword("반도체"), Keyword("디스플레이"), Keyword("휴대폰"),
-        Keyword("반도체"), Keyword("해운"), Keyword("F&B"), Keyword("건설"),
-        Keyword("소매유통"), Keyword("건설"), Keyword("철강"), Keyword("정유")
+        Keyword("반도체"), Keyword("해운"), Keyword("F&B"), Keyword("건설"), Keyword("소매유통")
     )
 
     private val records = mutableListOf(
@@ -35,12 +34,11 @@ class NewsSearchActivity: AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-
         initView()
 
         goToBack()
-        goToSearchList()
         allDelete()
+        goToSearchList()
     }
 
     // 백 버튼 누르면 홈 화면으로

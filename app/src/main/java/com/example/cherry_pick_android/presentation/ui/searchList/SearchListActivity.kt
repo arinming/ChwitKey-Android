@@ -1,7 +1,10 @@
 package com.example.cherry_pick_android.presentation.ui.searchList
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.toColorInt
+import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.ActivitySearchListBinding
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.data.data.Article
@@ -32,8 +35,13 @@ class SearchListActivity : AppCompatActivity() {
     }
 
     private fun initNewsList() {
+        val searchKeyword: Intent = intent
+        val searchText: String? = searchKeyword.getStringExtra("키워드")
+        binding.etSearch.hint = searchText.toString()
+
         binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(articles)
         binding.tvSearchCount.text = articles.size.toString()
+
     }
 
     private fun goToBack() {
