@@ -72,22 +72,6 @@ class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
                         Request(etBirth.text.toString(), etNick.text.toString())
                     )
 
-                    lifecycleScope.launch {
-                        try{
-                            val response = signUpService.getSignUp(request).execute()
-                            if(response.isSuccessful){
-                                Log.d(TAG, response.body()?.id.toString())
-                                startActivity(intent)
-                            }else{
-                                Log.d(TAG, "Response Error")
-                            }
-                        }catch (e: Exception){
-                            Log.d(TAG, "Error:${e.message}")
-                        }
-
-
-                    }
-
                 }
             }
         }
