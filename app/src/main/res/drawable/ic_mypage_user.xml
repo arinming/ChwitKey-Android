@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:drawable="@drawable/ic_my_page_profile"/>
+    <item
+        android:drawable="@drawable/ic_my_page_default" android:gravity="center"/>
+</layer-list>
