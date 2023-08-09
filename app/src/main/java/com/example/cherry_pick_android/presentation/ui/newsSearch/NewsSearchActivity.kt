@@ -6,10 +6,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.data.data.Keyword
+import com.example.cherry_pick_android.data.data.SearchRecord
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
-import com.example.cherry_pick_android.domain.model.SearchRecord
 import com.example.cherry_pick_android.presentation.adapter.ArticleKeywordAdapter
-import com.example.cherry_pick_android.presentation.adapter.KeywordAdapter
 import com.example.cherry_pick_android.presentation.ui.searchList.SearchListActivity
 
 class NewsSearchActivity: AppCompatActivity() {
@@ -22,9 +21,7 @@ class NewsSearchActivity: AppCompatActivity() {
     )
 
     private val records = mutableListOf(
-        SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3"),
-        SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3"),
-        SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3")
+        SearchRecord(1, "검색어 1"), SearchRecord(2, "검색어 2"), SearchRecord(3, "검색어 3"),
     )
 
 

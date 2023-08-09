@@ -1,8 +1,8 @@
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cherry_pick_android.data.data.SearchRecord
 import com.example.cherry_pick_android.databinding.ItemSearchBinding
-import com.example.cherry_pick_android.domain.model.SearchRecord
 
 class SearchRecordAdapter(private val record: MutableList<SearchRecord>):
     RecyclerView.Adapter<SearchRecordAdapter.ViewHolder>() {
@@ -26,7 +26,7 @@ class SearchRecordAdapter(private val record: MutableList<SearchRecord>):
 
     // 호출한 내용으로 bind
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.setRecordItem(record[position].searchRecode)
+        viewHolder.setRecordItem(record[position].record)
 
         // 삭제 버튼 클릭 이벤트 설정
         viewHolder.binding.ibtnDeleteRecentSearch.setOnClickListener {
