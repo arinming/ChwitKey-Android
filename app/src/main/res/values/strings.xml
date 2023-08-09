@@ -35,7 +35,6 @@
     <string name="news_search_keyword">2차전지</string>
 
 
-
     <!-- mypage -->
     <string name="mypage_user_id">유저네임a</string>
     <string name="mypage_saved_article">저장한 기사</string>
@@ -81,7 +80,7 @@
 
     <!-- home_news -->
     <string name="home_news_search_hint">원하는 주제를 검색하세요</string>
-    
+
     <!-- keyword -->
     <string name="first_keyword_title">앗! 아직 등록된 키워드가 없어요</string>
     <string name="first_keyword_recom">이런 키워드는 어때요?</string>
@@ -134,5 +133,10 @@
     <string name="scrap_snackbar_true">기사를 스크랩했어요!</string>
     <string name="scrap_snackbar_false">기사 스크랩을 해제했어요!</string>
 
+    <!-- jobgroup -->
+    <string name="job_change_instruction1">님이 변경을 희망하는</string>
+    <string name="job_change_instruction2">직군을 선택해주세요!</string>
+    <string name="job_change_instruction3">최대 3개 선택 및 추후 변경 가능합니다.</string>
+    <string name="job_change_complete">완료</string>
 
 </resources>

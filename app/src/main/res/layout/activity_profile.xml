@@ -74,7 +74,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_my_page" />
+                app:srcCompat="@drawable/ic_mypage_user" />
 
             <ImageButton
                 android:id="@+id/ibtn_profile_camera"
@@ -140,10 +140,10 @@
                         android:layout_height="19dp"
                         android:background="@color/white"
                         android:padding="0dp"
-                        android:scaleType="centerCrop"
+                        android:scaleType="fitCenter"
                         android:layout_gravity="right"
                         app:layout_constraintEnd_toEndOf="@id/ll_profile_name"
-                        app:srcCompat="@drawable/ic_pensil" />
+                        app:srcCompat="@drawable/ic_pencil" />
 
                 </LinearLayout>
 
@@ -237,8 +237,8 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
 
-                    <EditText
-                        android:id="@+id/et_profile_job"
+                    <TextView
+                        android:id="@+id/tv_profile_job"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@null"
@@ -256,7 +256,7 @@
                         android:background="@color/white"
                         android:padding="0dp"
                         android:scaleType="centerCrop"
-                        app:srcCompat="@drawable/ic_pensil" />
+                        app:srcCompat="@drawable/ic_pencil" />
 
                 </LinearLayout>
 
