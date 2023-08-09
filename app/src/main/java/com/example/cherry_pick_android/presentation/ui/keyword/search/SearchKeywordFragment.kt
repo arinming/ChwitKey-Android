@@ -20,7 +20,6 @@ import com.example.cherry_pick_android.presentation.adapter.SearchKeywordAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.DeleteListener
 import com.example.cherry_pick_android.presentation.ui.keyword.dialog.KeywordDialog
 import com.example.cherry_pick_android.presentation.ui.keyword.KeywordFragment
-import com.example.cherry_pick_android.presentation.ui.keyword.dialog.DotLoadingFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import dagger.hilt.android.AndroidEntryPoint

@@ -22,7 +22,7 @@ class ArticleActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-
+        initArticle()
         goToBack()
         goToGPT()
         articleScrap()
@@ -30,11 +30,26 @@ class ArticleActivity : AppCompatActivity() {
         articleShare()
     }
 
+    // 인텐트 값 받아서 초기화
+    private fun initArticle() {
+        val articleIntent: Intent = intent
+        val articleTitle: String? = articleIntent.getStringExtra("제목")
+        val articleCompany: String? = articleIntent.getStringExtra("회사")
+        val articleTime: String? = articleIntent.getStringExtra("시간")
+
+        binding.tvArticleTitle.text = articleTitle.toString()
+        binding.tvArticleCompany.text = articleCompany.toString()
+        binding.tvArticleTime.text = articleTime.toString()
+
+    }
+
+
     private fun goToBack() {
         binding.ibtnBack.setOnClickListener {
             finish()
         }
     }
+
 
 
     // GPT 버튼 이벤트

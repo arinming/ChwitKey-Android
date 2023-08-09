@@ -25,7 +25,6 @@ import com.example.cherry_pick_android.presentation.adapter.SearchKeywordAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.AddListener
 import com.example.cherry_pick_android.presentation.ui.keyword.DeleteListener
 import com.example.cherry_pick_android.presentation.ui.keyword.Keywords
-import com.example.cherry_pick_android.presentation.ui.keyword.dialog.DotLoadingFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.search.SearchKeywordFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView

@@ -6,9 +6,9 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.data.data.Keyword
+import com.example.cherry_pick_android.data.data.SearchRecord
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
-import com.example.cherry_pick_android.domain.model.SearchRecord
-import com.example.cherry_pick_android.presentation.adapter.KeywordAdapter
+import com.example.cherry_pick_android.presentation.adapter.ArticleKeywordAdapter
 import com.example.cherry_pick_android.presentation.ui.searchList.SearchListActivity
 
 class NewsSearchActivity: AppCompatActivity() {
@@ -17,14 +17,11 @@ class NewsSearchActivity: AppCompatActivity() {
     private val keywords = listOf(
         Keyword("2차전지"), Keyword("IT"), Keyword("철강"), Keyword("정유"),
         Keyword("석유"), Keyword("반도체"), Keyword("디스플레이"), Keyword("휴대폰"),
-        Keyword("반도체"), Keyword("해운"), Keyword("F&B"), Keyword("건설"),
-        Keyword("소매유통"), Keyword("건설"), Keyword("철강"), Keyword("정유")
+        Keyword("반도체"), Keyword("해운"), Keyword("F&B"), Keyword("건설"), Keyword("소매유통")
     )
 
     private val records = mutableListOf(
-        SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3"),
-        SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3"),
-        SearchRecord("검색어 1"), SearchRecord("검색어 2"), SearchRecord("검색어 3")
+        SearchRecord(1, "검색어 1"), SearchRecord(2, "검색어 2"), SearchRecord(3, "검색어 3"),
     )
 
 
@@ -34,12 +31,11 @@ class NewsSearchActivity: AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-
         initView()
 
         goToBack()
-        goToSearchList()
         allDelete()
+        goToSearchList()
     }
 
     // 백 버튼 누르면 홈 화면으로
@@ -59,7 +55,7 @@ class NewsSearchActivity: AppCompatActivity() {
         // 키워드
         binding.rvSearchNewsList.layoutManager =
             LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.rvSearchNewsList.adapter = KeywordAdapter(keywords)
+        binding.rvSearchNewsList.adapter = ArticleKeywordAdapter(keywords)
 
         // 검색어
         binding.rvRecordList.layoutManager = LinearLayoutManager(this)

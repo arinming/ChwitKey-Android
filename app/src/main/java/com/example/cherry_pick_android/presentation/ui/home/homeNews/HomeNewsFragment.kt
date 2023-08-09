@@ -6,20 +6,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.data.Article
 import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
-import com.example.cherry_pick_android.data.data.News
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
+import com.example.cherry_pick_android.presentation.viewmodel.article.ArticleViewModel
 
 class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     private var _binding: FragmentHomeNewsBinding? = null
     private val binding get() = _binding!!
 
-    private val news = listOf(
-        News("뉴스1"), News("뉴스2"), News("뉴스3"), News("뉴스4"),
-        News("뉴스5"), News("뉴스6"), News("뉴스7"), News("뉴스8"),
-        News("뉴스9"), News("뉴스10"), News("뉴스11"), News("뉴스12")
+    private val articles = listOf(
+        Article("1", "뉴스1", "회사1", "9분"),
+        Article("2", "뉴스2", "회사2", "19분"),
+        Article("3", "뉴스3", "회사3", "29분"),
+        Article("4", "뉴스4", "회사4", "39분"),
+        Article("5", "뉴스5", "회사5", "49분"),
+        Article("6", "뉴스6", "회사6", "59분"),
+        Article("7", "뉴스7", "회사7", "1시간"),
     )
 
 
@@ -29,17 +36,17 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentHomeNewsBinding.inflate(inflater, container, false)
-        val view = binding.root
 
-        return view
+
+        return binding.root
 
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        goToNewsSearch()
         initNewsList()
+        goToNewsSearch()
     }
 
     override fun onDestroyView() {
@@ -58,7 +65,16 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     }
 
 
-    fun initNewsList() {
-        binding.rvNewsList.adapter = NewsRecyclerViewAdapter(news)
+    private fun initNewsList() {
+        binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articles)
+    }
+
+    private fun liveNewsList() {
+        val viewModel = ViewModelProvider(this)[ArticleViewModel::class.java]
+        viewModel.getAllArticle()
+
+        viewModel.result.observe(viewLifecycleOwner, Observer {
+            binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articles)
+        })
     }
 }

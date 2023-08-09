@@ -3,18 +3,23 @@ package com.example.cherry_pick_android.presentation.ui.searchList
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.graphics.toColorInt
+import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.ActivitySearchListBinding
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
-import com.example.cherry_pick_android.presentation.ui.article.ArticleActivity
-import com.example.cherry_pick_android.data.data.News
+import com.example.cherry_pick_android.data.data.Article
 
 class SearchListActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySearchListBinding
 
-    private val news = listOf(
-        News("뉴스1"), News("뉴스2"), News("뉴스3"), News("뉴스4"),
-        News("뉴스5"), News("뉴스6"), News("뉴스7"), News("뉴스8"),
-        News("뉴스9"), News("뉴스10"), News("뉴스11"), News("뉴스12")
+    private val articles = listOf(
+        Article("1", "뉴스1", "회사1", "9분"),
+        Article("2", "뉴스2", "회사2", "19분"),
+        Article("3", "뉴스3", "회사3", "29분"),
+        Article("4", "뉴스4", "회사4", "39분"),
+        Article("5", "뉴스5", "회사5", "49분"),
+        Article("6", "뉴스6", "회사6", "59분"),
+        Article("7", "뉴스7", "회사7", "1시간"),
     )
 
 
@@ -30,7 +35,13 @@ class SearchListActivity : AppCompatActivity() {
     }
 
     private fun initNewsList() {
-        binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(news)
+        val searchKeyword: Intent = intent
+        val searchText: String? = searchKeyword.getStringExtra("키워드")
+        binding.etSearch.hint = searchText.toString()
+
+        binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(articles)
+        binding.tvSearchCount.text = articles.size.toString()
+
     }
 
     private fun goToBack() {
