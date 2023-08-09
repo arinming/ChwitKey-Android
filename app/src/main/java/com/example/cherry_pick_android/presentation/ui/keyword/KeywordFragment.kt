@@ -12,7 +12,9 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.data.News
 import com.example.cherry_pick_android.databinding.FragmentKeywordBinding
+import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.adapter.SearchKeywordAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.search.SearchKeywordFragment
@@ -28,6 +30,11 @@ class KeywordFragment : Fragment(), DeleteListener {
     private val searchKeywordViewModel: SearchKeywordViewModel by viewModels()
     private lateinit var searchKeywordAdapter: SearchKeywordAdapter
     private lateinit var bottomNavigationView: BottomNavigationView
+    private val news = listOf(
+        News("뉴스1"), News("뉴스2"), News("뉴스3"), News("뉴스4"),
+        News("뉴스5"), News("뉴스6"), News("뉴스7"), News("뉴스8"),
+        News("뉴스9"), News("뉴스10"), News("뉴스11"), News("뉴스12")
+    )
     companion object{
         const val TAG = "keywordFragment"
         fun newInstance(): KeywordFragment = KeywordFragment()
@@ -67,6 +74,8 @@ class KeywordFragment : Fragment(), DeleteListener {
         searchKeywordAdapter = SearchKeywordAdapter(this)
         binding.rvKeyword.adapter = searchKeywordAdapter
 
+        binding.rvKeywordArticle.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        binding.rvKeywordArticle.adapter = NewsRecyclerViewAdapter(news)
     }
 
     override fun onDeleteClick(keyword: String) {

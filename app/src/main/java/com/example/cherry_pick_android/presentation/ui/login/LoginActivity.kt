@@ -11,10 +11,14 @@ import android.text.style.StyleSpan
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.remote.service.SignUpService
 import com.example.cherry_pick_android.databinding.ActivityLoginBinding
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.infrom.InformSettingActivity
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
+import dagger.hilt.android.AndroidEntryPoint
+import retrofit2.Retrofit
+import javax.inject.Inject
 
 class LoginActivity: AppCompatActivity() {
     private lateinit var binding: ActivityLoginBinding
@@ -32,6 +36,7 @@ class LoginActivity: AppCompatActivity() {
     private fun goToHome() {
         binding.linearKakaoLoginBtn.setOnClickListener {
             startActivity(Intent(this, InformSettingActivity::class.java))
+            //startActivity(Intent(this, HomeActivity::class.java))
         }
     }
 
