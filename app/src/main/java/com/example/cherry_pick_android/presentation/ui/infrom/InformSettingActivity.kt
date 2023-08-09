@@ -58,7 +58,7 @@ class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
                     val request = SignUpRequest(
                         Request(etBirth.text.toString(), etNick.text.toString())
                     )
-
+                    startActivity(intent)
                 }
             }
         }
