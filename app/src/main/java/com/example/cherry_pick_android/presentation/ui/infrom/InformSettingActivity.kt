@@ -10,16 +10,40 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.remote.request.Request
+import com.example.cherry_pick_android.data.remote.request.SignUpRequest
+import com.example.cherry_pick_android.data.remote.response.SignUpResponse
+import com.example.cherry_pick_android.data.remote.service.SignUpService
 import com.example.cherry_pick_android.databinding.ActivityInformSettingBinding
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.infrom.dialog.GenderDialog
 import com.example.cherry_pick_android.presentation.ui.infrom.dialog.GenderDialogInterface
 import com.google.android.material.textfield.TextInputLayout
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import okhttp3.Callback
+import okhttp3.Dispatcher
+import retrofit2.Call
+import retrofit2.Response
+import retrofit2.await
+import java.lang.Exception
+import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
-class InformSettingActivity: AppCompatActivity(), GenderDialogInterface {
+@AndroidEntryPoint
+class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
     private val binding: ActivityInformSettingBinding by lazy {
         ActivityInformSettingBinding.inflate(layoutInflater)
+    }
+    @Inject
+    lateinit var signUpService: SignUpService
+    companion object{
+        const val TAG = "InformSettingActivity"
     }
     // 각 버튼의 Flag
     private var nickFlag = false
@@ -39,11 +63,31 @@ class InformSettingActivity: AppCompatActivity(), GenderDialogInterface {
         nickTextWatcher() // 닉네임 변경 감지
         birthTextWatcher() // 생일 변경 감지
 
-        with(binding.tvComplete){
-            setOnClickListener {
-                if(isEnabled){
+        with(binding){
+            tvComplete.setOnClickListener {
+                if(tvComplete.isEnabled){
                     val intent = Intent(this@InformSettingActivity, HomeActivity::class.java)
-                    startActivity(intent)
+                    // request body
+                    val request = SignUpRequest(
+                        Request(etBirth.text.toString(), etNick.text.toString())
+                    )
+
+                    lifecycleScope.launch {
+                        try{
+                            val response = signUpService.getSignUp(request).execute()
+                            if(response.isSuccessful){
+                                Log.d(TAG, response.body()?.id.toString())
+                                startActivity(intent)
+                            }else{
+                                Log.d(TAG, "Response Error")
+                            }
+                        }catch (e: Exception){
+                            Log.d(TAG, "Error:${e.message}")
+                        }
+
+
+                    }
+
                 }
             }
         }
