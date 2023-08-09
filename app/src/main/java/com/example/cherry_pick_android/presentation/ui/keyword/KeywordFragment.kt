@@ -12,7 +12,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
-import com.example.cherry_pick_android.data.data.News
+
 import com.example.cherry_pick_android.databinding.FragmentKeywordBinding
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.adapter.SearchKeywordAdapter
