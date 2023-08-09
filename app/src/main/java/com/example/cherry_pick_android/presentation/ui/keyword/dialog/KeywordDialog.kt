@@ -22,10 +22,13 @@ class KeywordDialog: DialogFragment() {
         // 다이얼로그 투명도 설정
         dialog?.window?.setDimAmount(0F)
 
-        // 다이얼로그 지연시간 설정
+        return binding.root
+    }
+    override fun onResume() {
+        super.onResume()
+        // 다이얼로그가 화면에 보여진 후 0.5초 후에 사라지도록 설정
         view?.postDelayed({
             dismiss()
-        }, 1000)
-        return binding.root
+        }, 500)
     }
 }
