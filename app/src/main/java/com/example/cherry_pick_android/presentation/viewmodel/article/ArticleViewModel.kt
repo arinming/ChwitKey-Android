@@ -16,6 +16,5 @@ class ArticleViewModel: ViewModel() {
         get() = _result
 
     fun getAllArticle() = viewModelScope.launch {
-        _result.value = repository.getAllArticle()
     }
 }

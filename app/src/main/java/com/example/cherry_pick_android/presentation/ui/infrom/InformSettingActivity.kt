@@ -10,11 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.remote.request.Request
 import com.example.cherry_pick_android.data.remote.request.SignUpRequest
-import com.example.cherry_pick_android.data.remote.response.SignUpResponse
 import com.example.cherry_pick_android.data.remote.service.SignUpService
 import com.example.cherry_pick_android.databinding.ActivityInformSettingBinding
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
@@ -22,18 +20,7 @@ import com.example.cherry_pick_android.presentation.ui.infrom.dialog.GenderDialo
 import com.example.cherry_pick_android.presentation.ui.infrom.dialog.GenderDialogInterface
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.Callback
-import okhttp3.Dispatcher
-import retrofit2.Call
-import retrofit2.Response
-import retrofit2.await
-import java.lang.Exception
 import javax.inject.Inject
-import kotlin.coroutines.coroutineContext
 
 @AndroidEntryPoint
 class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
