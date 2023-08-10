@@ -6,13 +6,28 @@ plugins {
     id 'com.google.dagger.hilt.android'
 }
 
+// local.properties 파일에 추가한 값 사용
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
 android {
+    defaultConfig{
+        buildConfigField(
+                "String",
+                "KAKAO_NATIVE_KEY",
+                properties.getProperty("KAKAO_NATIVE_KEY")
+        )
+        // manifest용
+        manifestPlaceholders["KAKAO_NATIVE_KEY"] =
+                properties.getProperty("KAKAO_NATIVE_KEY_MF")
+    }
     namespace 'com.example.cherry_pick_android'
     compileSdk 34
 
     buildFeatures{
         viewBinding = true
         dataBinding = true
+        buildConfig true
     }
     defaultConfig {
         applicationId "com.example.cherry_pick_android"
@@ -90,6 +105,9 @@ dependencies {
     
     // Glide
     implementation 'com.github.bumptech.glide:glide:4.11.0'
+
+    // kakao
+    implementation "com.kakao.sdk:v2-all:2.15.0" // 전체 모듈 설치, 2.11.0 버전부터 지원
 
 }
 
