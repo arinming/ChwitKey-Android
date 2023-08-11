@@ -19,10 +19,14 @@ import com.example.cherry_pick_android.databinding.ActivityLoginBinding
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.infrom.InformSettingActivity
 import com.example.cherry_pick_android.presentation.ui.login.loginManager.KakaoLoginManager
+import com.example.cherry_pick_android.presentation.ui.login.loginManager.NaverLoginManager
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
 import com.example.cherry_pick_android.presentation.util.PlatformManager
 import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
 import com.kakao.sdk.user.UserApiClient
+import com.navercorp.nid.oauth.NidOAuthLogin
+import com.navercorp.nid.profile.NidProfileCallback
+import com.navercorp.nid.profile.data.NidProfileResponse
 import dagger.hilt.android.AndroidEntryPoint
 import retrofit2.Retrofit
 import javax.inject.Inject
@@ -33,11 +37,15 @@ class LoginActivity: AppCompatActivity() {
 
     @Inject
     lateinit var kakaoLoginManager: KakaoLoginManager
+    @Inject
+    lateinit var naverLoginManager: NaverLoginManager
+
     private val viewModel: LoginViewModel by viewModels()
     private var loginFlag = false // 최초사용자 확인
     companion object{
         const val TAG = "LoginActivity"
         private const val KAKAO = "kakao"
+        private const val NAVER = "naver"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,7 +55,7 @@ class LoginActivity: AppCompatActivity() {
         binding.tvExplain.text = textToBold(binding.tvExplain.text.toString(), 7, 17)
         binding.tvExplain2.text = textToBold(binding.tvExplain2.text.toString(), 0, 16)
 
-        onClockLogin()
+        onClickLogin()
 
         viewModel.token.observe(this@LoginActivity, Observer {
             if(it != ""){
@@ -71,16 +79,20 @@ class LoginActivity: AppCompatActivity() {
         return builder
     }
 
-    private fun onClockLogin(){
+    private fun onClickLogin(){
         with(binding){
             linearKakaoLoginBtn.setOnClickListener {
                 PlatformManager.setPlatform(KAKAO)
-                // 유저 id 검사
-                UserApiClient.instance.me { user, error ->
-                    Log.d(TAG, user?.id.toString())
-                    loginFlag = user?.id != null
-                }
+                isInitUser(KAKAO) // 최초사용자 구별
                 kakaoLoginManager.startKakaoLogin {
+                    viewModel.updateSocialToken(it)
+                }
+            }
+
+            linearNaverLoginBtn.setOnClickListener {
+                PlatformManager.setPlatform(NAVER)
+                isInitUser(NAVER) // 최초사용자 구별
+                naverLoginManager.startLogin {
                     viewModel.updateSocialToken(it)
                 }
             }
@@ -97,5 +109,24 @@ class LoginActivity: AppCompatActivity() {
             startActivity(intent)
         }
 
+    }
+
+    private fun isInitUser(platform: String){
+        if(platform == "kakao"){
+            UserApiClient.instance.me { user, error ->
+                Log.d(TAG, user?.id.toString())
+                loginFlag = user?.id != null
+            }
+        }else{
+            NidOAuthLogin().callProfileApi(object: NidProfileCallback<NidProfileResponse>{
+                override fun onError(errorCode: Int, message: String) {}
+                override fun onFailure(httpStatus: Int, message: String) {}
+                override fun onSuccess(result: NidProfileResponse) {
+                    Log.d(TAG, result.profile?.id.toString())
+                    loginFlag = result.profile?.id != null
+                }
+
+            })
+        }
     }
 }
