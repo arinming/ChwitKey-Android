@@ -55,7 +55,7 @@ class LoginActivity: AppCompatActivity() {
         binding.tvExplain.text = textToBold(binding.tvExplain.text.toString(), 7, 17)
         binding.tvExplain2.text = textToBold(binding.tvExplain2.text.toString(), 0, 16)
 
-        onClockLogin()
+        onClickLogin()
 
         viewModel.token.observe(this@LoginActivity, Observer {
             if(it != ""){
@@ -79,7 +79,7 @@ class LoginActivity: AppCompatActivity() {
         return builder
     }
 
-    private fun onClockLogin(){
+    private fun onClickLogin(){
         with(binding){
             linearKakaoLoginBtn.setOnClickListener {
                 PlatformManager.setPlatform(KAKAO)
