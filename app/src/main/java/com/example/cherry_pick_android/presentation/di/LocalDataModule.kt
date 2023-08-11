@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import com.example.cherry_pick_android.data.db.KeywordDAO
 import com.example.cherry_pick_android.data.db.KeywordDB
+import com.example.cherry_pick_android.data.db.RecordDAO
+import com.example.cherry_pick_android.data.db.RecordDB
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,7 +30,25 @@ class LocalDataModule {
 
     @Singleton
     @Provides
+    fun provideRecordDatabase(application: Application): RecordDB {
+        return Room.databaseBuilder(
+            application,
+            RecordDB::class.java,
+            "record_db"
+        )
+            .fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Singleton
+    @Provides
     fun provideKeywordDAO(keywordDB: KeywordDB): KeywordDAO {
         return keywordDB.keywordDAO()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRecordDAO(recordDB: RecordDB): RecordDAO {
+        return recordDB.recordDAO()
     }
 }

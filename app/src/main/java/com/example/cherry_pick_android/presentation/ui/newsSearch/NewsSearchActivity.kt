@@ -10,7 +10,9 @@ import com.example.cherry_pick_android.data.data.SearchRecord
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
 import com.example.cherry_pick_android.presentation.adapter.ArticleKeywordAdapter
 import com.example.cherry_pick_android.presentation.ui.searchList.SearchListActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class NewsSearchActivity: AppCompatActivity() {
     private lateinit var binding: ActivityNewsSearchBinding
 
