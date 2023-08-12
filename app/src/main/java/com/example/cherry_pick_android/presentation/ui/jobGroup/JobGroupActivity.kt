@@ -26,27 +26,47 @@ class JobGroupActivity : AppCompatActivity() {
 
         gridView = findViewById(R.id.gv_job_group)
         arrayList = ArrayList()
+        var selectedData: ArrayList<String>
+
         adapter = JobGroupAdapter(applicationContext, jobgroups!!)
+        //adapter = JobGroupAdapter(this, jobgroups)
         gridView?.adapter = adapter
 
-        var selectedData = adapter.getSelectedList()
+        selectedData = adapter.getSelectedList()
         Log.d("JobGroupActivity", "$selectedData")
 
+        //gridview의 item click 감지
         gridView.onItemClickListener =
             AdapterView.OnItemClickListener { parent, view, position, id ->
-                Log.e("JobGroupActivity", "onItemCli ckListener is working")
-                var jobgroupItem: JobGroup = jobgroups.get(position)
+                val completeBtn : Button = findViewById(R.id.btn_complete)
+                selectedData = adapter.getSelectedList()
+
+                // 직군 1개이상 선택시 완료 버튼 활성화
+                if (selectedData.size > 0) {
+                    completeBtn.setBackgroundResource(R.drawable.ic_job_complete_clicked)
+                    completeBtn.isEnabled= true
+                    Log.d("JobGroupActivity", "arrayList크기 : ${arrayList.size}이므로 버튼 활성화 ")
+                    Log.d("JobGroupActivity", "arrayList크기 : ${selectedData.size}이므로 버튼 활성화 ")
+                }
+                else{
+                    completeBtn.setBackgroundResource(R.drawable.ic_job_complete)
+                    completeBtn.isEnabled= false
+                }
+
+                //activateCompleteBtn()
+                Log.d("JobGroupActivity", "onItemClickListener is working")
+                /*var jobgroupItem: JobGroup = jobgroups[position]
                 arrayList.add(jobgroupItem.toString())
                 Log.d("JobGroupActivity", "arrayList : $arrayList ")
 
                 var selectedData = adapter.getSelectedList()
-                Log.d("JobGroupActivity", "$selectedData")
+                Log.d("JobGroupActivity", "$selectedData")*/
 
             }
 
         GoToProfile()
         clickcompletebutton()
-        //activateCompleteBtn()
+
     }
 
     private fun GoToProfile() {
@@ -76,19 +96,17 @@ class JobGroupActivity : AppCompatActivity() {
 
     private fun activateCompleteBtn() {
         val completeBtn : Button = findViewById(R.id.btn_complete)
+        // 직군 1개이상 선택시 완료 버튼 활성화
+        if (arrayList.size > 0) {
+            completeBtn.setBackgroundResource(R.drawable.ic_job_complete_clicked)
+            completeBtn.isEnabled= true
+            Log.d("JobGroupActivity", "arrayList크기 : ${arrayList.size}이므로 버튼 활성화 ")
 
-// 직군 1개이상 선택시 완료 버튼 활성화
-            if (arrayList.size > 0) {
-                completeBtn.setBackgroundResource(R.drawable.ic_job_complete_clicked)
-                completeBtn.isEnabled= true
-                Log.d("JobGroupActivity", "arrayList크기 : ${arrayList.size}이므로 버튼 활성화 ")
-
-            }
-            else{
-                completeBtn.setBackgroundResource(R.drawable.ic_job_complete)
-                completeBtn.isEnabled= false
-            }
-
+        }
+        else{
+            completeBtn.setBackgroundResource(R.drawable.ic_job_complete)
+            completeBtn.isEnabled= false
+        }
     }
 
 
