@@ -4,7 +4,10 @@ import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.response.ArticleCommendResponse
 import com.example.cherry_pick_android.data.remote.response.ArticleIndustryResponse
 import com.example.cherry_pick_android.data.remote.response.ArticleKeywordResponse
+import dagger.Provides
+import retrofit2.Call
 import retrofit2.Response
+import retrofit2.http.FormUrlEncoded
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -16,7 +19,7 @@ interface ArticleSearchService {
         @Query("cond") cond: String,
         @Query("sortType") sortType: String,
         @Query("pageable") pageable: Pageable
-    ): ArticleCommendResponse
+    ): Call<ArticleCommendResponse>
 
 
     // 직군 & 정렬
@@ -26,7 +29,7 @@ interface ArticleSearchService {
         @Query("sortType") sortType: String,
         @Query("industry") industry: String,
         @Query("pageable") pageable: Pageable
-    ): Response<ArticleIndustryResponse>
+    ): Call<ArticleIndustryResponse>
 
 
     // 키워드 & 정렬
@@ -36,5 +39,5 @@ interface ArticleSearchService {
         @Query("sortType") sortType: String,
         @Query("industry") industry: String,
         @Query("pageable") pageable: Pageable
-    ): Response<ArticleKeywordResponse>
+    ): Call<ArticleKeywordResponse>
 }

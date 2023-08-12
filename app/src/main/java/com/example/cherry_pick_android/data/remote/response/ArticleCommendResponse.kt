@@ -1,5 +1,8 @@
 package com.example.cherry_pick_android.data.remote.response
 
+import com.squareup.moshi.JsonClass
+
+@JsonClass(generateAdapter = true)
 data class ArticleCommendResponse(
     val `data`: Data,
     val description: String,
