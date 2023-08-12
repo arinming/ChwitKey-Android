@@ -6,17 +6,21 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.databinding.ActivityJobGroupBinding
 import com.example.cherry_pick_android.domain.model.JobGroup
+import dagger.hilt.android.AndroidEntryPoint
 
 
-class JobGroupAdapter(var context: Context, private val jobgroups: List<JobGroup>) : BaseAdapter() {
+class JobGroupAdapter(
+    var context: Context,
+    private val jobgroups: List<JobGroup>,
+    private val onCompleteBtnCallback: ()->Unit
+) : BaseAdapter() {
     private var selectedjobList =arrayListOf<String>()
-
     override fun getCount(): Int = jobgroups.size
 
     override fun getItem(position: Int): Any {
@@ -57,6 +61,9 @@ class JobGroupAdapter(var context: Context, private val jobgroups: List<JobGroup
                 Log.d("JobGroupAdapter", "added ${tvBtn.text} from selectedjobList")
                 Log.d("JobGroupAdapter", "selectedjobList크기 : ${selectedjobList.size} ")
             }
+            /* 변경사항 */
+            onCompleteBtnCallback.invoke()
+
         }
 
         tvBtn.setOnClickListener{
