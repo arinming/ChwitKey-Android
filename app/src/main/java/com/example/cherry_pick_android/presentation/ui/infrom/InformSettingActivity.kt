@@ -6,6 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
@@ -16,6 +17,7 @@ import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.infrom.dialog.GenderDialog
 import com.example.cherry_pick_android.presentation.ui.infrom.dialog.GenderDialogInterface
 import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroupActivity
+import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -24,6 +26,7 @@ class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
     private val binding: ActivityInformSettingBinding by lazy {
         ActivityInformSettingBinding.inflate(layoutInflater)
     }
+    private val loginViewModel: LoginViewModel by viewModels()
     companion object{
         const val TAG = "InformSettingActivity"
     }
@@ -45,8 +48,12 @@ class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
         nickTextWatcher() // 닉네임 변경 감지
         birthTextWatcher() // 생일 변경 감지
 
+        // 다음 버튼 이벤트
         with(binding){
             tvComplete.setOnClickListener {
+                loginViewModel.setUserData("name", binding.etNick.text.toString())
+                loginViewModel.setUserData("gender", binding.tvGenderChoice.text.toString())
+                loginViewModel.setUserData("birthday", binding.etBirth.text.toString())
                 if(tvComplete.isEnabled){
                     val intent = Intent(this@InformSettingActivity, JobGroupActivity::class.java)
                     startActivity(intent)

@@ -9,17 +9,25 @@ import android.widget.AdapterView
 import android.widget.Button
 import android.widget.GridView
 import android.widget.ImageButton
+import androidx.activity.viewModels
+import androidx.lifecycle.Observer
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.ActivityJobGroupBinding
 import com.example.cherry_pick_android.domain.model.JobGroup
 import com.example.cherry_pick_android.presentation.adapter.JobGroupAdapter
+import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroups.jobgroups
 import com.example.cherry_pick_android.presentation.ui.mypage.ProfileActivity
+import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class JobGroupActivity : AppCompatActivity() {
     private lateinit var adapter: JobGroupAdapter
     private lateinit var gridView: GridView
     private lateinit var arrayList: ArrayList<String>
+    private var flag = false
+    private val loginViewModel: LoginViewModel by viewModels()
     private val binding: ActivityJobGroupBinding by lazy {
         ActivityJobGroupBinding.inflate(layoutInflater)
     }
@@ -41,8 +49,15 @@ class JobGroupActivity : AppCompatActivity() {
         selectedData = adapter.getSelectedList()
         Log.d(TAG, "$selectedData")
 
-        GoToProfile()
-        clickcompletebutton()
+        // 데이터 감지를 통해 최초 사용자 구분
+        loginViewModel.getUserData().observe(this@JobGroupActivity, Observer {
+            if(it.name != ""){
+                flag = true
+            }
+        })
+
+        onBackBtn()
+        onCompleteBtn()
 
     }
 
@@ -85,6 +100,33 @@ class JobGroupActivity : AppCompatActivity() {
         } else {
             completeBtn.setBackgroundResource(R.drawable.ic_job_complete)
             completeBtn.isEnabled = false
+        }
+    }
+
+    // 최초사용자의 여부에 따라 화면전환
+    private fun onCompleteBtn(){
+        binding.btnJobComplete.setOnClickListener {
+            val selecetedJobList = adapter.getSelectedList()
+            val resultIntent = Intent().apply {
+                putStringArrayListExtra("selectedJobList", selecetedJobList)
+            }
+            setResult(Activity.RESULT_OK, resultIntent)
+
+            Log.d(TAG, "completeFlag: ${flag}")
+            if(!flag){
+                val homeIntent = Intent(this, HomeActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                startActivity(homeIntent)
+            }else{
+                if(!isFinishing) finish()
+            }
+        }
+    }
+
+    private fun onBackBtn(){
+        binding.ibtnJobChangeBack.setOnClickListener {
+            finish()
         }
     }
 

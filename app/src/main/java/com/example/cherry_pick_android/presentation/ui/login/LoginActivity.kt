@@ -14,6 +14,7 @@ import androidx.lifecycle.Observer
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.ActivityLoginBinding
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
+import com.example.cherry_pick_android.presentation.ui.infrom.InformSettingActivity
 import com.example.cherry_pick_android.presentation.ui.login.loginManager.KakaoLoginManager
 import com.example.cherry_pick_android.presentation.ui.login.loginManager.NaverLoginManager
 import com.example.cherry_pick_android.presentation.util.PlatformManager
@@ -51,9 +52,14 @@ class LoginActivity: AppCompatActivity() {
 
         onClickLogin()
 
-        viewModel.token.observe(this@LoginActivity, Observer {
-            if(it != ""){
-                moveHomeActivity()
+        viewModel.getUserData().observe(this@LoginActivity, Observer {
+            if(it.name != ""){
+                val intent = Intent(this, HomeActivity::class.java)
+                startActivity(intent)
+                finish()
+            }else{
+                val intent = Intent(this, InformSettingActivity::class.java)
+                startActivity(intent)
                 finish()
             }
         })

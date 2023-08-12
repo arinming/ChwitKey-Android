@@ -29,6 +29,7 @@ class UserDataRepositoryImpl @Inject constructor(
         private val BIRTHDAY_KEY = stringPreferencesKey("birthday")
     }
 
+    // 유저 정보 흭득
     override suspend fun getUserData(): UserData {
         val userData = context.dataStore.data
             .catch {exception ->
@@ -44,6 +45,7 @@ class UserDataRepositoryImpl @Inject constructor(
         return userData
     }
 
+    // 유저 정보 세팅
     override suspend fun setUserData(key: String, value: String) {
         context.dataStore.edit { preferences ->
             val preferencesKey = when(key){
@@ -52,10 +54,12 @@ class UserDataRepositoryImpl @Inject constructor(
                 "birthday" -> BIRTHDAY_KEY
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
+            Log.d(TAG, "Key:${key} Value:${value}")
             preferences[preferencesKey] = value
         }
     }
 
+    // 유저 정보 매핑
     private fun mapperToUserData(preferences: Preferences): UserData {
         val name = preferences[NAME_KEY] ?: ""
         val gender = preferences[GENDER_KEY] ?: ""

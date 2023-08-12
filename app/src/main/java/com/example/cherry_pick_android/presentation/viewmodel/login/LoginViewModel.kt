@@ -1,5 +1,6 @@
 package com.example.cherry_pick_android.presentation.viewmodel.login
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -29,10 +30,12 @@ class LoginViewModel @Inject constructor(
     fun getUserData(): LiveData<UserData>{
         return liveData {
             emit(userDataRepository.getUserData())
+            Log.d(TAG, "UserData: ${userDataRepository.getUserData()}")
         }
     }
 
     fun setUserData(key: String, value: String){
+        Log.d(TAG, "setUserData")
         viewModelScope.launch {
             userDataRepository.setUserData(key, value)
         }
