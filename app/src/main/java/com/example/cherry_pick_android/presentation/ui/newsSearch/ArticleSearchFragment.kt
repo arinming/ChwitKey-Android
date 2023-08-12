@@ -2,27 +2,35 @@ package com.example.cherry_pick_android.presentation.ui.newsSearch
 
 import SearchRecordAdapter
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.Keyword
 import com.example.cherry_pick_android.databinding.FragmentArticleSearchBinding
 import com.example.cherry_pick_android.presentation.adapter.ArticleKeywordAdapter
+import com.example.cherry_pick_android.presentation.ui.keyword.AddListener
 import com.example.cherry_pick_android.presentation.ui.keyword.DeleteListener
 import com.example.cherry_pick_android.presentation.ui.keyword.search.SearchKeywordFragment
+import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import com.example.cherry_pick_android.presentation.viewmodel.searchRecord.SearchRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ArticleSearchFragment : Fragment(), DeleteListener {
+class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
     private var _binding: FragmentArticleSearchBinding? = null
     private val binding get() = _binding!!
+
+    private val searchKeywordViewModel: SearchKeywordViewModel by viewModels()
+
 
     private val keywords = listOf(
         Keyword("2차전지"), Keyword("IT"), Keyword("철강"), Keyword("정유"),
@@ -47,7 +55,6 @@ class ArticleSearchFragment : Fragment(), DeleteListener {
         super.onViewCreated(view, savedInstanceState)
 
         initView()
-        clickSearch()
         deleteAll()
 
     }
@@ -71,20 +78,44 @@ class ArticleSearchFragment : Fragment(), DeleteListener {
         }
     }
 
-    // 키워드 제거 함수
+    // 검색 기록 제거 함수
     override fun onDeleteClick(record: String) {
         searchRecordViewModel.deleteRecord(record)
     }
 
-    private fun clickSearch() {
-        binding.btnSearch.setOnClickListener {
-            val searchListFragment = SearchListFragment()
-            val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
-            transaction.replace(R.id.fl_search, searchListFragment)
-            transaction.addToBackStack(null)
-            transaction.commitAllowingStateLoss()
+    // 추천 키워드 클릭 이벤트
+    override fun onAddClick(keyword: String) {
+        searchKeywordViewModel.viewModelScope.launch {
+            val isKeywordNew = searchKeywordViewModel.checkKeyword(keyword) // 키워드 중복 검사
+            val isKeywordCnt = searchKeywordViewModel.checkKeywordCnt() // 키워드 개수 검사
+
+            if(isKeywordNew && isKeywordCnt){
+                searchKeywordViewModel.addKeyword(keyword)
+                showFragment(SearchKeywordFragment.newInstance(), SearchKeywordFragment.TAG)
+                Toast.makeText(context, "$keyword 키워드가 추가되었습니다", Toast.LENGTH_SHORT).show()
+            }
+            else if(!isKeywordCnt){
+                Toast.makeText(context, "키워드 최대 개수를 초과했습니다", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                Toast.makeText(context, "이미 존재하는 키워드입니다", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
+    // 프래그먼트 전환 함수
+    private fun showFragment(fragment: Fragment, tag: String){
+        val transaction: FragmentTransaction =
+            requireActivity().supportFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.horizon_enter_front,
+                    R.anim.none,
+                    R.anim.none,
+                    R.anim.horizon_exit_front
+                )
+                .remove(this)
+                .add(R.id.fv_home, fragment, tag)
+        transaction.addToBackStack(tag).commitAllowingStateLoss()
+    }
 
 }

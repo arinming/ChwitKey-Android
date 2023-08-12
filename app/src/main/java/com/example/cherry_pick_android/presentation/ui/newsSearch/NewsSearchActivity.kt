@@ -7,9 +7,11 @@ import android.text.TextWatcher
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.Keyword
 import com.example.cherry_pick_android.data.data.SearchRecord
+import com.example.cherry_pick_android.data.model.SearchRecordEntity
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
 import com.example.cherry_pick_android.presentation.viewmodel.searchRecord.SearchRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,7 +23,7 @@ class NewsSearchActivity: AppCompatActivity() {
 
     private val searchRecordViewModel: SearchRecordViewModel by viewModels()
     private lateinit var searchAdapter: SearchRecordAdapter
-
+    private var searchRecordLiveData: LiveData<List<SearchRecordEntity>>? = null
 
 
     private val keywords = listOf(
@@ -46,6 +48,10 @@ class NewsSearchActivity: AppCompatActivity() {
         goToBack()
     }
 
+    override fun onDestroy() {
+        searchRecordLiveData?.removeObservers(this) // 액티비티 종료 시 관찰 해제
+        super.onDestroy()
+    }
 
     // 초기 프래그먼트 선언
     private fun initFragment() {
@@ -82,9 +88,6 @@ class NewsSearchActivity: AppCompatActivity() {
         manager.beginTransaction().replace(R.id.fl_search, this).commit()
     }
 
-    private fun loadDB() {
-        searchRecordViewModel.loadRecord().observe(this) {
-            searchAdapter.setList(it)
-        }
-    }
+
+
 }
