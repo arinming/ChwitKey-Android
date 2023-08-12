@@ -1,8 +1,8 @@
 package com.example.cherry_pick_android.data.module.datastore
 
 import android.content.Context
-import com.example.cherry_pick_android.data.remote.repository.UserIdRepositoryImpl
-import com.example.cherry_pick_android.domain.repository.UserIdRepository
+import com.example.cherry_pick_android.data.remote.repository.UserDataRepositoryImpl
+import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -18,7 +18,7 @@ object DataStoreModule {
     @Singleton
     fun provideUserIdDataStore(
         @ApplicationContext context: Context
-    ): UserIdRepository{
-        return UserIdRepositoryImpl(context)
+    ): UserDataRepository{
+        return UserDataRepositoryImpl(context)
     }
 }

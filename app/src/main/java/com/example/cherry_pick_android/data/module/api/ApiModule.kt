@@ -1,6 +1,6 @@
 package com.example.cherry_pick_android.data.module.api
 
-import com.example.cherry_pick_android.data.remote.service.SignUpService
+import com.example.cherry_pick_android.data.remote.service.SaveUserService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -37,7 +37,9 @@ class ApiModule {
 
     @Singleton
     @Provides
-    fun getSignUpService(retrofit: Retrofit): SignUpService{
-        return retrofit.create(SignUpService::class.java)
+    fun saveUserService(retrofit: Retrofit): SaveUserService{
+        return retrofit.create(SaveUserService::class.java)
     }
+
+
 }

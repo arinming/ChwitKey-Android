@@ -11,24 +11,18 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.example.cherry_pick_android.R
-import com.example.cherry_pick_android.data.remote.request.Request
-import com.example.cherry_pick_android.data.remote.request.SignUpRequest
-import com.example.cherry_pick_android.data.remote.service.SignUpService
 import com.example.cherry_pick_android.databinding.ActivityInformSettingBinding
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.infrom.dialog.GenderDialog
 import com.example.cherry_pick_android.presentation.ui.infrom.dialog.GenderDialogInterface
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
     private val binding: ActivityInformSettingBinding by lazy {
         ActivityInformSettingBinding.inflate(layoutInflater)
     }
-    @Inject
-    lateinit var signUpService: SignUpService
     companion object{
         const val TAG = "InformSettingActivity"
     }
@@ -54,10 +48,6 @@ class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
             tvComplete.setOnClickListener {
                 if(tvComplete.isEnabled){
                     val intent = Intent(this@InformSettingActivity, HomeActivity::class.java)
-                    // request body
-                    val request = SignUpRequest(
-                        Request(etBirth.text.toString(), etNick.text.toString())
-                    )
                     startActivity(intent)
                 }
             }

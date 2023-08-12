@@ -1,20 +1,19 @@
 package com.example.cherry_pick_android.presentation.viewmodel.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.example.cherry_pick_android.domain.model.UserId
-import com.example.cherry_pick_android.domain.repository.UserIdRepository
+import com.example.cherry_pick_android.domain.model.UserData
+import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val userIdRepository: UserIdRepository
+    private val userDataRepository: UserDataRepository
 ): ViewModel() {
     private val _token = MutableLiveData<String>()
     companion object{
@@ -27,17 +26,15 @@ class LoginViewModel @Inject constructor(
         _token.value = Token
     }
 
-    fun getUserId(): LiveData<UserId>{
-        Log.d(TAG, "getUserId")
+    fun getUserData(): LiveData<UserData>{
         return liveData {
-            emit(userIdRepository.getUserId())
+            emit(userDataRepository.getUserData())
         }
     }
 
-    fun setUserId(key: String, value: String){
-        Log.d(TAG, "setUserId")
+    fun setUserData(key: String, value: String){
         viewModelScope.launch {
-            userIdRepository.setUserId(key, value)
+            userDataRepository.setUserData(key, value)
         }
     }
 
