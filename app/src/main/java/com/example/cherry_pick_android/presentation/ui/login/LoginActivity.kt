@@ -59,10 +59,19 @@ class LoginActivity: AppCompatActivity() {
 
         viewModel.token.observe(this@LoginActivity, Observer {
             if(it != ""){
-                moveActivity()
+                moveHomeActivity()
                 finish()
             }
         })
+
+        /*viewModel.getUserId().observe(this@LoginActivity, Observer {
+            Log.d(TAG, "getUserIdObserve:${it}")
+            if(it.kakaoUserId != "" || it.naverUserId != ""){
+                Log.d(TAG, "kakao:${it.kakaoUserId} naver:${it.naverUserId}")
+                moveHomeActivity()
+                finish()
+            }
+        })*/
 
     }
 
@@ -100,22 +109,16 @@ class LoginActivity: AppCompatActivity() {
     }
 
     // 최초 사용자 여부에 따라 화면전환
-    private fun moveActivity(){
-        if(loginFlag){
-            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-            startActivity(intent)
-        }else{
-            val intent = Intent(this@LoginActivity, InformSettingActivity::class.java)
-            startActivity(intent)
-        }
-
+    private fun moveHomeActivity(){
+        val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+        startActivity(intent)
     }
 
     private fun isInitUser(platform: String){
         if(platform == "kakao"){
             UserApiClient.instance.me { user, error ->
                 Log.d(TAG, user?.id.toString())
-                loginFlag = user?.id != null
+                viewModel.setUserId(platform, user?.id.toString())
             }
         }else{
             NidOAuthLogin().callProfileApi(object: NidProfileCallback<NidProfileResponse>{
@@ -124,6 +127,7 @@ class LoginActivity: AppCompatActivity() {
                 override fun onSuccess(result: NidProfileResponse) {
                     Log.d(TAG, result.profile?.id.toString())
                     loginFlag = result.profile?.id != null
+                    viewModel.setUserId(platform, result.profile?.id.toString())
                 }
 
             })
