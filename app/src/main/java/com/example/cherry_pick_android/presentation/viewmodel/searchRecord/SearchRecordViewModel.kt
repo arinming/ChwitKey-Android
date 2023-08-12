@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.presentation.viewmodel.searchKeyword
+package com.example.cherry_pick_android.presentation.viewmodel.searchRecord
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchKeywordViewModel @Inject constructor(
+class SearchRecordViewModel @Inject constructor(
     private val addRecordUseCase: AddRecordUseCase,
     private val deleteRecordUseCase: DeleteRecordUseCase,
     private val readRecordUseCase: ReadRecordUseCase

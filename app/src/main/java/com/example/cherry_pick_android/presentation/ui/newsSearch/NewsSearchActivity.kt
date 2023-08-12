@@ -1,20 +1,30 @@
 package com.example.cherry_pick_android.presentation.ui.newsSearch
 
-import SearchRecordAdapter
-import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.fragment.app.Fragment
+import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.Keyword
 import com.example.cherry_pick_android.data.data.SearchRecord
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
-import com.example.cherry_pick_android.presentation.adapter.ArticleKeywordAdapter
-import com.example.cherry_pick_android.presentation.ui.searchList.SearchListActivity
+import com.example.cherry_pick_android.presentation.ui.home.homeNews.HomeNewsFragment
+import com.example.cherry_pick_android.presentation.viewmodel.searchRecord.SearchRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class NewsSearchActivity: AppCompatActivity() {
     private lateinit var binding: ActivityNewsSearchBinding
+    private val manager = supportFragmentManager
+
+    private val searchRecordViewModel: SearchRecordViewModel by viewModels()
+
+    companion object {
+        const val TAG = "NewsSearchActivity"
+        fun newInstance(): NewsSearchActivity = NewsSearchActivity()
+    }
 
     private val keywords = listOf(
         Keyword("2차전지"), Keyword("IT"), Keyword("철강"), Keyword("정유"),
@@ -33,11 +43,17 @@ class NewsSearchActivity: AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        initView()
+        initFragment()
 
         goToBack()
-        allDelete()
-        goToSearchList()
+    }
+
+
+    // 초기 프래그먼트 선언
+    private fun initFragment() {
+        val transaction = manager.beginTransaction()
+            .add(R.id.fl_search, ArticleSearchFragment())
+        transaction.commit()
     }
 
     // 백 버튼 누르면 홈 화면으로
@@ -47,28 +63,20 @@ class NewsSearchActivity: AppCompatActivity() {
         }
     }
 
-    private fun goToSearchList() {
-        binding.btnSearch.setOnClickListener {
-            startActivity(Intent(this, SearchListActivity::class.java))
-        }
+    private fun changeText() {
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
+            override fun afterTextChanged(p0: Editable?) { }
+            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
+                val text = p0.toString()
+                if (text.isNotEmpty()) {
+
+                }
+            }
+        })
     }
 
-    private fun initView() {
-        // 키워드
-        binding.rvSearchNewsList.layoutManager =
-            LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
-        binding.rvSearchNewsList.adapter = ArticleKeywordAdapter(keywords)
+    private fun addDetailFragment() {
 
-        // 검색어
-        binding.rvRecordList.layoutManager = LinearLayoutManager(this)
-        binding.rvRecordList.adapter = SearchRecordAdapter(records) // MutableList 전달    }
-    }
-
-    private fun allDelete() {
-        // 모두 지우기 버튼 클릭 이벤트 설정
-        binding.btnAllDelete.setOnClickListener {
-            records.clear() // 검색어 아이템 모두 삭제
-            binding.rvRecordList.adapter?.notifyDataSetChanged() // 어댑터에 변경 알림
-        }
     }
 }
