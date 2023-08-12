@@ -2,17 +2,25 @@ package com.example.cherry_pick_android.presentation.ui.newsSearch
 
 import SearchRecordAdapter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.Keyword
-import com.example.cherry_pick_android.data.data.SearchRecord
 import com.example.cherry_pick_android.databinding.FragmentArticleSearchBinding
 import com.example.cherry_pick_android.presentation.adapter.ArticleKeywordAdapter
+import com.example.cherry_pick_android.presentation.ui.keyword.DeleteListener
+import com.example.cherry_pick_android.presentation.ui.keyword.search.SearchKeywordFragment
+import com.example.cherry_pick_android.presentation.viewmodel.searchRecord.SearchRecordViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class ArticleSearchFragment : Fragment() {
+@AndroidEntryPoint
+class ArticleSearchFragment : Fragment(), DeleteListener {
     private var _binding: FragmentArticleSearchBinding? = null
     private val binding get() = _binding!!
 
@@ -22,9 +30,8 @@ class ArticleSearchFragment : Fragment() {
         Keyword("반도체"), Keyword("해운"), Keyword("F&B"), Keyword("건설"), Keyword("소매유통")
     )
 
-    private val records = mutableListOf(
-        SearchRecord(1, "검색어 1"), SearchRecord(2, "검색어 2"), SearchRecord(3, "검색어 3"),
-    )
+    private lateinit var searchRecordAdapter: SearchRecordAdapter
+    private val searchRecordViewModel: SearchRecordViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,7 +47,7 @@ class ArticleSearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initView()
-
+        clickSearch()
         deleteAll()
 
     }
@@ -53,14 +60,29 @@ class ArticleSearchFragment : Fragment() {
 
         // 검색어
         binding.rvRecordList.layoutManager = LinearLayoutManager(context)
-        binding.rvRecordList.adapter = SearchRecordAdapter(records) // MutableList 전달    }
+        searchRecordAdapter = SearchRecordAdapter(this)
+        binding.rvRecordList.adapter = searchRecordAdapter
     }
 
     private fun deleteAll() {
         // 모두 지우기 버튼 클릭 이벤트 설정
         binding.btnAllDelete.setOnClickListener {
-            records.clear() // 검색어 아이템 모두 삭제
             binding.rvRecordList.adapter?.notifyDataSetChanged() // 어댑터에 변경 알림
+        }
+    }
+
+    // 키워드 제거 함수
+    override fun onDeleteClick(record: String) {
+        searchRecordViewModel.deleteRecord(record)
+    }
+
+    private fun clickSearch() {
+        binding.btnSearch.setOnClickListener {
+            val searchListFragment = SearchListFragment()
+            val transaction: FragmentTransaction = parentFragmentManager.beginTransaction()
+            transaction.replace(R.id.fl_search, searchListFragment)
+            transaction.addToBackStack(null)
+            transaction.commitAllowingStateLoss()
         }
     }
 

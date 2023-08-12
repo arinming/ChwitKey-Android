@@ -8,10 +8,20 @@ import androidx.fragment.app.Fragment
 import com.example.cherry_pick_android.data.data.Article
 import com.example.cherry_pick_android.databinding.FragmentSearchListBinding
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SearchListFragment : Fragment() {
     private var _binding: FragmentSearchListBinding? = null
     private val binding get() = _binding!!
+
+
+    private var searchListFragment: SearchListFragment? = null
+
+    companion object {
+        const val TAG = "ArticleSearchFragment"
+        fun newInstance(): SearchListFragment = SearchListFragment()
+    }
 
     private val articles = listOf(
         Article("1", "뉴스1", "회사1", "9분"),
@@ -45,4 +55,7 @@ class SearchListFragment : Fragment() {
         binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(articles)
         binding.tvSearchCount.text = articles.size.toString()
     }
+
+
 }
+

@@ -1,5 +1,6 @@
 package com.example.cherry_pick_android.presentation.ui.newsSearch
 
+import SearchRecordAdapter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -10,7 +11,6 @@ import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.Keyword
 import com.example.cherry_pick_android.data.data.SearchRecord
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
-import com.example.cherry_pick_android.presentation.ui.home.homeNews.HomeNewsFragment
 import com.example.cherry_pick_android.presentation.viewmodel.searchRecord.SearchRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -20,11 +20,9 @@ class NewsSearchActivity: AppCompatActivity() {
     private val manager = supportFragmentManager
 
     private val searchRecordViewModel: SearchRecordViewModel by viewModels()
+    private lateinit var searchAdapter: SearchRecordAdapter
 
-    companion object {
-        const val TAG = "NewsSearchActivity"
-        fun newInstance(): NewsSearchActivity = NewsSearchActivity()
-    }
+
 
     private val keywords = listOf(
         Keyword("2차전지"), Keyword("IT"), Keyword("철강"), Keyword("정유"),
@@ -44,7 +42,7 @@ class NewsSearchActivity: AppCompatActivity() {
         setContentView(view)
 
         initFragment()
-
+        changeText()
         goToBack()
     }
 
@@ -70,13 +68,23 @@ class NewsSearchActivity: AppCompatActivity() {
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 val text = p0.toString()
                 if (text.isNotEmpty()) {
-
+                    SearchListFragment().changeFragment()
+                } else {
+                    ArticleSearchFragment().changeFragment()
                 }
             }
         })
     }
 
-    private fun addDetailFragment() {
 
+    // 프래그먼트 전환 작업
+    private fun Fragment.changeFragment() {
+        manager.beginTransaction().replace(R.id.fl_search, this).commit()
+    }
+
+    private fun loadDB() {
+        searchRecordViewModel.loadRecord().observe(this) {
+            searchAdapter.setList(it)
+        }
     }
 }
