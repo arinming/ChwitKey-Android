@@ -78,9 +78,13 @@
         <activity
             android:name=".presentation.ui.article.ArticleActivity"
             android:exported="true">
-
-
         </activity>
+
+        <activity
+            android:name=".presentation.ui.jobGroup.JobGroupActivity"
+            android:exported="true">
+        </activity>
+
     </application>
 
 

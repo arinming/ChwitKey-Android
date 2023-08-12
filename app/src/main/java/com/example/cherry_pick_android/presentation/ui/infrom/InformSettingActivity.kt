@@ -15,6 +15,7 @@ import com.example.cherry_pick_android.databinding.ActivityInformSettingBinding
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.infrom.dialog.GenderDialog
 import com.example.cherry_pick_android.presentation.ui.infrom.dialog.GenderDialogInterface
+import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroupActivity
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -47,7 +48,7 @@ class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
         with(binding){
             tvComplete.setOnClickListener {
                 if(tvComplete.isEnabled){
-                    val intent = Intent(this@InformSettingActivity, HomeActivity::class.java)
+                    val intent = Intent(this@InformSettingActivity, JobGroupActivity::class.java)
                     startActivity(intent)
                 }
             }

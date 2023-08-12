@@ -93,7 +93,7 @@ class LoginActivity: AppCompatActivity() {
 
     // 최초 사용자 여부에 따라 화면전환
     private fun moveHomeActivity(){
-        val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+        val intent = Intent(this@LoginActivity, InformSettingActivity::class.java)
         startActivity(intent)
     }
 
