@@ -3,7 +3,6 @@ package com.example.cherry_pick_android.data.module.api
 
 import com.example.cherry_pick_android.data.remote.repository.ArticleRepository
 import com.example.cherry_pick_android.data.remote.service.ArticleSearchService
-import com.example.cherry_pick_android.data.remote.service.SignUpService
 import com.example.cherry_pick_android.data.remote.service.login.SaveUserService
 import com.example.cherry_pick_android.data.remote.service.login.UserInfoService
 import com.squareup.moshi.Moshi
