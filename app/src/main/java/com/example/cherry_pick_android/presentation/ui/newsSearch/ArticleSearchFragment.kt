@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.core.view.isGone
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
@@ -30,7 +29,8 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
     private val binding get() = _binding!!
 
     private val searchKeywordViewModel: SearchKeywordViewModel by viewModels()
-
+    private val searchRecordViewModel: SearchRecordViewModel by viewModels()
+    private lateinit var searchRecordAdapter: SearchRecordAdapter
 
     private val keywords = listOf(
         Keyword("2차전지"), Keyword("IT"), Keyword("철강"), Keyword("정유"),
@@ -38,8 +38,6 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
         Keyword("반도체"), Keyword("해운"), Keyword("F&B"), Keyword("건설"), Keyword("소매유통")
     )
 
-    private lateinit var searchRecordAdapter: SearchRecordAdapter
-    private val searchRecordViewModel: SearchRecordViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,7 +61,7 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
         // 키워드
         binding.rvSearchNewsList.layoutManager =
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        binding.rvSearchNewsList.adapter = ArticleKeywordAdapter(keywords)
+        binding.rvSearchNewsList.adapter = ArticleKeywordAdapter(keywords, this)
 
         // 검색어
         binding.rvRecordList.layoutManager = LinearLayoutManager(context)
@@ -90,9 +88,9 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
             val isKeywordCnt = searchKeywordViewModel.checkKeywordCnt() // 키워드 개수 검사
 
             if(isKeywordNew && isKeywordCnt){
-                searchKeywordViewModel.addKeyword(keyword)
-                showFragment(SearchKeywordFragment.newInstance(), SearchKeywordFragment.TAG)
-                Toast.makeText(context, "$keyword 키워드가 추가되었습니다", Toast.LENGTH_SHORT).show()
+                searchRecordViewModel.addRecord(keyword)
+                showFragment(SearchListFragment.newInstance(), SearchListFragment.TAG)
+                Toast.makeText(context, "$keyword 키워드 검색", Toast.LENGTH_SHORT).show()
             }
             else if(!isKeywordCnt){
                 Toast.makeText(context, "키워드 최대 개수를 초과했습니다", Toast.LENGTH_SHORT).show()
@@ -114,7 +112,7 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
                     R.anim.horizon_exit_front
                 )
                 .remove(this)
-                .add(R.id.fv_home, fragment, tag)
+                .add(R.id.fl_search, fragment, tag)
         transaction.addToBackStack(tag).commitAllowingStateLoss()
     }
 

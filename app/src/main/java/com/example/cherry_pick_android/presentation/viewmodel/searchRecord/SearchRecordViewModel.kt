@@ -31,7 +31,7 @@ class SearchRecordViewModel @Inject constructor(
         }
     }
 
-    fun loadRecord(): LiveData<List<SearchRecordEntity>> {
+    private fun loadRecord(): LiveData<List<SearchRecordEntity>> {
         return recordList
     }
 
@@ -43,6 +43,6 @@ class SearchRecordViewModel @Inject constructor(
 
     // 키워드 개수 검사
     fun checkRecordCnt(): Boolean {
-        return loadRecord().value?.size!! < 20
+        return loadRecord().value?.size?: 0 < 20
     }
 }
