@@ -18,9 +18,8 @@ class ScrapNoneFragment: Fragment(R.layout.fragment_scrap_none) {
         savedInstanceState: Bundle?
     ): View? {
         _binding = FragmentScrapNoneBinding.inflate(inflater, container, false)
-        val view = binding.root
 
-        return view
+        return binding.root
     }
 
     override fun onDestroyView() {

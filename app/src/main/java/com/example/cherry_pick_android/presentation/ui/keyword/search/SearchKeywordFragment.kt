@@ -27,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint
 // 키워드 검색 프래그먼트
 @AndroidEntryPoint
 class SearchKeywordFragment: Fragment(), DeleteListener {
-    private val bindig: FragmentSearchKeywordBinding by lazy {
+    private val binding: FragmentSearchKeywordBinding by lazy {
         FragmentSearchKeywordBinding.inflate(layoutInflater)
     }
     private var searchKeywordDetailFragment: SearchKeywordDetailFragment? = null
@@ -43,12 +43,12 @@ class SearchKeywordFragment: Fragment(), DeleteListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        bindig.etSearch.requestFocus() // 자동으로 EditText에 커서 효과 적용
+        binding.etSearch.requestFocus() // 자동으로 EditText에 커서 효과 적용
 
         initView() // 어뎁터 적용
 
         // EditText의 텍스트 변경 감지
-        bindig.etSearch.addTextChangedListener(object : TextWatcher {
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {}
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -64,30 +64,30 @@ class SearchKeywordFragment: Fragment(), DeleteListener {
         // DB 데이터 로드 및 개수 초기화
         searchKeywordViewModel.loadKeyword().observe(viewLifecycleOwner){
             searchKeywordAdapter.setList(it)
-            bindig.tvKeywordCnt.text = it.size.toString()
+            binding.tvKeywordCnt.text = it.size.toString()
         }
 
         // 삭제 버튼 이벤트 적용 (입력한 값 지우기)
-        bindig.ivDelete.setOnClickListener {
-            bindig.etSearch.text = null
+        binding.ivDelete.setOnClickListener {
+            binding.etSearch.text = null
         }
 
         // 이전 버튼 이벤트 적용 (+ 키패드 내리기)
-        bindig.ivBack.setOnClickListener {
+        binding.ivBack.setOnClickListener {
             hideKeyboard()
             requireActivity().supportFragmentManager.popBackStack()
         }
 
         // 키워드 등록 버튼 이벤트
-        bindig.btnComplete.setOnClickListener {
-            val keyword = bindig.etSearch.text.toString().trim() // EditText 내용 가져오기
+        binding.btnComplete.setOnClickListener {
+            val keyword = binding.etSearch.text.toString().trim() // EditText 내용 가져오기
             val isKeywordNew = searchKeywordViewModel.checkKeyword(keyword) // 중복 키워드 검사
             val isKeywordCnt = searchKeywordViewModel.checkKeywordCnt() // 키워드 개수 검사
 
             if(keyword.isNotEmpty() && isKeywordNew && isKeywordCnt){
                 searchKeywordViewModel.addKeyword(keyword)
                 hideKeyboard()
-                bindig.etSearch.text = null
+                binding.etSearch.text = null
                 KeywordDialog().show(parentFragmentManager, "keyword_dialog")
             }
             else if(keyword.isEmpty()){
@@ -101,7 +101,7 @@ class SearchKeywordFragment: Fragment(), DeleteListener {
             }
         }
 
-        return bindig.root
+        return binding.root
     }
 
     // 키워드가 존재 유무에 따른 프래그먼트 전환
@@ -144,9 +144,9 @@ class SearchKeywordFragment: Fragment(), DeleteListener {
         imm.hideSoftInputFromWindow(requireActivity().window.decorView.applicationWindowToken, 0)
     }
     private fun initView(){
-        bindig.rvKeyword.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvKeyword.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         searchKeywordAdapter = SearchKeywordAdapter(this)
-        bindig.rvKeyword.adapter = searchKeywordAdapter
+        binding.rvKeyword.adapter = searchKeywordAdapter
     }
 
 

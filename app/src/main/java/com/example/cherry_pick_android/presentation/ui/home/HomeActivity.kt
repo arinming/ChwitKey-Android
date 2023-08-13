@@ -1,7 +1,6 @@
 package com.example.cherry_pick_android.presentation.ui.home
 
 import android.os.Bundle
-import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -12,7 +11,6 @@ import com.example.cherry_pick_android.presentation.ui.keyword.KeywordFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.ui.mypage.MyPageFragment
 import com.example.cherry_pick_android.presentation.ui.scrap.ScrapTrueFragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -22,11 +20,8 @@ class HomeActivity: AppCompatActivity() {
     private lateinit var binding: ActivityHomeBinding
 
     // 프래그먼트 매니저
-    val mananger = supportFragmentManager
+    private val manager = supportFragmentManager
 
-
-    var bottomNavigationView: BottomNavigationView? = null
-    var menu: Menu? = null
     // 뷰 모델 가져오기
     private val searchKeywordViewModel: SearchKeywordViewModel by viewModels()
 
@@ -75,12 +70,12 @@ class HomeActivity: AppCompatActivity() {
 
     // 프래그먼트 전환 작업
     private fun Fragment.changeFragment() {
-        mananger.beginTransaction().replace(R.id.fv_home, this).commit()
+        manager.beginTransaction().replace(R.id.fv_home, this).commit()
     }
 
     // 초기 프래그먼트 선언
-    fun initFragment() {
-        val transaction = mananger.beginTransaction()
+    private fun initFragment() {
+        val transaction = manager.beginTransaction()
             .add(R.id.fv_home, HomeNewsFragment()) // 뉴스 프래그먼트로 초기화
         transaction.commit()
     }
