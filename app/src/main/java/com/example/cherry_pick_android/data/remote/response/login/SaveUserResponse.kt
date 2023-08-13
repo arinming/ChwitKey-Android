@@ -5,9 +5,9 @@ import com.squareup.moshi.Json
 
 data class SaveUserResponse(
     @field:Json(name = "data")
-    val `data`: Any?,
+    val `data`: String?,
     @field:Json(name = "description")
-    val description: String?,
+    val description: Any?,
     @field:Json(name = "status")
     val status: String?,
     @field:Json(name = "statusCode")

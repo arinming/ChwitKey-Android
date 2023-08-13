@@ -2,8 +2,10 @@ package com.example.cherry_pick_android.presentation.ui.login.loginManager
 
 import android.content.Context
 import android.util.Log
+import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.user.UserApiClient
+import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.qualifiers.ActivityContext
 import javax.inject.Inject
 
