@@ -31,7 +31,7 @@ class SearchRecordViewModel @Inject constructor(
         }
     }
 
-    private fun loadRecord(): LiveData<List<SearchRecordEntity>> {
+    fun loadRecord(): LiveData<List<SearchRecordEntity>> {
         return recordList
     }
 

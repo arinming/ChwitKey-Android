@@ -9,7 +9,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import com.example.cherry_pick_android.R
-import com.example.cherry_pick_android.data.data.Keyword
 import com.example.cherry_pick_android.data.data.SearchRecord
 import com.example.cherry_pick_android.data.model.SearchRecordEntity
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
@@ -21,8 +20,6 @@ class NewsSearchActivity: AppCompatActivity() {
     private lateinit var binding: ActivityNewsSearchBinding
     private val manager = supportFragmentManager
 
-    private val searchRecordViewModel: SearchRecordViewModel by viewModels()
-    private lateinit var searchAdapter: SearchRecordAdapter
     private var searchRecordLiveData: LiveData<List<SearchRecordEntity>>? = null
 
     private val records = mutableListOf(
@@ -49,6 +46,9 @@ class NewsSearchActivity: AppCompatActivity() {
     // 초기 프래그먼트 선언
     private fun initFragment() {
         binding.etSearch.requestFocus()
+        binding.ivDelete.setOnClickListener {
+            binding.etSearch.text.clear()   // x 버튼 클릭시 텍스트 지우기
+        }
         val transaction = manager.beginTransaction()
             .add(R.id.fl_search, ArticleSearchFragment())
         transaction.commit()
@@ -87,7 +87,4 @@ class NewsSearchActivity: AppCompatActivity() {
     private fun Fragment.changeFragment() {
         manager.beginTransaction().replace(R.id.fl_search, this).commit()
     }
-
-
-
 }

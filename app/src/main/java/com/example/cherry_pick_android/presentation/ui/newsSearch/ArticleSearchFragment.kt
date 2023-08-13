@@ -7,17 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.Keyword
 import com.example.cherry_pick_android.databinding.FragmentArticleSearchBinding
 import com.example.cherry_pick_android.presentation.adapter.ArticleKeywordAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.AddListener
 import com.example.cherry_pick_android.presentation.ui.keyword.DeleteListener
-import com.example.cherry_pick_android.presentation.ui.keyword.search.SearchKeywordFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import com.example.cherry_pick_android.presentation.viewmodel.searchRecord.SearchRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -55,6 +52,10 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
         initView()
         deleteAll()
 
+        searchRecordViewModel.loadRecord().observe(viewLifecycleOwner) {
+            searchRecordAdapter.setList(it)
+        }
+
     }
 
     private fun initView() {
@@ -89,8 +90,6 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
 
             if(isKeywordNew && isKeywordCnt){
                 searchRecordViewModel.addRecord(keyword)
-                Toast.makeText(context, "$keyword 키워드 검색", Toast.LENGTH_SHORT).show()
-
                 // NewsSearchActivity의 etSearch 텍스트 변경
                 if (activity is NewsSearchActivity) {
                     val newsSearchActivity = activity as NewsSearchActivity
@@ -105,20 +104,4 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
             }
         }
     }
-
-    // 프래그먼트 전환 함수
-    private fun showFragment(fragment: Fragment, tag: String){
-        val transaction: FragmentTransaction =
-            requireActivity().supportFragmentManager.beginTransaction()
-                .setCustomAnimations(
-                    R.anim.horizon_enter_front,
-                    R.anim.none,
-                    R.anim.none,
-                    R.anim.horizon_exit_front
-                )
-                .remove(this)
-                .add(R.id.fl_search, fragment, tag)
-        transaction.addToBackStack(tag).commitAllowingStateLoss()
-    }
-
 }
