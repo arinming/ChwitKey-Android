@@ -89,8 +89,13 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
 
             if(isKeywordNew && isKeywordCnt){
                 searchRecordViewModel.addRecord(keyword)
-                showFragment(SearchListFragment.newInstance(), SearchListFragment.TAG)
                 Toast.makeText(context, "$keyword 키워드 검색", Toast.LENGTH_SHORT).show()
+
+                // NewsSearchActivity의 etSearch 텍스트 변경
+                if (activity is NewsSearchActivity) {
+                    val newsSearchActivity = activity as NewsSearchActivity
+                    newsSearchActivity.updateSearchText(keyword)
+                }
             }
             else if(!isKeywordCnt){
                 Toast.makeText(context, "키워드 최대 개수를 초과했습니다", Toast.LENGTH_SHORT).show()

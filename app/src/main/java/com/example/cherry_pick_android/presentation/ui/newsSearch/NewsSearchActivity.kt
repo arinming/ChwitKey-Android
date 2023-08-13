@@ -25,13 +25,6 @@ class NewsSearchActivity: AppCompatActivity() {
     private lateinit var searchAdapter: SearchRecordAdapter
     private var searchRecordLiveData: LiveData<List<SearchRecordEntity>>? = null
 
-
-    private val keywords = listOf(
-        Keyword("2차전지"), Keyword("IT"), Keyword("철강"), Keyword("정유"),
-        Keyword("석유"), Keyword("반도체"), Keyword("디스플레이"), Keyword("휴대폰"),
-        Keyword("반도체"), Keyword("해운"), Keyword("F&B"), Keyword("건설"), Keyword("소매유통")
-    )
-
     private val records = mutableListOf(
         SearchRecord(1, "검색어 1"), SearchRecord(2, "검색어 2"), SearchRecord(3, "검색어 3"),
     )
@@ -55,6 +48,7 @@ class NewsSearchActivity: AppCompatActivity() {
 
     // 초기 프래그먼트 선언
     private fun initFragment() {
+        binding.etSearch.requestFocus()
         val transaction = manager.beginTransaction()
             .add(R.id.fl_search, ArticleSearchFragment())
         transaction.commit()
@@ -65,6 +59,12 @@ class NewsSearchActivity: AppCompatActivity() {
         binding.ibtnBack.setOnClickListener {
             finish()
         }
+    }
+
+    // etSearch 텍스트 업데이트
+    fun updateSearchText(keyword: String) {
+        binding.etSearch.setText(keyword)
+        binding.etSearch.setSelection(binding.etSearch.text.length) // 커서를 텍스트 끝으로 이동
     }
 
     private fun changeText() {
