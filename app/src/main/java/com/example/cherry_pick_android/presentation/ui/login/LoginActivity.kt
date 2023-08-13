@@ -11,7 +11,9 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.remote.service.login.UserInfoService
 import com.example.cherry_pick_android.databinding.ActivityLoginBinding
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.infrom.InformSettingActivity
@@ -24,6 +26,9 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -34,9 +39,10 @@ class LoginActivity: AppCompatActivity() {
     lateinit var kakaoLoginManager: KakaoLoginManager
     @Inject
     lateinit var naverLoginManager: NaverLoginManager
+    @Inject
+    lateinit var userInfoService: UserInfoService
 
     private val viewModel: LoginViewModel by viewModels()
-    private var loginFlag = false // 최초사용자 확인
     companion object{
         const val TAG = "LoginActivity"
         private const val KAKAO = "kakao"
@@ -46,18 +52,37 @@ class LoginActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
 
+        // 기존 회원 여부 검사 (200: 통신성공, 404: 통신실패)
+        viewModel.getUserData().observe(this@LoginActivity, Observer {
+            if(it.userId != ""){
+                lifecycleScope.launch {
+                    val userInfoResponse = userInfoService.getUserInfo(it.userId)
+                    val status = userInfoResponse.body()?.statusCode.toString()
+                    withContext(Dispatchers.Main){
+                        if(status == "200"){
+                            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                            viewModel.setIsinit("200")
+                            startActivity(intent)
+                            finish()
+                        }else if(status == "404"){
+                            val intent = Intent(this@LoginActivity, InformSettingActivity::class.java)
+                            viewModel.setIsinit("404")
+                            startActivity(intent)
+                            finish()
+                        }else{
+                            Log.d(TAG, "ERROR")
+                        }
+                    }
+                }
+            }
+        })
+
         // 텍스트 스타일 설정
         binding.tvExplain.text = textToBold(binding.tvExplain.text.toString(), 7, 17)
         binding.tvExplain2.text = textToBold(binding.tvExplain2.text.toString(), 0, 16)
 
         onClickLogin()
 
-        viewModel.token.observe(this@LoginActivity, Observer {
-            if(it != ""){
-                moveHomeActivity()
-                finish()
-            }
-        })
 
     }
 
@@ -74,12 +99,16 @@ class LoginActivity: AppCompatActivity() {
         return builder
     }
 
+    // 플랫폼에 따라 로그인 및 유저id 저장
     private fun onClickLogin(){
         with(binding){
             linearKakaoLoginBtn.setOnClickListener {
                 PlatformManager.setPlatform(KAKAO)
                 kakaoLoginManager.startKakaoLogin {
                     viewModel.updateSocialToken(it)
+                    UserApiClient.instance.me { user, error ->
+                        viewModel.setUserData("userId", user?.id.toString())
+                    }
                 }
             }
 
@@ -87,15 +116,16 @@ class LoginActivity: AppCompatActivity() {
                 PlatformManager.setPlatform(NAVER)
                 naverLoginManager.startLogin {
                     viewModel.updateSocialToken(it)
+                    NidOAuthLogin().callProfileApi(object: NidProfileCallback<NidProfileResponse>{
+                        override fun onError(errorCode: Int, message: String) {}
+                        override fun onFailure(httpStatus: Int, message: String) {}
+                        override fun onSuccess(result: NidProfileResponse) {
+                            viewModel.setUserData("userId", result.profile?.id.toString())
+                        }
+                    })
                 }
             }
         }
-    }
-
-    // 최초 사용자 여부에 따라 화면전환
-    private fun moveHomeActivity(){
-        val intent = Intent(this@LoginActivity, InformSettingActivity::class.java)
-        startActivity(intent)
     }
 
 
