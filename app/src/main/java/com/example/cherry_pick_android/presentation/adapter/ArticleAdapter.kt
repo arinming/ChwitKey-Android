@@ -52,6 +52,7 @@ class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
         }
     }
 
-    override fun getItemCount(): Int = listData?.size!!
-
+    override fun getItemCount(): Int {
+        return listData?.size ?: 0
+    }
 }
