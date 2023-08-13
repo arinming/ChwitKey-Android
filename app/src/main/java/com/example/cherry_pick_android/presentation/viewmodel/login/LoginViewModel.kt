@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.cherry_pick_android.data.remote.service.login.UserInfoService
 import com.example.cherry_pick_android.domain.model.UserData
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
+import com.kakao.sdk.user.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -27,6 +28,7 @@ class LoginViewModel @Inject constructor(
         get() = _token
     val isInit: LiveData<String>
         get() = _isInit
+    val userData: LiveData<UserData> = userDataRepository.observeUserData()
 
     fun updateSocialToken(Token: String){
         _token.value = Token
@@ -38,13 +40,6 @@ class LoginViewModel @Inject constructor(
             _isInit.value = "OK"
         }else{
             _isInit.value = "NO"
-        }
-    }
-
-    fun getUserData(): LiveData<UserData>{
-        return liveData {
-            emit(userDataRepository.getUserData())
-            Log.d(TAG, "UserData: ${userDataRepository.getUserData()}")
         }
     }
 

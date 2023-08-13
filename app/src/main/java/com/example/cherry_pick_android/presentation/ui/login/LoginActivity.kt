@@ -53,7 +53,7 @@ class LoginActivity: AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
 
         // 기존 회원 여부 검사 (200: 통신성공, 404: 통신실패)
-        viewModel.getUserData().observe(this@LoginActivity, Observer {
+        viewModel.userData.observe(this@LoginActivity, Observer {
             if(it.userId != ""){
                 lifecycleScope.launch {
                     val userInfoResponse = userInfoService.getUserInfo(it.userId)

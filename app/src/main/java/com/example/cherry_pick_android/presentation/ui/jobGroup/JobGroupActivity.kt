@@ -62,7 +62,7 @@ class JobGroupActivity: AppCompatActivity() {
         loginViewModel.isInit.observe(this@JobGroupActivity, Observer {
             flag = it != "NO"
         })
-        loginViewModel.getUserData().observe(this@JobGroupActivity, Observer {
+        loginViewModel.userData.observe(this@JobGroupActivity, Observer {
             userId = it.userId
             name = it.name
             gender = it.gender
