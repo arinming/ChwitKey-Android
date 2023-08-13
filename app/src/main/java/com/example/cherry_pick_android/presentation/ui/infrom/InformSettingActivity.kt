@@ -6,30 +6,27 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.inputmethod.InputMethodManager
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import com.example.cherry_pick_android.R
-import com.example.cherry_pick_android.data.remote.request.Request
-import com.example.cherry_pick_android.data.remote.request.SignUpRequest
-import com.example.cherry_pick_android.data.remote.service.SignUpService
 import com.example.cherry_pick_android.databinding.ActivityInformSettingBinding
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.infrom.dialog.GenderDialog
 import com.example.cherry_pick_android.presentation.ui.infrom.dialog.GenderDialogInterface
 import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroupActivity
+import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
     private val binding: ActivityInformSettingBinding by lazy {
         ActivityInformSettingBinding.inflate(layoutInflater)
     }
-    @Inject
-    lateinit var signUpService: SignUpService
+    private val loginViewModel: LoginViewModel by viewModels()
     companion object{
         const val TAG = "InformSettingActivity"
     }
@@ -51,14 +48,14 @@ class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
         nickTextWatcher() // 닉네임 변경 감지
         birthTextWatcher() // 생일 변경 감지
 
+        // 다음 버튼 이벤트
         with(binding){
             tvComplete.setOnClickListener {
                 if(tvComplete.isEnabled){
+                    loginViewModel.setUserData("name", binding.etNick.text.toString())
+                    loginViewModel.setUserData("gender", binding.tvGenderChoice.text.toString())
+                    loginViewModel.setUserData("birthday", binding.etBirth.text.toString())
                     val intent = Intent(this@InformSettingActivity, JobGroupActivity::class.java)
-                    // request body
-                    val request = SignUpRequest(
-                        Request(etBirth.text.toString(), etNick.text.toString())
-                    )
                     startActivity(intent)
                 }
             }

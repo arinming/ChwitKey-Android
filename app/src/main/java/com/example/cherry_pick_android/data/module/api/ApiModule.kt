@@ -4,6 +4,10 @@ package com.example.cherry_pick_android.data.module.api
 import com.example.cherry_pick_android.data.remote.repository.ArticleRepository
 import com.example.cherry_pick_android.data.remote.service.ArticleSearchService
 import com.example.cherry_pick_android.data.remote.service.SignUpService
+import com.example.cherry_pick_android.data.remote.service.login.SaveUserService
+import com.example.cherry_pick_android.data.remote.service.login.UserInfoService
+import com.squareup.moshi.Moshi
+import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,8 +16,8 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
 import javax.inject.Singleton
-import com.squareup.moshi.Moshi
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -22,7 +26,7 @@ class ApiModule {
 
     @Singleton
     @Provides
-    fun getOkHttpClient(): OkHttpClient {
+    fun getOkHttpClient(): OkHttpClient{
         return OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
@@ -32,25 +36,31 @@ class ApiModule {
 
     @Singleton
     @Provides
-    fun provideMoshi(): Moshi {
-        return Moshi.Builder()
+    fun getInstance(okHttpClient: OkHttpClient): Retrofit{
+        val moshi = Moshi.Builder()
+            .add(KotlinJsonAdapterFactory())
             .build()
-    }
 
-    @Singleton
-    @Provides
-    fun getInstance(okHttpClient: OkHttpClient, moshi: Moshi): Retrofit {
         return Retrofit.Builder().client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(getOkHttpClient())
             .baseUrl(BASE_URL)
             .build()
     }
 
     @Singleton
     @Provides
-    fun getSignUpService(retrofit: Retrofit): SignUpService {
-        return retrofit.create(SignUpService::class.java)
+    fun saveUserService(retrofit: Retrofit): SaveUserService {
+        return retrofit.create(SaveUserService::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun userInfoService(retrofit: Retrofit): UserInfoService{
+        return retrofit.create(UserInfoService::class.java)
+    }
+
+
 
     @Provides
     @Singleton

@@ -6,38 +6,52 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.example.cherry_pick_android.domain.model.UserId
-import com.example.cherry_pick_android.domain.repository.UserIdRepository
+import com.example.cherry_pick_android.data.remote.service.login.UserInfoService
+import com.example.cherry_pick_android.domain.model.UserData
+import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val userIdRepository: UserIdRepository
+    private val userDataRepository: UserDataRepository
 ): ViewModel() {
     private val _token = MutableLiveData<String>()
+    private val _isInit = MutableLiveData<String>()
     companion object{
         const val TAG = "LoginViewModel"
     }
 
     val token: LiveData<String>
         get() = _token
+    val isInit: LiveData<String>
+        get() = _isInit
+
     fun updateSocialToken(Token: String){
         _token.value = Token
     }
 
-    fun getUserId(): LiveData<UserId>{
-        Log.d(TAG, "getUserId")
-        return liveData {
-            emit(userIdRepository.getUserId())
+
+    fun setIsinit(status: String){
+        if(status == "200"){
+            _isInit.value = "OK"
+        }else{
+            _isInit.value = "NO"
         }
     }
 
-    fun setUserId(key: String, value: String){
-        Log.d(TAG, "setUserId")
+    fun getUserData(): LiveData<UserData>{
+        return liveData {
+            emit(userDataRepository.getUserData())
+            Log.d(TAG, "UserData: ${userDataRepository.getUserData()}")
+        }
+    }
+
+    fun setUserData(key: String, value: String){
+        Log.d(TAG, "setUserData")
         viewModelScope.launch {
-            userIdRepository.setUserId(key, value)
+            userDataRepository.setUserData(key, value)
         }
     }
 
