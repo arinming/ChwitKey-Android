@@ -2,23 +2,48 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:focusable="false"
+    android:focusableInTouchMode="false" >
 
-    <android.widget.Button
-        android:id="@+id/btn_job_group"
-        android:layout_width="166dp"
-        android:layout_height="42dp"
-        android:background="@drawable/ic_job_button"
-        android:gravity="center"
-        android:text=""
-        android:textColor="@color/black"
-        android:textSize="17sp"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:outlineProvider="none"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="false"
+            android:focusableInTouchMode="false" >
+
+            <ImageView
+                android:id="@+id/iv_job_group_btn"
+                android:layout_width="166dp"
+                android:layout_height="42dp"
+                android:background="@drawable/ic_job_button"
+                android:outlineProvider="none"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:focusable="false"
+                android:focusableInTouchMode="false"/>
+            <TextView
+                android:id="@+id/tv_job_group_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="철강"
+                android:textColor="@color/black"
+                android:textSize="17sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:focusable="false"
+                android:focusableInTouchMode="false" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

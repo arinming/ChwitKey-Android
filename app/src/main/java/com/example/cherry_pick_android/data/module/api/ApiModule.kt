@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.data.api
+package com.example.cherry_pick_android.data.module.api
 
 
 import com.example.cherry_pick_android.data.remote.repository.ArticleRepository

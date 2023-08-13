@@ -91,6 +91,8 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.2'
 
     // Lifecycle
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.6.1"
+
 
     // Coroutine
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
@@ -121,6 +123,9 @@ dependencies {
 
     // naver
     implementation 'com.navercorp.nid:oauth:5.6.0' // jdk 11
+
+    // Data store
+    implementation "androidx.datastore:datastore-preferences:1.0.0"
 
 }
 

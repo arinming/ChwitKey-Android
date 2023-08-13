@@ -1,12 +1,10 @@
 package com.example.cherry_pick_android.presentation.ui.login
 
 import android.content.Intent
-import android.graphics.Color
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.SpannableStringBuilder
 import android.text.Spanned
-import android.text.style.ForegroundColorSpan
 import android.text.style.StyleSpan
 import android.util.Log
 import androidx.activity.viewModels
@@ -14,13 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.example.cherry_pick_android.R
-import com.example.cherry_pick_android.data.remote.service.SignUpService
 import com.example.cherry_pick_android.databinding.ActivityLoginBinding
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.infrom.InformSettingActivity
 import com.example.cherry_pick_android.presentation.ui.login.loginManager.KakaoLoginManager
 import com.example.cherry_pick_android.presentation.ui.login.loginManager.NaverLoginManager
-import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
 import com.example.cherry_pick_android.presentation.util.PlatformManager
 import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
 import com.kakao.sdk.user.UserApiClient
@@ -28,7 +24,6 @@ import com.navercorp.nid.oauth.NidOAuthLogin
 import com.navercorp.nid.profile.NidProfileCallback
 import com.navercorp.nid.profile.data.NidProfileResponse
 import dagger.hilt.android.AndroidEntryPoint
-import retrofit2.Retrofit
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -59,7 +54,7 @@ class LoginActivity: AppCompatActivity() {
 
         viewModel.token.observe(this@LoginActivity, Observer {
             if(it != ""){
-                moveActivity()
+                moveHomeActivity()
                 finish()
             }
         })
@@ -83,7 +78,6 @@ class LoginActivity: AppCompatActivity() {
         with(binding){
             linearKakaoLoginBtn.setOnClickListener {
                 PlatformManager.setPlatform(KAKAO)
-                isInitUser(KAKAO) // 최초사용자 구별
                 kakaoLoginManager.startKakaoLogin {
                     viewModel.updateSocialToken(it)
                 }
@@ -91,7 +85,6 @@ class LoginActivity: AppCompatActivity() {
 
             linearNaverLoginBtn.setOnClickListener {
                 PlatformManager.setPlatform(NAVER)
-                isInitUser(NAVER) // 최초사용자 구별
                 naverLoginManager.startLogin {
                     viewModel.updateSocialToken(it)
                 }
@@ -100,33 +93,10 @@ class LoginActivity: AppCompatActivity() {
     }
 
     // 최초 사용자 여부에 따라 화면전환
-    private fun moveActivity(){
-        if(loginFlag){
-            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-            startActivity(intent)
-        }else{
-            val intent = Intent(this@LoginActivity, InformSettingActivity::class.java)
-            startActivity(intent)
-        }
-
+    private fun moveHomeActivity(){
+        val intent = Intent(this@LoginActivity, InformSettingActivity::class.java)
+        startActivity(intent)
     }
 
-    private fun isInitUser(platform: String){
-        if(platform == "kakao"){
-            UserApiClient.instance.me { user, error ->
-                Log.d(TAG, user?.id.toString())
-                loginFlag = user?.id != null
-            }
-        }else{
-            NidOAuthLogin().callProfileApi(object: NidProfileCallback<NidProfileResponse>{
-                override fun onError(errorCode: Int, message: String) {}
-                override fun onFailure(httpStatus: Int, message: String) {}
-                override fun onSuccess(result: NidProfileResponse) {
-                    Log.d(TAG, result.profile?.id.toString())
-                    loginFlag = result.profile?.id != null
-                }
 
-            })
-        }
-    }
 }
