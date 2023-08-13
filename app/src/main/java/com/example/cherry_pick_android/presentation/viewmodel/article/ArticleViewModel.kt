@@ -15,7 +15,8 @@ class ArticleViewModel @Inject constructor(
     private val repository: ArticleRepository
 ) : ViewModel() {
 
-    var liveDataList: MutableLiveData<List<ArticleCommendResponse.Data>> = MutableLiveData()
+    private val liveDataList = MutableLiveData<List<ArticleCommendResponse.Data>>()
+
 
     fun getLiveDataObserver(): MutableLiveData<List<ArticleCommendResponse.Data>> {
         return liveDataList
