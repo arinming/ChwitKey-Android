@@ -86,6 +86,8 @@ class LoginActivity: AppCompatActivity() {
 
         //onClickLogin()
 
+        Log.d(LoginViewModel.TAG, "UserData: ${viewModel.getUserData()}")
+
 
     }
 

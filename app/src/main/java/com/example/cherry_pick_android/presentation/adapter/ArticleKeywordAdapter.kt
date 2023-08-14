@@ -1,20 +1,22 @@
 package com.example.cherry_pick_android.presentation.adapter
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.data.data.Keyword
 import com.example.cherry_pick_android.databinding.ItemKeywordBtnBinding
+import com.example.cherry_pick_android.presentation.ui.keyword.AddListener
 
 class ArticleKeywordAdapter(
-    private val keywords: List<Keyword>
+    private val keywords: List<Keyword>,
+    private val addListener: AddListener? = null
 ) : RecyclerView.Adapter<ArticleKeywordAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: ItemKeywordBtnBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        val keyword = binding.btnKeyword
+        fun setItem(keyword: String) {
+            binding.btnKeyword.text = keyword
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -26,7 +28,10 @@ class ArticleKeywordAdapter(
     override fun getItemCount() = keywords.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.keyword.text = keywords[position].keyword
+        holder.setItem(keywords[position].keyword)
+        holder.binding.btnKeyword.setOnClickListener {
+            addListener?.onAddClick(keywords[position].keyword)
+        }
     }
 
 }

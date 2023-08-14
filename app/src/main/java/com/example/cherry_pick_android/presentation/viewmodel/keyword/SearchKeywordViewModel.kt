@@ -48,7 +48,7 @@ class SearchKeywordViewModel @Inject constructor(
 
     // 키워드 개수 검사
     fun checkKeywordCnt(): Boolean{
-        return loadKeyword().value?.size!! < 10
+        return loadKeyword().value?.size?: 0 < 10
     }
 
 }

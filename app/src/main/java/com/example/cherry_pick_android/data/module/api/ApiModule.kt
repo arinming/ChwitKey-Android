@@ -1,5 +1,8 @@
 package com.example.cherry_pick_android.data.module.api
 
+
+import com.example.cherry_pick_android.data.remote.repository.ArticleRepository
+import com.example.cherry_pick_android.data.remote.service.ArticleSearchService
 import com.example.cherry_pick_android.data.remote.service.login.SaveUserService
 import com.example.cherry_pick_android.data.remote.service.login.UserInfoService
 import com.squareup.moshi.Moshi
@@ -57,4 +60,16 @@ class ApiModule {
     }
 
 
+
+    @Provides
+    @Singleton
+    fun provideArticleSearchService(retrofit: Retrofit): ArticleSearchService {
+        return retrofit.create(ArticleSearchService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideArticleRepository(articleSearchService: ArticleSearchService): ArticleRepository {
+        return ArticleRepository(articleSearchService)
+    }
 }

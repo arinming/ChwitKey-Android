@@ -5,41 +5,37 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
-import com.example.cherry_pick_android.data.data.Article
 import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
-import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
+import com.example.cherry_pick_android.presentation.adapter.ArticleAdapter
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
 import com.example.cherry_pick_android.presentation.viewmodel.article.ArticleViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     private var _binding: FragmentHomeNewsBinding? = null
     private val binding get() = _binding!!
 
-    private val articles = listOf(
-        Article("1", "뉴스1", "회사1", "9분"),
-        Article("2", "뉴스2", "회사2", "19분"),
-        Article("3", "뉴스3", "회사3", "29분"),
-        Article("4", "뉴스4", "회사4", "39분"),
-        Article("5", "뉴스5", "회사5", "49분"),
-        Article("6", "뉴스6", "회사6", "59분"),
-        Article("7", "뉴스7", "회사7", "1시간"),
-    )
+    lateinit var recyclerViewAdapter: ArticleAdapter
+    private val viewModel: ArticleViewModel by viewModels()
 
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentHomeNewsBinding.inflate(inflater, container, false)
 
-
         return binding.root
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -47,12 +43,15 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
 
         initNewsList()
         goToNewsSearch()
+
+        binding.ibtnSortingMenu.setOnClickListener { showSortingMenu(it) }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+
 
     // 검색창 누르면 NewsSearch 액티비티로 이동
     private fun goToNewsSearch() {
@@ -64,17 +63,43 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
         }
     }
 
-
     private fun initNewsList() {
-        binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articles)
+        recyclerViewAdapter = ArticleAdapter()
+        binding.rvNewsList.adapter = recyclerViewAdapter
     }
 
     private fun liveNewsList() {
-        val viewModel = ViewModelProvider(this)[ArticleViewModel::class.java]
-        viewModel.getAllArticle()
-
-        viewModel.result.observe(viewLifecycleOwner, Observer {
-            binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articles)
+        viewModel.getLiveDataObserver().observe(viewLifecycleOwner, Observer {
+            if (it != null) {
+                recyclerViewAdapter.setListData(it)
+                recyclerViewAdapter.notifyDataSetChanged()
+            } else {
+                Toast.makeText(context, "오류", Toast.LENGTH_SHORT).show()
+            }
         })
+
+        // loadListOfData 함수를 호출하는 코루틴 시작
+        viewLifecycleOwner.lifecycleScope.launch {
+            viewModel.loadListOfData()
+        }
     }
+
+    // 메뉴
+    private fun showSortingMenu(view: View) {
+        val popupMenu = PopupMenu(requireContext(), view)
+        popupMenu.menuInflater.inflate(R.menu.menu_article_sort, popupMenu.menu)
+
+        // 메뉴 아이템 클릭 처리
+        popupMenu.setOnMenuItemClickListener { item ->
+            when (item.itemId) {
+                R.id.menu_sort_asc -> binding.tvSorting.text = getString(R.string.sort_article_asc)
+                R.id.menu_sort_desc -> binding.tvSorting.text = getString(R.string.sort_article_desc)
+                R.id.menu_sort_like -> binding.tvSorting.text = getString(R.string.sort_article_like)
+            }
+            true
+        }
+
+        popupMenu.show()
+    }
+
 }

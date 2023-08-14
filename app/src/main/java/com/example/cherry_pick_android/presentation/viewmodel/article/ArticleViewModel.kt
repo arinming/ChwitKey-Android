@@ -6,15 +6,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cherry_pick_android.data.remote.repository.ArticleRepository
 import com.example.cherry_pick_android.data.remote.response.ArticleCommendResponse
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class ArticleViewModel: ViewModel() {
-    private val repository = ArticleRepository()
+@HiltViewModel
+class ArticleViewModel @Inject constructor(
+    private val repository: ArticleRepository
+) : ViewModel() {
 
-    private val _result = MutableLiveData<ArticleCommendResponse>()
-    val result: LiveData<ArticleCommendResponse>
-        get() = _result
+    private val liveDataList = MutableLiveData<List<ArticleCommendResponse.Data>>()
 
-    fun getAllArticle() = viewModelScope.launch {
+
+    fun getLiveDataObserver(): MutableLiveData<List<ArticleCommendResponse.Data>> {
+        return liveDataList
+    }
+
+    suspend fun loadListOfData() {
+        repository.makeApiCall(liveDataList)
     }
 }

@@ -62,7 +62,10 @@
     <string name="home_menu_keyword">키워드</string>
     <string name="home_menu_scrap">스크랩</string>
     <string name="home_menu_my_page">마이페이지</string>
-
+    
+    <string name="sort_article_asc">오름차순</string>
+    <string name="sort_article_desc">내림차순</string>
+    <string name="sort_article_like">인기순</string>
 
     <!-- news_item -->
     <string name="item_news_title">6월 무역수지 16개월 만에 흑자, 전년\n비 자동차 수출 58% 선박 98% 늘어</string>
