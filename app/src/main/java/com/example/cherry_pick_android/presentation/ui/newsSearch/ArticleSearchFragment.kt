@@ -89,22 +89,28 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
     // 추천 키워드 클릭 이벤트
     override fun onAddClick(keyword: String) {
         searchKeywordViewModel.viewModelScope.launch {
-            val isKeywordNew = searchKeywordViewModel.checkKeyword(keyword) // 키워드 중복 검사
-            val isKeywordCnt = searchKeywordViewModel.checkKeywordCnt() // 키워드 개수 검사
+            val existingRecords = searchRecordAdapter.getRecords()
+            val existingRecord = existingRecords.find { it.record == keyword }
 
-            if(isKeywordNew && isKeywordCnt){
+            if (existingRecord != null) {
+                // 이미 존재하는 키워드를 리스트에서 삭제하고, 맨 앞에 새로운 값 추가
+                searchRecordViewModel.deleteRecord(existingRecord.record)
+                searchRecordAdapter.removeRecord(existingRecord)
+                searchRecordViewModel.addRecord(keyword)
+
+                // NewsSearchActivity의 etSearch 텍스트 변경
+                if (activity is NewsSearchActivity) {
+                    val newsSearchActivity = activity as NewsSearchActivity
+                    newsSearchActivity.updateSearchText(keyword)
+                }
+            } else {
+                // 새로운 값만 추가
                 searchRecordViewModel.addRecord(keyword)
                 // NewsSearchActivity의 etSearch 텍스트 변경
                 if (activity is NewsSearchActivity) {
                     val newsSearchActivity = activity as NewsSearchActivity
                     newsSearchActivity.updateSearchText(keyword)
                 }
-            }
-            else if(!isKeywordCnt){
-                Toast.makeText(context, "키워드 최대 개수를 초과했습니다", Toast.LENGTH_SHORT).show()
-            }
-            else{
-                Toast.makeText(context, "이미 존재하는 키워드입니다", Toast.LENGTH_SHORT).show()
             }
         }
     }

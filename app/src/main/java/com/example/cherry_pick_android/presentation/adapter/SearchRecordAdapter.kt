@@ -15,6 +15,16 @@ class SearchRecordAdapter(
         fun setRecordItem(records: String) {
             binding.btnRecentSearchItem.text = records
         }
+
+        init {
+            // 삭제 버튼 클릭 이벤트 설정
+            binding.ibtnDeleteRecentSearch.setOnClickListener {
+                val position = adapterPosition
+                if (position != RecyclerView.NO_POSITION) {
+                    deleteListener.onDeleteClick(records[position].record)
+                }
+            }
+        }
     }
 
     // 아이템 레이아웃 호출
@@ -47,5 +57,14 @@ class SearchRecordAdapter(
 
     fun getRecords(): List<SearchRecordEntity> {
         return records
+    }
+
+    fun removeRecord(record: SearchRecordEntity) {
+        val position = records.indexOf(record)
+        if (position != -1) {
+            records.removeAt(position)
+            notifyItemRemoved(position)
+            notifyItemRangeChanged(position, itemCount)
+        }
     }
 }
