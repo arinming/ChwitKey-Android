@@ -73,9 +73,13 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
     private fun deleteAll() {
         // 모두 지우기 버튼 클릭 이벤트 설정
         binding.btnAllDelete.setOnClickListener {
-            binding.rvRecordList.adapter?.notifyDataSetChanged() // 어댑터에 변경 알림
+            val recordsToDelete = searchRecordAdapter.getRecords() // 현재 레코드 리스트 가져오기
+            for (record in recordsToDelete) {
+                searchRecordViewModel.deleteRecord(record.record)
+            }
         }
     }
+
 
     // 검색 기록 제거 함수
     override fun onDeleteClick(record: String) {

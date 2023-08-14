@@ -41,7 +41,11 @@ class SearchRecordAdapter(
 
     fun setList(list: List<SearchRecordEntity>) {
         records.clear()
-        records.addAll(list)
+        records.addAll(list.reversed())
         notifyDataSetChanged()
+    }
+
+    fun getRecords(): List<SearchRecordEntity> {
+        return records
     }
 }
