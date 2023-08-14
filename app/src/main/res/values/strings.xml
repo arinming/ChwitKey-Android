@@ -37,9 +37,6 @@
 
     <!-- mypage -->
     <string name="mypage_user_id">유저네임a</string>
-    <string name="mypage_saved_article">저장한 기사</string>
-    <string name="mypage_change_job">직군 정보 변경</string>
-    <string name="mypage_keyword_setting">키워드 설정</string>
     <string name="mypage_score_appstore">스토어 별점 남기기</string>
     <string name="mypage_user_policy">이용약관 및 사용자 정책</string>
     <string name="mypage_contacts">언론사 연락처</string>
@@ -53,8 +50,11 @@
     <string name="profile_birth">생년월일</string>
     <string name="profile_job">직군 정보</string>
 
-
     <string name="profile_logout">로그아웃</string>
+    <string name="profile_img_fromAlbum">앨범에서 사진 선택</string>
+    <string name="profile_img_fromCamera">촬영하기</string>
+    <string name="profile_img_basic">기본 이미지로 변경</string>
+    <string name="profile_img_cancel">취소</string>
 
 
     <!-- menu -->

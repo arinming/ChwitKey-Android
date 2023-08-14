@@ -22,31 +22,31 @@
             android:id="@+id/ll_mypage_buttons"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="20dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/ll_mypage_user">
 
             <ImageButton
-                android:id="@+id/ibtn_mypage_to_profile"
+                android:id="@+id/ibtn_mypage_logout"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_mypage_to_profile"
+                android:src="@drawable/ic_my_page_logout"
                 android:layout_marginRight="10dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/ibtn_mypage_to_setting"/>
+                app:layout_constraintEnd_toStartOf="@+id/ibtn_mypage_setting"/>
 
             <ImageButton
-                android:id="@+id/ibtn_mypage_to_setting"
+                android:id="@+id/ibtn_mypage_setting"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_setting"
+                android:src="@drawable/ic_my_page_setting"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
@@ -73,14 +73,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_mypage_user" />
+                app:srcCompat="@drawable/ic_my_page_user" />
 
             <TextView
                 android:id="@+id/tv_mypage_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="@string/mypage_user_id" />
+                android:text="@string/mypage_user_id"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:fontFamily="@font/pretendard_medium" />
 
         </LinearLayout>
 
@@ -99,9 +102,9 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.3dp"
+            android:layout_height="0.6dp"
             android:background="@color/gray_3"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginBottom="20dp"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -112,20 +115,23 @@
                 android:id="@+id/tv_mypage_score_appstore"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
                 android:clickable="true"
+                android:fontFamily="@font/pretendard_regular"
                 android:text="@string/mypage_score_appstore"
-                android:layout_gravity="start"/>
+                android:textColor="@color/black"
+                android:textSize="16sp" />
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
             <ImageButton
                 android:id="@+id/ibtn_moveTo_score"
-                android:layout_width="7dp"
-                android:layout_height="14dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_mypage_menu"
+                android:src="@drawable/ic_my_page_menu"
                 android:layout_gravity="end"/>
 
         </LinearLayout>
@@ -134,45 +140,51 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="20dp">
 
             <TextView
                 android:id="@+id/tv_mypage_user_policy"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="start"
                 android:clickable="true"
+                android:fontFamily="@font/pretendard_regular"
                 android:text="@string/mypage_user_policy"
-                android:layout_gravity="start"/>
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
             <View
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_weight="1" />
             <ImageButton
                 android:id="@+id/ibtn_moveTo_policy"
-                android:layout_width="7dp"
-                android:layout_height="14dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:background="@null"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_mypage_menu"
+                android:src="@drawable/ic_my_page_menu"
                 android:layout_gravity="end"/>
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="0.3dp"
+            android:layout_height="0.6dp"
             android:background="@color/gray_3"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"/>
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="20dp"/>
 
         <TextView
             android:id="@+id/tv_mypage_contacts"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
             android:clickable="true"
-            android:textColor="@color/gray_6"
+            android:fontFamily="@font/pretendard_light"
             android:text="@string/mypage_contacts"
-            android:layout_marginBottom="10dp"/>
+            android:textColor="@color/gray_6"
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_mypage_privacy_policy"
@@ -180,7 +192,9 @@
             android:layout_height="wrap_content"
             android:clickable="true"
             android:textColor="@color/gray_6"
-            android:text="@string/mypage_privacy_policy" />
+            android:text="@string/mypage_privacy_policy"
+            android:textSize="14sp"
+            android:fontFamily="@font/pretendard_light" />
 
     </LinearLayout>
 

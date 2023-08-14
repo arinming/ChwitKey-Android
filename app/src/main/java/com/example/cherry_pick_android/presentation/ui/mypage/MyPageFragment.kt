@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.FragmentMypageBinding
+import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
 
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMypageBinding? = null
@@ -31,11 +32,18 @@ class MyPageFragment : Fragment() {
 
     private fun setButton() {
         binding.apply {
-            // 계정설정 (프로필) 페이지로 이동
-            ibtnMypageToProfile.setOnClickListener{
-                val intent = Intent(it.context,ProfileActivity::class.java)
-                it.context.startActivity(intent)
+            // 로그아웃
+            ibtnMypageLogout.setOnClickListener {
+
             }
+            // 계정설정 (프로필) 페이지로 이동
+            ibtnMypageSetting.setOnClickListener {
+                activity?.let {
+                    val intent = Intent(it, ProfileActivity::class.java)
+                    it.startActivity(intent)
+                }
+            }
+
             // 스토어 별점 남기기 이동
             ibtnMoveToScore.setOnClickListener {
                 // val intent = Intent(Intent.ACTION_VIEW)
