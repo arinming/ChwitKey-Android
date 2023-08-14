@@ -7,6 +7,8 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.cherry_pick_android.domain.model.UserData
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import kotlinx.coroutines.flow.catch
@@ -21,6 +23,7 @@ class UserDataRepositoryImpl @Inject constructor(
 ): UserDataRepository {
 
     private val Context.dataStore by preferencesDataStore(name = "user_data")
+    private val _userData = MutableLiveData<UserData>()
 
     companion object{
         const val TAG = "UserIdRepositoryImpl"
@@ -58,8 +61,10 @@ class UserDataRepositoryImpl @Inject constructor(
             }
             Log.d(TAG, "Key:${key} Value:${value}")
             preferences[preferencesKey] = value
+            _userData.postValue(mapperToUserData(preferences))
         }
     }
+
 
     // 유저 정보 매핑
     private fun mapperToUserData(preferences: Preferences): UserData {
