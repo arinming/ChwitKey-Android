@@ -23,7 +23,7 @@ import java.sql.Date
 import java.text.SimpleDateFormat
 
 
-class ProfileActivity : AppCompatActivity(),CameraDialogInterface {
+class ProfileActivity : AppCompatActivity()/*,CameraDialogInterface*/ {
     private lateinit var binding: ActivityProfileBinding
 
     companion object {

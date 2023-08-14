@@ -71,6 +71,9 @@ class LoginActivity: AppCompatActivity() {
                             finish()
                         }else{
                             Log.d(TAG, "ERROR")
+                            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                            startActivity(intent)
+                            finish()
                         }
                     }
                 }
