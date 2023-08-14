@@ -7,5 +7,4 @@ interface UserDataRepository {
     suspend fun getUserData(): UserData
     suspend fun setUserData(key: String, value: String)
 
-    fun observeUserData(): LiveData<UserData>
 }

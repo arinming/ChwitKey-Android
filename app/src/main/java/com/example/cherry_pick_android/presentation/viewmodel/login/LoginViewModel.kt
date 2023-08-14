@@ -28,18 +28,19 @@ class LoginViewModel @Inject constructor(
         get() = _token
     val isInit: LiveData<String>
         get() = _isInit
-    val userData: LiveData<UserData> = userDataRepository.observeUserData()
 
     fun updateSocialToken(Token: String){
         _token.value = Token
     }
 
-
     fun setIsinit(status: String){
-        if(status == "200"){
-            _isInit.value = "OK"
-        }else{
-            _isInit.value = "NO"
+        _isInit.value = status
+    }
+
+    fun getUserData(): LiveData<UserData>{
+        return liveData {
+            emit(userDataRepository.getUserData())
+            Log.d(TAG, "UserData: ${userDataRepository.getUserData()}")
         }
     }
 

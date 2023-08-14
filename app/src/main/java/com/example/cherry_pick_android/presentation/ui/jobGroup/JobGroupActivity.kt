@@ -34,7 +34,7 @@ class JobGroupActivity: AppCompatActivity() {
     private var name = ""
     private var gender = ""
     private var birth = ""
-    private var flag = false
+    private var flag = ""
     private val loginViewModel: LoginViewModel by viewModels()
     @Inject
     lateinit var saveUserService: SaveUserService
@@ -60,9 +60,9 @@ class JobGroupActivity: AppCompatActivity() {
 
         // 데이터 감지를 통해 최초 사용자 구분
         loginViewModel.isInit.observe(this@JobGroupActivity, Observer {
-            flag = it != "NO"
+            flag = it
         })
-        loginViewModel.userData.observe(this@JobGroupActivity, Observer {
+        loginViewModel.getUserData().observe(this@JobGroupActivity, Observer {
             userId = it.userId
             name = it.name
             gender = it.gender
@@ -101,7 +101,7 @@ class JobGroupActivity: AppCompatActivity() {
             setResult(Activity.RESULT_OK, resultIntent)
 
             // Request body 설정
-            if(!flag){
+            if(flag == "404"){
                 Log.d(TAG, selecetedJobList.toString())
                 val request = SaveUserRequest(
                     birthdate = birth,
@@ -126,9 +126,10 @@ class JobGroupActivity: AppCompatActivity() {
                         }
                     }
                 }
-
+            }else if(flag == "200"){
+                finish()
             }else{
-                if(!isFinishing) finish()
+                Log.d(TAG, "ERROR")
             }
         }
     }

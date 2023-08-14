@@ -43,6 +43,7 @@ class LoginActivity: AppCompatActivity() {
     lateinit var userInfoService: UserInfoService
 
     private val viewModel: LoginViewModel by viewModels()
+
     companion object{
         const val TAG = "LoginActivity"
         private const val KAKAO = "kakao"
@@ -52,8 +53,9 @@ class LoginActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
 
+
         // 기존 회원 여부 검사 (200: 통신성공, 404: 통신실패)
-        viewModel.userData.observe(this@LoginActivity, Observer {
+        viewModel.getUserData().observe(this@LoginActivity, Observer {
             if(it.userId != ""){
                 lifecycleScope.launch {
                     val userInfoResponse = userInfoService.getUserInfo(it.userId)

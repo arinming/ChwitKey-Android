@@ -65,9 +65,6 @@ class UserDataRepositoryImpl @Inject constructor(
         }
     }
 
-    override fun observeUserData(): LiveData<UserData> {
-        return _userData
-    }
 
     // 유저 정보 매핑
     private fun mapperToUserData(preferences: Preferences): UserData {
