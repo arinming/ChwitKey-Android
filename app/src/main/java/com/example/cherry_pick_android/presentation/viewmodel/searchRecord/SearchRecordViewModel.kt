@@ -15,7 +15,7 @@ import javax.inject.Inject
 class SearchRecordViewModel @Inject constructor(
     private val addRecordUseCase: AddRecordUseCase,
     private val deleteRecordUseCase: DeleteRecordUseCase,
-    private val readRecordUseCase: ReadRecordUseCase
+    readRecordUseCase: ReadRecordUseCase
 ): ViewModel() {
     private val recordList: LiveData<List<SearchRecordEntity>> = readRecordUseCase.invoke()
 
@@ -33,16 +33,5 @@ class SearchRecordViewModel @Inject constructor(
 
     fun loadRecord(): LiveData<List<SearchRecordEntity>> {
         return recordList
-    }
-
-    // 중복 검사
-    fun checkRecord(record: String): Boolean {
-        val existingRecords = loadRecord().value
-        return existingRecords == null || !existingRecords.any { it.record == record }
-    }
-
-    // 키워드 개수 검사
-    fun checkRecordCnt(): Boolean {
-        return loadRecord().value?.size?: 0 < 20
     }
 }
