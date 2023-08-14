@@ -1,5 +1,10 @@
 package com.example.cherry_pick_android.presentation.ui.mypage.dialog
 
+import android.content.Intent
+
 interface CameraDialogInterface {
-    fun onCameraClick(cameraMenu: String)
+    fun onAlbumClick(intent : Intent)
+    fun onCameraClick(intent : Intent)
+    fun onBasicClick(intent: Intent)
+    fun onCancelClick(intent: Intent)
 }

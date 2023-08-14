@@ -84,7 +84,7 @@ class LoginActivity: AppCompatActivity() {
         binding.tvExplain2.text = textToBold(binding.tvExplain2.text.toString(), 0, 16)
 
 
-        //onClickLogin()
+        onClickLogin()
 
         Log.d(LoginViewModel.TAG, "UserData: ${viewModel.getUserData()}")
 
