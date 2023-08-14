@@ -9,6 +9,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.cherry_pick_android.data.remote.service.login.UserInfoService
 import com.example.cherry_pick_android.domain.model.UserData
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
+import com.kakao.sdk.user.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -32,13 +33,8 @@ class LoginViewModel @Inject constructor(
         _token.value = Token
     }
 
-
     fun setIsinit(status: String){
-        if(status == "200"){
-            _isInit.value = "OK"
-        }else{
-            _isInit.value = "NO"
-        }
+        _isInit.value = status
     }
 
     fun getUserData(): LiveData<UserData>{
