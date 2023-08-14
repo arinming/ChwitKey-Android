@@ -13,13 +13,16 @@
         android:layout_height="wrap_content"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="-2dp">
 
         <ImageButton
             android:id="@+id/ibtn_profile_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
             android:background="@android:color/transparent"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_back"
@@ -31,20 +34,22 @@
             android:id="@+id/tv_profile_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:fontFamily="@font/pretendard_medium"
             android:text="@string/mypage_profile_setting"
-            android:textSize="20sp"
-            android:textColor="@color/black"
-            android:layout_gravity="left" />
+            android:textColor="@color/gray_5"
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/tv_leave_account"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/profile_leave_account"
-            android:textSize="14sp"
-            android:textColor="@color/gray_4"
+            android:layout_gravity="right"
             android:layout_margin="20dp"
-            android:layout_gravity="right" />
+            android:fontFamily="@font/pretendard_regular"
+            android:text="@string/profile_leave_account"
+            android:textColor="@color/gray_4"
+            android:textSize="14sp" />
 
     </androidx.appcompat.widget.Toolbar>
 
@@ -74,7 +79,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_mypage_user" />
+                app:srcCompat="@drawable/ic_my_page_user" />
 
             <ImageButton
                 android:id="@+id/ibtn_profile_camera"
@@ -113,8 +118,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/profile_name"
                     android:textSize="12sp"
-                    android:fontWeight="400"
-                    android:textColor="@color/gray_4" />
+                    android:textColor="@color/gray_4"
+                    android:fontFamily="@font/pretendard_regular" />
 
                 <LinearLayout
                     android:id="@+id/ll_profile_name"
@@ -129,18 +134,19 @@
                         android:background="@null"
                         android:text="@string/mypage_user_id"
                         android:textColor="@color/black"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:fontFamily="@font/pretendard_medium"/>
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_weight="1" />
                     <ImageButton
                         android:id="@+id/ibtn_profile_name_change"
-                        android:layout_width="19dp"
-                        android:layout_height="19dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@color/white"
                         android:padding="0dp"
-                        android:scaleType="fitCenter"
+                        android:scaleType="fitStart"
                         android:layout_gravity="right"
                         app:layout_constraintEnd_toEndOf="@id/ll_profile_name"
                         app:srcCompat="@drawable/ic_pencil" />
@@ -151,7 +157,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.3px"
+                android:layout_height="0.6dp"
                 android:layout_marginBottom="20dp"
                 android:background="@color/gray_3" />
 
@@ -167,7 +173,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/profile_sex"
                     android:textSize="12sp"
-                    android:textColor="@color/gray_4" />
+                    android:textColor="@color/gray_4"
+                    android:fontFamily="@font/pretendard_regular" />
 
                 <EditText
                     android:id="@+id/et_profile_sex"
@@ -176,13 +183,14 @@
                     android:background="@null"
                     android:text="@string/profile_sex"
                     android:textColor="@color/black"
-                    android:textSize="18sp"/>
+                    android:textSize="18sp"
+                    android:fontFamily="@font/pretendard_medium" />
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.3px"
+                android:layout_height="0.6dp"
                 android:background="@color/gray_3"
                 android:layout_marginBottom="20dp"/>
 
@@ -198,13 +206,15 @@
                     android:layout_height="wrap_content"
                     android:text="@string/profile_birth"
                     android:textSize="12sp"
-                    android:textColor="@color/gray_4" />
+                    android:textColor="@color/gray_4"
+                    android:fontFamily="@font/pretendard_regular" />
 
                 <EditText
                     android:id="@+id/et_profile_birth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
+                    android:fontFamily="@font/pretendard_medium"
                     android:text="@string/profile_birth"
                     android:textColor="@color/black"
                     android:textSize="18sp" />
@@ -213,7 +223,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.3px"
+                android:layout_height="0.6dp"
                 android:background="@color/gray_3"
                 android:layout_marginBottom="20dp" />
 
@@ -229,7 +239,8 @@
                     android:layout_height="wrap_content"
                     android:text="@string/profile_job"
                     android:textSize="12sp"
-                    android:textColor="@color/gray_4" />
+                    android:textColor="@color/gray_4"
+                    android:fontFamily="@font/pretendard_regular" />
 
                 <LinearLayout
                     android:id="@+id/ll_profile_job"
@@ -244,15 +255,16 @@
                         android:background="@null"
                         android:text="@string/profile_job"
                         android:textColor="@color/black"
-                        android:textSize="18sp" />
+                        android:textSize="18sp"
+                        android:fontFamily="@font/pretendard_medium" />
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"
                         android:layout_weight="1" />
                     <ImageButton
                         android:id="@+id/ibtn_profile_job_change"
-                        android:layout_width="19dp"
-                        android:layout_height="19dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@color/white"
                         android:padding="0dp"
                         android:scaleType="centerCrop"
@@ -264,7 +276,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="0.3px"
+                android:layout_height="0.6dp"
                 android:background="@color/gray_3" />
 
         </LinearLayout>

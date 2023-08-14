@@ -1,19 +1,67 @@
 package com.example.cherry_pick_android.presentation.ui.mypage
 
-import android.app.Activity
+import android.content.ContentValues
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
+import android.view.Gravity
+import android.view.Window
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil.setContentView
+import androidx.core.content.ContextCompat
+import coil.load
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.ActivityProfileBinding
 import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroupActivity
+import com.example.cherry_pick_android.presentation.ui.mypage.dialog.CameraDialog
+import com.example.cherry_pick_android.presentation.ui.mypage.dialog.CameraDialogInterface
+import java.sql.Date
+import java.text.SimpleDateFormat
 
-class ProfileActivity : AppCompatActivity() {
+
+class ProfileActivity : AppCompatActivity(),CameraDialogInterface {
     private lateinit var binding: ActivityProfileBinding
 
+    companion object {
+        const val REQUEST_CODE_PERMISSIONS = 1001
+        const val ALBUM_OK = 2002
+        const val CAMERA_OK = 2003
+        const val BASIC_OK = 2004
+        const val TAG = "ProfileActivity"
+    }
+
+
+    private fun checkPermission(permissions: Array<String>): Boolean {
+        return permissions.all {
+            ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
+        }
+    }
+
+    // 이미지 로드
+    private val readImage = registerForActivityResult(
+        ActivityResultContracts.GetContent()) {
+            uri -> binding.ivProfilePic.load(uri)
+    }
+
+    // 카메라를 실행한 후 찍은 사진을 저장
+    var pictureUri: Uri? = null
+    private val getTakePicture = registerForActivityResult(ActivityResultContracts.TakePicture()) {
+        if(it) {
+            pictureUri.let { binding.ivProfilePic.setImageURI(pictureUri) }
+        }
+    }
+    // 파일 불러오기
+    private val getContentImage = registerForActivityResult(
+        ActivityResultContracts.GetContent()) {
+            uri ->
+                uri.let { binding.ivProfilePic.setImageURI(uri)
+            }
+    }
+    // 직군선택 결과 받아오기
     private val getResultText = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()){
             result-> if (result.resultCode == RESULT_OK){
@@ -30,7 +78,7 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(view)
 
         goBack()
-        ChangeImage()
+        showCameraDialog()
         ChangeName()
         ChangeJobInterest()
         LeaveAccount()
@@ -45,20 +93,43 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     // 프로필 사진 변경
-    private fun ChangeImage() {
-        binding.ivProfilePic.setOnClickListener{
-
-            // 앨범에서 사진 선택
-
-            // 촬영하기->고유 이름으로 파일 생성->갤러리에 사진추가
-            //dispatchTakePictureIntent()
-            //createImageFile()
-            //galleryAddPic()
-            // 기본 이미지로 변경
-
-            // 취소
-
+    fun showCameraDialog() {
+        binding.ibtnProfileCamera.setOnClickListener{
+            val dialog = CameraDialog(this)
+            dialog.show(this.supportFragmentManager, "CameraDialog")
         }
+    }
+    override fun onCameraClick(cameraMenu: String) {
+        val camera_menu = cameraMenu
+
+        //readImage.launch()
+        // 권한 확인
+        //checkPermission.launch(permissionList)
+        //if (!checkPermission(permissions)) {
+          //  requestPermissions(permissions, REQUEST_CODE_PERMISSIONS)
+        //}
+
+        if (camera_menu=="@string/profile_img_fromAlbum"){
+            getContentImage.launch("image/*")
+        }
+        else if (camera_menu=="@string/profile_img_fromCamera"){
+            pictureUri = createImageFile()
+            getTakePicture.launch(pictureUri)
+        }
+        else if (camera_menu=="@string/profile_img_basic"){
+            binding.ivProfilePic.setImageResource(R.drawable.ic_my_page_user)
+        }
+        else if (camera_menu=="@string/profile_img_cancel"){
+            // 변화없음
+        }
+    }
+    private fun createImageFile(): Uri? {
+        val now = SimpleDateFormat("yyMMdd_HHmmss").format(System.currentTimeMillis())
+        val content = ContentValues().apply {
+            put(MediaStore.Images.Media.DISPLAY_NAME, "img_$now.jpg")
+            put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
+        }
+        return contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, content)
     }
 
     // 직군정보 변경페이지로 이동
@@ -102,4 +173,5 @@ class ProfileActivity : AppCompatActivity() {
 
         }
     }
+
 }
