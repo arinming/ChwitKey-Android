@@ -50,7 +50,7 @@ class JobGroupAdapter(
             // 이미 선택했던 직군 선택시 버튼 변경
             if (selectedjobList.contains(tvBtn.text)) {
                 setBtn(ivBtn, tvBtn, false)
-                selectedjobList.remove(mapperToJob(tvBtn.text.toString()))
+                selectedjobList.remove(tvBtn.text.toString())
                 Log.d("JobGroupAdapter", "removed ${tvBtn.text} from selectedjobList")
             }
             // 최대 선택 가능한 직군 개수(=3) 제한
@@ -60,7 +60,7 @@ class JobGroupAdapter(
             // 새롭게 직군 선택시 버튼 변경
             else {
                 setBtn(ivBtn, tvBtn, true)
-                selectedjobList.add(mapperToJob(tvBtn.text.toString()))
+                selectedjobList.add(tvBtn.text.toString())
                 Log.d(TAG, selectedjobList.toString())
             }
             /* 변경사항 */
@@ -83,6 +83,7 @@ class JobGroupAdapter(
         if(flag){
             ivBtn.setBackgroundResource(R.drawable.ic_job_button_clicked)
             tvBtn.setTextColor(ContextCompat.getColor(context, R.color.sub_bage))
+
         }else{
             ivBtn.setBackgroundResource(R.drawable.ic_job_button)
             tvBtn.setTextColor(ContextCompat.getColor(context, R.color.black))
@@ -95,17 +96,7 @@ class JobGroupAdapter(
 
     }
 
-    // 직군을 영문으로 매핑 작업
-    fun mapperToJob(value: String): String{
-        return when(value){
-            "철강" -> "steel" "석유·화학" -> "Petroleum/Chemical" "정유" -> "oilrefining" "2차 전지" -> "secondarybattery"
-            "반도체" -> "Semiconductor" "디스플레이" -> "Display" "휴대폰" -> "Mobile" "IT" -> "it"
-            "자동차" -> "car" "조선" -> "Shipbuilding" "해운" -> "Shipping" "F&B" -> "FnB"
-            "소매유통" -> "RetailDistribution" "건설" -> "Construction" "호텔·여행·항공" -> "HotelTravel" "섬유·의류" -> "FiberClothing"
-            else -> ""
-        }
 
-    }
 
 
 }

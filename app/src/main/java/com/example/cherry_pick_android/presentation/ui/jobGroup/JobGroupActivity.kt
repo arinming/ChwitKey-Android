@@ -18,6 +18,7 @@ import com.example.cherry_pick_android.databinding.ActivityJobGroupBinding
 import com.example.cherry_pick_android.presentation.adapter.JobGroupAdapter
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroups.jobgroups
+import com.example.cherry_pick_android.presentation.ui.mypage.ProfileActivity
 import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -74,7 +75,6 @@ class JobGroupActivity: AppCompatActivity() {
 
     }
 
-    /* 주요 변경 사항 (밑에 2문단 코드) */
     private val onCompleteButtonStateChanged: () -> Unit = {
         updateCompleteButtonState() // 완료 버튼 상태 갱신
     }
@@ -88,6 +88,17 @@ class JobGroupActivity: AppCompatActivity() {
         } else {
             completeBtn.setBackgroundResource(R.drawable.ic_job_complete)
             completeBtn.isEnabled = false
+        }
+    }
+
+    // 직군을 영문으로 매핑 작업
+    fun mapperToJob(value: String): String{
+        return when(value){
+            "철강" -> "steel" "석유·화학" -> "Petroleum/Chemical" "정유" -> "oilrefining" "2차 전지" -> "secondarybattery"
+            "반도체" -> "Semiconductor" "디스플레이" -> "Display" "휴대폰" -> "Mobile" "IT" -> "it"
+            "자동차" -> "car" "조선" -> "Shipbuilding" "해운" -> "Shipping" "F&B" -> "FnB"
+            "소매유통" -> "RetailDistribution" "건설" -> "Construction" "호텔·여행·항공" -> "HotelTravel" "섬유·의류" -> "FiberClothing"
+            else -> ""
         }
     }
 
@@ -108,9 +119,9 @@ class JobGroupActivity: AppCompatActivity() {
                     gender = gender,
                     memberNumber = userId,
                     name = name,
-                    industryKeyword1 = selecetedJobList.getOrElse(0){ "" },
-                    industryKeyword2 = selecetedJobList.getOrElse(1){ "" },
-                    industryKeyword3 = selecetedJobList.getOrElse(2){" "}
+                    industryKeyword1 = mapperToJob(selecetedJobList.getOrElse(0){ "" }),
+                    industryKeyword2 = mapperToJob(selecetedJobList.getOrElse(1){ "" }),
+                    industryKeyword3 = mapperToJob(selecetedJobList.getOrElse(2){" "})
                 )
                 lifecycleScope.launch {
                     val saveUserResponse = saveUserService.saveUserInform(request)

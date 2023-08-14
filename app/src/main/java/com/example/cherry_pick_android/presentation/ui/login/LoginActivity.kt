@@ -81,7 +81,8 @@ class LoginActivity: AppCompatActivity() {
         binding.tvExplain.text = textToBold(binding.tvExplain.text.toString(), 7, 17)
         binding.tvExplain2.text = textToBold(binding.tvExplain2.text.toString(), 0, 16)
 
-        onClickLogin()
+
+        //onClickLogin()
 
 
     }
