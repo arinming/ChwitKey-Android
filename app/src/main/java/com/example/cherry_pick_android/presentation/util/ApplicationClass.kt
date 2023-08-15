@@ -15,7 +15,7 @@ class ApplicationClass: Application() {
     @Inject
     lateinit var userDataRepository: UserDataRepository
     companion object{
-        lateinit var authToken: String
+        var authToken: String = ""
     }
     override fun onCreate() {
         super.onCreate()
@@ -25,7 +25,11 @@ class ApplicationClass: Application() {
         Log.d("HASHKEY", keyHash)
 
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_KEY) // 초기화
-        authToken = runBlocking { userDataRepository.getUserData().token }
+
+        userDataRepository.getTokenLiveData().observeForever{
+            Log.d("ApplicationContext", "옵저버 감지!!")
+            authToken = it
+        }
     }
 
 }

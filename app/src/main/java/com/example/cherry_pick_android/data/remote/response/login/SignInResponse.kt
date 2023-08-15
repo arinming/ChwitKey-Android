@@ -1,13 +1,13 @@
-package com.example.cherry_pick_android.data.remote.response.user
+package com.example.cherry_pick_android.data.remote.response.login
 
 
 import com.squareup.moshi.Json
 
-data class UserKeywordResponse(
+data class SignInResponse(
     @field:Json(name = "data")
     val `data`: Data?,
     @field:Json(name = "description")
-    val description: Any?,
+    val description: String?,
     @field:Json(name = "status")
     val status: String?,
     @field:Json(name = "statusCode")
@@ -17,6 +17,10 @@ data class UserKeywordResponse(
 )
 
 data class Data(
-    @field:Json(name = "keywordList")
-    val keywordList: List<Any?>?
+    @field:Json(name = "access_token")
+    val access_token: String?,
+    @field:Json(name = "isMember")
+    val isMember: Boolean?,
+    @field:Json(name = "refresh_token")
+    val refresh_token: String?
 )

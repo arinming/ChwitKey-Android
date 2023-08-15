@@ -23,7 +23,7 @@ class UserDataRepositoryImpl @Inject constructor(
 ): UserDataRepository {
 
     private val Context.dataStore by preferencesDataStore(name = "user_data")
-    private val _userData = MutableLiveData<UserData>()
+    private val _tokenLiveData = MutableLiveData<String>()
 
     companion object{
         const val TAG = "UserIdRepositoryImpl"
@@ -33,6 +33,7 @@ class UserDataRepositoryImpl @Inject constructor(
         private val NAME_KEY = stringPreferencesKey("name")
         private val GENDER_KEY = stringPreferencesKey("gender")
         private val BIRTHDAY_KEY = stringPreferencesKey("birthday")
+        private val ISINIT_KEY = stringPreferencesKey("isInit")
     }
 
     // 유저 정보 흭득
@@ -57,16 +58,23 @@ class UserDataRepositoryImpl @Inject constructor(
             val preferencesKey = when(key){
                 "userId" -> USER_KEY
                 "platform" -> PLATFORM_KEY
-                "token" -> TOKEN_KEY
+                "token" -> {
+                    _tokenLiveData.postValue(value)
+                    TOKEN_KEY
+                }
                 "name" -> NAME_KEY
                 "gender" -> GENDER_KEY
                 "birthday" -> BIRTHDAY_KEY
+                "isInit" -> ISINIT_KEY
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
             Log.d(TAG, "Key:${key} Value:${value}")
             preferences[preferencesKey] = value
-            _userData.postValue(mapperToUserData(preferences))
         }
+    }
+
+    override fun getTokenLiveData(): LiveData<String> {
+        return _tokenLiveData
     }
 
 
@@ -78,8 +86,9 @@ class UserDataRepositoryImpl @Inject constructor(
         val name = preferences[NAME_KEY] ?: ""
         val gender = preferences[GENDER_KEY] ?: ""
         val birthday = preferences[BIRTHDAY_KEY] ?: ""
+        val isInit = preferences[ISINIT_KEY] ?: ""
 
-        return UserData(userId, platform, token, name, gender, birthday)
+        return UserData(userId, platform, token, name, gender, birthday, isInit)
     }
 
 }

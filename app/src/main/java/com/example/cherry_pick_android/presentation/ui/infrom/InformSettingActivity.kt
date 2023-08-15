@@ -51,13 +51,11 @@ class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
         // 다음 버튼 이벤트
         with(binding){
             tvComplete.setOnClickListener {
-                if(tvComplete.isEnabled){
-                    loginViewModel.setUserData("name", binding.etNick.text.toString())
-                    loginViewModel.setUserData("gender", binding.tvGenderChoice.text.toString())
-                    loginViewModel.setUserData("birthday", binding.etBirth.text.toString())
-                    val intent = Intent(this@InformSettingActivity, JobGroupActivity::class.java)
-                    startActivity(intent)
-                }
+                loginViewModel.setUserData("name", binding.etNick.text.toString())
+                loginViewModel.setUserData("gender", binding.tvGenderChoice.text.toString())
+                loginViewModel.setUserData("birthday", binding.etBirth.text.toString())
+                val intent = Intent(this@InformSettingActivity, JobGroupActivity::class.java)
+                startActivity(intent)
             }
         }
         // 성별 선택

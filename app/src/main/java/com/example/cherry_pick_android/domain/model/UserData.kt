@@ -6,5 +6,6 @@ data class UserData(
     val token: String,
     val name: String,
     val gender: String,
-    val birthday: String
+    val birthday: String,
+    val isInit: String
 )

@@ -3,7 +3,8 @@ package com.example.cherry_pick_android.data.module.api
 
 import com.example.cherry_pick_android.data.remote.repository.ArticleRepository
 import com.example.cherry_pick_android.data.remote.service.ArticleSearchService
-import com.example.cherry_pick_android.data.remote.service.login.SaveUserService
+import com.example.cherry_pick_android.data.remote.service.login.SignInService
+import com.example.cherry_pick_android.data.remote.service.user.InitUserSaveService
 import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.data.remote.service.user.UserKeywordService
 import com.squareup.moshi.Moshi
@@ -56,8 +57,8 @@ class ApiModule {
 
     @Singleton
     @Provides
-    fun saveUserService(retrofit: Retrofit): SaveUserService {
-        return retrofit.create(SaveUserService::class.java)
+    fun provideSignInService(retrofit: Retrofit): SignInService {
+        return retrofit.create(SignInService::class.java)
     }
 
 
@@ -83,5 +84,11 @@ class ApiModule {
     @Singleton
     fun provideUserKeyword(retrofit: Retrofit): UserKeywordService{
         return retrofit.create(UserKeywordService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideInitUserSave(retrofit: Retrofit): InitUserSaveService{
+        return retrofit.create(InitUserSaveService::class.java)
     }
 }
