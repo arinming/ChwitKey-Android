@@ -127,6 +127,7 @@ class JobGroupActivity: AppCompatActivity() {
                             val homeIntent = Intent(this@JobGroupActivity, HomeActivity::class.java).apply {
                                 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // 백스택에 남아있는 액티비티 제거
                             }
+                            loginViewModel.setUserData("isInit", "exitUser")
                             startActivity(homeIntent)
                         }else{
                             Log.d(TAG, "STATUS ERROR")

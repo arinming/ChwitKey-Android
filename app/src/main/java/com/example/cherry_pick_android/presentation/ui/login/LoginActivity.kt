@@ -120,6 +120,7 @@ class LoginActivity: AppCompatActivity() {
             Log.d(TAG, userDataRepository.getUserData().toString())
             if(userDataRepository.getUserData().token.isNotEmpty()){
                 val intent = Intent(this@LoginActivity, HomeActivity::class.java)
+                viewModel.setUserData("isInit", "exitUser")
                 startActivity(intent)
                 finish()
             }
