@@ -111,7 +111,7 @@ class JobGroupActivity: AppCompatActivity() {
 
             lifecycleScope.launch {
                 val isInit = userDataRepository.getUserData().isInit
-
+                Log.d(TAG, "list:${getIndustryList(selecetedJobList)}")
                 if(isInit == "InitUser"){
                     val request = InitUserSaveRequest(
                         birth = birth,
@@ -149,11 +149,18 @@ class JobGroupActivity: AppCompatActivity() {
     }
 
     private fun getIndustryList(list: ArrayList<String>): List<IndustryKeyword> {
-        return listOf(
-            IndustryKeyword(mapperToJob(list[0])),
-            IndustryKeyword(mapperToJob(list[1])),
-            IndustryKeyword(mapperToJob(list[2]))
-        )
+        val size = list.size
+        val industryList = mutableListOf<IndustryKeyword>()
+
+        for (i in 0 until 3) {
+            if (i < size) {
+                industryList.add(IndustryKeyword(mapperToJob(list[i])))
+            } else {
+                industryList.add(IndustryKeyword("")) // 원하는 기본 값으로 채워넣기
+            }
+        }
+        return industryList
     }
+
 
 }

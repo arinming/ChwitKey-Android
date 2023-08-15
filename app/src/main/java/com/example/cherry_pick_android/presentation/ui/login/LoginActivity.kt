@@ -119,9 +119,7 @@ class LoginActivity: AppCompatActivity() {
         binding.tvExplain.text = textToBold(binding.tvExplain.text.toString(), 7, 17)
         binding.tvExplain2.text = textToBold(binding.tvExplain2.text.toString(), 0, 16)
 
-
         onClickLogin()
-
         // 자동로그인 설정
         lifecycleScope.launch {
             Log.d(TAG, userDataRepository.getUserData().toString())
