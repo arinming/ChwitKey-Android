@@ -13,7 +13,6 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import coil.load
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.ActivityProfileBinding
 import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroupActivity
@@ -44,7 +43,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface {
     // 이미지 로드
     private val readImage = registerForActivityResult(
         ActivityResultContracts.GetContent()) {
-            uri -> binding.ivProfilePic.load(uri)
+            //uri -> binding.ivProfilePic.load(uri)
     }
 
     // 카메라를 실행한 후 찍은 사진을 저장
