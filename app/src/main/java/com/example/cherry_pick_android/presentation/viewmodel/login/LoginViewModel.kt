@@ -6,10 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.example.cherry_pick_android.data.remote.service.login.UserInfoService
 import com.example.cherry_pick_android.domain.model.UserData
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
-import com.kakao.sdk.user.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject

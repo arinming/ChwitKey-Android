@@ -4,7 +4,8 @@ package com.example.cherry_pick_android.data.module.api
 import com.example.cherry_pick_android.data.remote.repository.ArticleRepository
 import com.example.cherry_pick_android.data.remote.service.ArticleSearchService
 import com.example.cherry_pick_android.data.remote.service.login.SaveUserService
-import com.example.cherry_pick_android.data.remote.service.login.UserInfoService
+import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
+import com.example.cherry_pick_android.data.remote.service.user.UserKeywordService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -21,12 +22,18 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 class ApiModule {
-    private val BASE_URL = "http://3.37.104.185"
+    private val BASE_URL = "https://umcserver.shop"
 
     @Singleton
     @Provides
-    fun getOkHttpClient(): OkHttpClient{
+    fun getInterceptor(): AppInterceptor{
+        return AppInterceptor()
+    }
+    @Singleton
+    @Provides
+    fun getOkHttpClient(interceptor: AppInterceptor): OkHttpClient{
         return OkHttpClient.Builder()
+            .addInterceptor(interceptor)
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = HttpLoggingInterceptor.Level.BODY
             })
@@ -42,7 +49,7 @@ class ApiModule {
 
         return Retrofit.Builder().client(okHttpClient)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .client(getOkHttpClient())
+            .client(getOkHttpClient(getInterceptor()))
             .baseUrl(BASE_URL)
             .build()
     }
@@ -52,13 +59,6 @@ class ApiModule {
     fun saveUserService(retrofit: Retrofit): SaveUserService {
         return retrofit.create(SaveUserService::class.java)
     }
-
-    @Singleton
-    @Provides
-    fun userInfoService(retrofit: Retrofit): UserInfoService{
-        return retrofit.create(UserInfoService::class.java)
-    }
-
 
 
     @Provides
@@ -71,5 +71,17 @@ class ApiModule {
     @Singleton
     fun provideArticleRepository(articleSearchService: ArticleSearchService): ArticleRepository {
         return ArticleRepository(articleSearchService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserInfo(retrofit: Retrofit): UserInfoService {
+        return retrofit.create(UserInfoService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserKeyword(retrofit: Retrofit): UserKeywordService{
+        return retrofit.create(UserKeywordService::class.java)
     }
 }

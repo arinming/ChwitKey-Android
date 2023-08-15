@@ -5,25 +5,17 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.AdapterView
 import android.widget.Button
 import android.widget.GridView
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
-import com.example.cherry_pick_android.data.remote.request.login.SaveUserRequest
 import com.example.cherry_pick_android.data.remote.service.login.SaveUserService
 import com.example.cherry_pick_android.databinding.ActivityJobGroupBinding
 import com.example.cherry_pick_android.presentation.adapter.JobGroupAdapter
-import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroups.jobgroups
-import com.example.cherry_pick_android.presentation.ui.mypage.ProfileActivity
 import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -112,7 +104,7 @@ class JobGroupActivity: AppCompatActivity() {
             setResult(Activity.RESULT_OK, resultIntent)
 
             // Request body 설정
-            if(flag == "404"){
+            /*if(flag == "404"){
                 Log.d(TAG, selecetedJobList.toString())
                 val request = SaveUserRequest(
                     birthdate = birth,
@@ -141,7 +133,7 @@ class JobGroupActivity: AppCompatActivity() {
                 finish()
             }else{
                 Log.d(TAG, "ERROR")
-            }
+            }*/
         }
     }
 

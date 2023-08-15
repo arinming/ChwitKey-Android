@@ -28,6 +28,8 @@ class UserDataRepositoryImpl @Inject constructor(
     companion object{
         const val TAG = "UserIdRepositoryImpl"
         private val USER_KEY = stringPreferencesKey("userId")
+        private val PLATFORM_KEY = stringPreferencesKey("platform")
+        private val TOKEN_KEY = stringPreferencesKey("token")
         private val NAME_KEY = stringPreferencesKey("name")
         private val GENDER_KEY = stringPreferencesKey("gender")
         private val BIRTHDAY_KEY = stringPreferencesKey("birthday")
@@ -54,6 +56,8 @@ class UserDataRepositoryImpl @Inject constructor(
         context.dataStore.edit { preferences ->
             val preferencesKey = when(key){
                 "userId" -> USER_KEY
+                "platform" -> PLATFORM_KEY
+                "token" -> TOKEN_KEY
                 "name" -> NAME_KEY
                 "gender" -> GENDER_KEY
                 "birthday" -> BIRTHDAY_KEY
@@ -69,11 +73,13 @@ class UserDataRepositoryImpl @Inject constructor(
     // 유저 정보 매핑
     private fun mapperToUserData(preferences: Preferences): UserData {
         val userId = preferences[USER_KEY] ?: ""
+        val platform = preferences[PLATFORM_KEY] ?: ""
+        val token = preferences[TOKEN_KEY] ?: ""
         val name = preferences[NAME_KEY] ?: ""
         val gender = preferences[GENDER_KEY] ?: ""
         val birthday = preferences[BIRTHDAY_KEY] ?: ""
 
-        return UserData(userId, name, gender, birthday)
+        return UserData(userId, platform, token, name, gender, birthday)
     }
 
 }

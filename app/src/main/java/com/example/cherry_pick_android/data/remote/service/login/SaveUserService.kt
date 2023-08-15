@@ -7,7 +7,7 @@ import retrofit2.http.Body
 import retrofit2.http.POST
 
 interface SaveUserService {
-    @POST("/api/members/save")
+    @POST("/api/members/signIn")
     suspend fun saveUserInform(
         @Body saveUserRequest: SaveUserRequest
     ): Response<SaveUserResponse>

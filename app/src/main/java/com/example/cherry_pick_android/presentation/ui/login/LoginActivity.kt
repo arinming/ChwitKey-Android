@@ -13,10 +13,12 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
-import com.example.cherry_pick_android.data.remote.service.login.UserInfoService
+import com.example.cherry_pick_android.data.remote.request.login.SaveUserRequest
+import com.example.cherry_pick_android.data.remote.service.login.SaveUserService
+import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
+import com.example.cherry_pick_android.data.remote.service.user.UserKeywordService
 import com.example.cherry_pick_android.databinding.ActivityLoginBinding
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
-import com.example.cherry_pick_android.presentation.ui.infrom.InformSettingActivity
 import com.example.cherry_pick_android.presentation.ui.login.loginManager.KakaoLoginManager
 import com.example.cherry_pick_android.presentation.ui.login.loginManager.NaverLoginManager
 import com.example.cherry_pick_android.presentation.util.PlatformManager
@@ -40,6 +42,10 @@ class LoginActivity: AppCompatActivity() {
     @Inject
     lateinit var naverLoginManager: NaverLoginManager
     @Inject
+    lateinit var saverUserService: SaveUserService
+    @Inject
+    lateinit var userKeywordService: UserKeywordService
+    @Inject
     lateinit var userInfoService: UserInfoService
 
     private val viewModel: LoginViewModel by viewModels()
@@ -52,27 +58,33 @@ class LoginActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+        Log.d(TAG, "Platform:${PlatformManager.getPlatform()}")
 
-
-        // 기존 회원 여부 검사 (200: 통신성공, 404: 통신실패)
+        lifecycleScope.launch {
+            val response = userInfoService.getUserInfo().body()?.name
+            Log.d(TAG, "헤더 테스트:${response}")
+        }
+        // 기존 회원 여부 검사
         viewModel.getUserData().observe(this@LoginActivity, Observer {
             if(it.userId != ""){
+                val request = SaveUserRequest(
+                    memberNumber = it.userId,
+                    provider = it.platform
+                )
                 lifecycleScope.launch {
-                    val userInfoResponse = userInfoService.getUserInfo(it.userId)
-                    val status = userInfoResponse.body()?.statusCode.toString()
+                    val saveUserResponse = saverUserService.saveUserInform(request)
+                    val response = saveUserResponse.body()?.data
+
                     withContext(Dispatchers.Main){
-                        if(status == "200"){
+                        if(response?.isMember.toString() == "true"){
+                            viewModel.setIsinit("exitUser")
                             val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-                            viewModel.setIsinit("200")
-                            startActivity(intent)
-                            finish()
-                        }else if(status == "404"){
-                            val intent = Intent(this@LoginActivity, InformSettingActivity::class.java)
-                            viewModel.setIsinit("404")
                             startActivity(intent)
                             finish()
                         }else{
-                            Log.d(TAG, "ERROR")
+                            viewModel.setIsinit("InitUser")
+                            viewModel.setUserData("token", response?.accessToken.toString())
+                            Log.d(TAG, "토큰 등록 완료")
                         }
                     }
                 }
@@ -84,7 +96,7 @@ class LoginActivity: AppCompatActivity() {
         binding.tvExplain2.text = textToBold(binding.tvExplain2.text.toString(), 0, 16)
 
 
-        //onClickLogin()
+        onClickLogin()
 
         Log.d(LoginViewModel.TAG, "UserData: ${viewModel.getUserData()}")
 
@@ -113,6 +125,7 @@ class LoginActivity: AppCompatActivity() {
                     viewModel.updateSocialToken(it)
                     UserApiClient.instance.me { user, error ->
                         viewModel.setUserData("userId", user?.id.toString())
+                        viewModel.setUserData("platform", "kakao")
                     }
                 }
             }
@@ -126,6 +139,7 @@ class LoginActivity: AppCompatActivity() {
                         override fun onFailure(httpStatus: Int, message: String) {}
                         override fun onSuccess(result: NidProfileResponse) {
                             viewModel.setUserData("userId", result.profile?.id.toString())
+                            viewModel.setUserData("platform", "naver")
                         }
                     })
                 }
