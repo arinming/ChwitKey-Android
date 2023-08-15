@@ -7,4 +7,8 @@ interface UserDataRepository {
     suspend fun getUserData(): UserData
     suspend fun setUserData(key: String, value: String)
 
+    fun getTokenLiveData(): LiveData<String>
+
+    fun getUserIdLiveData(): LiveData<String>
+    fun getPlatFormLiveData(): LiveData<String>
 }

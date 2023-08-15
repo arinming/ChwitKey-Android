@@ -5,20 +5,20 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.AdapterView
 import android.widget.Button
 import android.widget.GridView
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
-import com.example.cherry_pick_android.data.remote.request.login.SaveUserRequest
-import com.example.cherry_pick_android.data.remote.service.login.SaveUserService
+import com.example.cherry_pick_android.data.remote.request.user.IndustryKeyword
+import com.example.cherry_pick_android.data.remote.request.user.InitUserSaveRequest
+import com.example.cherry_pick_android.data.remote.service.user.InitUserSaveService
 import com.example.cherry_pick_android.databinding.ActivityJobGroupBinding
+import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.adapter.JobGroupAdapter
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroups.jobgroups
-import com.example.cherry_pick_android.presentation.ui.mypage.ProfileActivity
 import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -32,13 +32,15 @@ class JobGroupActivity: AppCompatActivity() {
     private lateinit var gridView: GridView
     private lateinit var arrayList: ArrayList<String>
     private var userId = ""
-    private var name = ""
+    private var nickname = ""
     private var gender = ""
     private var birth = ""
-    private var flag = ""
     private val loginViewModel: LoginViewModel by viewModels()
     @Inject
-    lateinit var saveUserService: SaveUserService
+    lateinit var initUserSaveService: InitUserSaveService
+    @Inject
+    lateinit var userDataRepository: UserDataRepository
+
     private val binding: ActivityJobGroupBinding by lazy {
         ActivityJobGroupBinding.inflate(layoutInflater)
     }
@@ -59,13 +61,9 @@ class JobGroupActivity: AppCompatActivity() {
         val selectedData: ArrayList<String> = adapter.getSelectedList()
         Log.d(TAG, "$selectedData")
 
-        // 데이터 감지를 통해 최초 사용자 구분
-        loginViewModel.isInit.observe(this@JobGroupActivity, Observer {
-            flag = it
-        })
         loginViewModel.getUserData().observe(this@JobGroupActivity, Observer {
             userId = it.userId
-            name = it.name
+            nickname = it.name
             gender = it.gender
             birth = it.birthday
         })
@@ -111,36 +109,35 @@ class JobGroupActivity: AppCompatActivity() {
             }
             setResult(Activity.RESULT_OK, resultIntent)
 
-            // Request body 설정
-            if(flag == "404"){
-                Log.d(TAG, selecetedJobList.toString())
-                val request = SaveUserRequest(
-                    birthdate = birth,
-                    gender = gender,
-                    memberNumber = userId,
-                    name = name,
-                    industryKeyword1 = mapperToJob(selecetedJobList.getOrElse(0){ "" }),
-                    industryKeyword2 = mapperToJob(selecetedJobList.getOrElse(1){ "" }),
-                    industryKeyword3 = mapperToJob(selecetedJobList.getOrElse(2){" "})
-                )
-                lifecycleScope.launch {
-                    val saveUserResponse = saveUserService.saveUserInform(request)
-                    val status = saveUserResponse.body()?.statusCode.toString()
+            lifecycleScope.launch {
+                val isInit = userDataRepository.getUserData().isInit
+                Log.d(TAG, "list:${getIndustryList(selecetedJobList)}")
+                if(isInit == "InitUser"){
+                    val request = InitUserSaveRequest(
+                        birth = birth,
+                        gender = gender,
+                        nickname = nickname,
+                        industryKeywords = getIndustryList(selecetedJobList)
+                    )
+                    val response = initUserSaveService.putInitUserData(request)
+                    val statusCode = response.body()?.statusCode
+
                     withContext(Dispatchers.Main){
-                        if(status == "200"){
+                        if(statusCode == 200){
                             val homeIntent = Intent(this@JobGroupActivity, HomeActivity::class.java).apply {
                                 flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // 백스택에 남아있는 액티비티 제거
                             }
+                            loginViewModel.setUserData("isInit", "exitUser")
                             startActivity(homeIntent)
                         }else{
-                            Log.d(TAG, "오류: ${saveUserResponse.body()?.statusCode}")
+                            Log.d(TAG, "STATUS ERROR")
                         }
                     }
+                }else if(isInit == "exitUser"){
+                    finish()
+                }else{
+                    Log.d(TAG, "TYPE ERROR : userStatus[${isInit}]")
                 }
-            }else if(flag == "200"){
-                finish()
-            }else{
-                Log.d(TAG, "ERROR")
             }
         }
     }
@@ -150,5 +147,20 @@ class JobGroupActivity: AppCompatActivity() {
             finish()
         }
     }
+
+    private fun getIndustryList(list: ArrayList<String>): List<IndustryKeyword> {
+        val size = list.size
+        val industryList = mutableListOf<IndustryKeyword>()
+
+        for (i in 0 until 3) {
+            if (i < size) {
+                industryList.add(IndustryKeyword(mapperToJob(list[i])))
+            } else {
+                industryList.add(IndustryKeyword("")) // 원하는 기본 값으로 채워넣기
+            }
+        }
+        return industryList
+    }
+
 
 }

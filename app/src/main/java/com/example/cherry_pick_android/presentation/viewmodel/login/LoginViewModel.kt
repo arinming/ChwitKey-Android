@@ -6,10 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.example.cherry_pick_android.data.remote.service.login.UserInfoService
 import com.example.cherry_pick_android.domain.model.UserData
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
-import com.kakao.sdk.user.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -18,24 +16,14 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository
 ): ViewModel() {
-    private val _token = MutableLiveData<String>()
-    private val _isInit = MutableLiveData<String>()
+    private val _flag = MutableLiveData<String>()
     companion object{
         const val TAG = "LoginViewModel"
     }
 
-    val token: LiveData<String>
-        get() = _token
-    val isInit: LiveData<String>
-        get() = _isInit
 
-    fun updateSocialToken(Token: String){
-        _token.value = Token
-    }
-
-    fun setIsinit(status: String){
-        _isInit.value = status
-    }
+    val flag: LiveData<String>
+        get() = _flag
 
     fun getUserData(): LiveData<UserData>{
         return liveData {
@@ -45,10 +33,15 @@ class LoginViewModel @Inject constructor(
     }
 
     fun setUserData(key: String, value: String){
-        Log.d(TAG, "setUserData")
+        Log.d(TAG, "[setUserData] key:${key} value:${value}")
         viewModelScope.launch {
             userDataRepository.setUserData(key, value)
         }
     }
+
+    fun setFlag(flag: String){
+        _flag.value = flag
+    }
+
 
 }

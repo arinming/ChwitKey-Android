@@ -49,6 +49,13 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface {
     }
 
     // 촬영한 사진 불러오기
+    // 이미지 로드
+    private val readImage = registerForActivityResult(
+        ActivityResultContracts.GetContent()) {
+            //uri -> binding.ivProfilePic.load(uri)
+    }
+
+    // 카메라를 실행한 후 찍은 사진을 저장
     var pictureUri: Uri? = null
     private val getTakePicture = registerForActivityResult(
         ActivityResultContracts.TakePicture()) {
