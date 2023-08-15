@@ -24,6 +24,8 @@ class UserDataRepositoryImpl @Inject constructor(
 
     private val Context.dataStore by preferencesDataStore(name = "user_data")
     private val _tokenLiveData = MutableLiveData<String>()
+    private val _userId = MutableLiveData<String>()
+    private val _platForm = MutableLiveData<String>()
 
     companion object{
         const val TAG = "UserIdRepositoryImpl"
@@ -56,8 +58,14 @@ class UserDataRepositoryImpl @Inject constructor(
     override suspend fun setUserData(key: String, value: String) {
         context.dataStore.edit { preferences ->
             val preferencesKey = when(key){
-                "userId" -> USER_KEY
-                "platform" -> PLATFORM_KEY
+                "userId" -> {
+                    _userId.postValue(value)
+                    USER_KEY
+                }
+                "platform" -> {
+                    _platForm.postValue(value)
+                    PLATFORM_KEY
+                }
                 "token" -> {
                     _tokenLiveData.postValue(value)
                     TOKEN_KEY
@@ -75,6 +83,14 @@ class UserDataRepositoryImpl @Inject constructor(
 
     override fun getTokenLiveData(): LiveData<String> {
         return _tokenLiveData
+    }
+
+    override fun getUserIdLiveData(): LiveData<String> {
+        return _userId
+    }
+
+    override fun getPlatFormLiveData(): LiveData<String> {
+        return _platForm
     }
 
 

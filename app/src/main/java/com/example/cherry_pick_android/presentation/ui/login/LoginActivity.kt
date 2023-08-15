@@ -50,6 +50,8 @@ class LoginActivity: AppCompatActivity() {
 
     private val viewModel: LoginViewModel by viewModels()
     private var flag = false
+    private var userId = ""
+    private var platform = ""
 
     companion object{
         const val TAG = "LoginActivity"
@@ -59,22 +61,34 @@ class LoginActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
+        // 테스트 할 때 사용
         /*viewModel.setUserData("userId", "")
-        viewModel.setUserData("token", "")*/
+        viewModel.setUserData("token", "")
+        viewModel.setUserData("platform", "")
+        viewModel.setUserData("name", "")
+        viewModel.setUserData("gender", "")
+        viewModel.setUserData("isInit", "")
+        viewModel.setUserData("birthday", "")*/
 
+        userDataRepository.getUserIdLiveData().observe(this@LoginActivity, Observer {
+            userId = it
+        })
+
+        userDataRepository.getPlatFormLiveData().observe(this@LoginActivity, Observer {
+            platform = it
+            viewModel.setFlag("OK")
+        })
         // 기존 회원 여부 검사
-        viewModel.isLogin.observe(this@LoginActivity, Observer {
-            if(it){
+        viewModel.flag.observe(this@LoginActivity, Observer {
+            Log.d(TAG, "TEST:${it}")
+            if(it == "OK"){
                 lifecycleScope.launch {
                     val request = SignInRequest(
-                        memberNumber = userDataRepository.getUserData().userId,
-                        provider = userDataRepository.getUserData().platform
+                        memberNumber = userId,
+                        provider = platform
                     )
-                    Log.d(TAG, "memNum: ${userDataRepository.getUserData().userId} plat: ${userDataRepository.getUserData().platform}")
-
                     val saveUserResponse = signInService.signInInform(request)
                     val response = saveUserResponse.body()?.data
-                    Log.d(TAG, "response:${response}")
 
                     withContext(Dispatchers.Main){
                         if(response?.isMember.toString() == "true"){
@@ -101,13 +115,6 @@ class LoginActivity: AppCompatActivity() {
         Log.d(TAG, userDataRepository.getTokenLiveData().value.toString())
 
 
-        // 소셜로그인 창을 닫은 후에도 무반응일 경우 수행하는 코드
-        if(flag && !isFinishing){
-            val intent = Intent(this@LoginActivity, HomeActivity::class.java)
-            startActivity(intent)
-            finish()
-        }
-
         // 텍스트 스타일 설정
         binding.tvExplain.text = textToBold(binding.tvExplain.text.toString(), 7, 17)
         binding.tvExplain2.text = textToBold(binding.tvExplain2.text.toString(), 0, 16)
@@ -118,7 +125,7 @@ class LoginActivity: AppCompatActivity() {
         // 자동로그인 설정
         lifecycleScope.launch {
             Log.d(TAG, userDataRepository.getUserData().toString())
-            if(userDataRepository.getUserData().token.isNotEmpty()){
+            if (userDataRepository.getUserData().token.isNotEmpty()) {
                 val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                 viewModel.setUserData("isInit", "exitUser")
                 startActivity(intent)
@@ -147,11 +154,10 @@ class LoginActivity: AppCompatActivity() {
                 PlatformManager.setPlatform(KAKAO)
                 kakaoLoginManager.startKakaoLogin {
                     UserApiClient.instance.me { user, error ->
-                        viewModel.setUserData("userId", user?.id.toString())
+                        viewModel.setUserData("userId", user!!.id.toString())
                         viewModel.setUserData("platform", "kakao")
-                        Log.d(TAG, "userId:${user?.id.toString()}")
+                        Log.d(TAG, "userId:${user.id.toString()}")
                     }
-                    viewModel.setIsLogin(true)
                 }
             }
 
@@ -162,17 +168,14 @@ class LoginActivity: AppCompatActivity() {
                         override fun onError(errorCode: Int, message: String) {}
                         override fun onFailure(httpStatus: Int, message: String) {}
                         override fun onSuccess(result: NidProfileResponse) {
-                            viewModel.setUserData("userId", result.profile?.id.toString())
+                            viewModel.setUserData("userId", result.profile!!.id.toString())
                             viewModel.setUserData("platform", "naver")
                             Log.d(TAG, "userId:${result.profile?.id}")
                         }
                     })
-
-                    viewModel.setIsLogin(true)
                 }
             }
         }
     }
-
 
 }

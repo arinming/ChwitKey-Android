@@ -16,13 +16,14 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository
 ): ViewModel() {
-    private val _isLogin = MutableLiveData<Boolean>()
+    private val _flag = MutableLiveData<String>()
     companion object{
         const val TAG = "LoginViewModel"
     }
 
-    val isLogin: LiveData<Boolean>
-        get() = _isLogin
+
+    val flag: LiveData<String>
+        get() = _flag
 
     fun getUserData(): LiveData<UserData>{
         return liveData {
@@ -38,8 +39,9 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun setIsLogin(flag: Boolean){
-        _isLogin.value = flag
+    fun setFlag(flag: String){
+        _flag.value = flag
     }
+
 
 }
