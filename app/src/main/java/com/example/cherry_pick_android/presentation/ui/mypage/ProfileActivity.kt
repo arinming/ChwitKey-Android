@@ -1,9 +1,11 @@
 package com.example.cherry_pick_android.presentation.ui.mypage
 
+import android.Manifest
 import android.content.ContentValues
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -13,6 +15,8 @@ import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import coil.load
+import com.bumptech.glide.Glide
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.ActivityProfileBinding
 import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroupActivity
@@ -26,20 +30,25 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface {
     private lateinit var binding: ActivityProfileBinding
 
     companion object {
-        const val REQUEST_CODE_PERMISSIONS = 1001
-        const val ALBUM_OK = 2002
-        const val CAMERA_OK = 2003
-        const val BASIC_OK = 2004
         const val TAG = "ProfileActivity"
     }
-
-
-    private fun checkPermission(permissions: Array<String>): Boolean {
-        return permissions.all {
-            ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
+    // 요청하고자 하는 권한들
+    private val permissions = arrayOf(
+        Manifest.permission.CAMERA,
+        // Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        // Manifest.permission.READ_EXTERNAL_STORAGE
+    )
+    // 권한 확인 응답
+    private val getPermissionResult = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) {
+        if (it.all { permission -> permission.value == true }) {
+        } else {
+            Toast.makeText(this, "권한을 거부하였습니다.", Toast.LENGTH_SHORT).show()
         }
     }
 
+    // 촬영한 사진 불러오기
     // 이미지 로드
     private val readImage = registerForActivityResult(
         ActivityResultContracts.GetContent()) {
@@ -48,18 +57,22 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface {
 
     // 카메라를 실행한 후 찍은 사진을 저장
     var pictureUri: Uri? = null
-    private val getTakePicture = registerForActivityResult(ActivityResultContracts.TakePicture()) {
-        if(it) {
-            pictureUri.let { binding.ivProfilePic.setImageURI(pictureUri) }
+    private val getTakePicture = registerForActivityResult(
+        ActivityResultContracts.TakePicture()) {
+        if(it) { pictureUri.let {
+                Glide.with(this).load(pictureUri).circleCrop().into(binding.ivProfilePic)
+            }
         }
     }
-    // 파일 불러오기
-    private val getContentImage = registerForActivityResult(
-        ActivityResultContracts.GetContent()) {
-            uri ->
-                uri.let { binding.ivProfilePic.setImageURI(uri)
-            }
+    // 앨범으로부터 이미지 불러오기
+    private val getResultImage = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()) {
+        if (it.resultCode == RESULT_OK) {
+            var imageUrl = it.data?.data
+            Glide.with(this).load(imageUrl).circleCrop().into(binding.ivProfilePic)
+        }
     }
+
     // 직군선택 결과 받아오기
     private val getResultText = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()){
@@ -98,30 +111,25 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface {
             dialog.show(this.supportFragmentManager, "CameraDialog")
         }
     }
-    override fun onCameraClick(cameraMenu: String) {
-        val camera_menu = cameraMenu
-
-        //readImage.launch()
-        // 권한 확인
-        //checkPermission.launch(permissionList)
-        //if (!checkPermission(permissions)) {
-          //  requestPermissions(permissions, REQUEST_CODE_PERMISSIONS)
-        //}
-
-        if (camera_menu=="@string/profile_img_fromAlbum"){
-            getContentImage.launch("image/*")
-        }
-        else if (camera_menu=="@string/profile_img_fromCamera"){
-            pictureUri = createImageFile()
-            getTakePicture.launch(pictureUri)
-        }
-        else if (camera_menu=="@string/profile_img_basic"){
-            binding.ivProfilePic.setImageResource(R.drawable.ic_my_page_user)
-        }
-        else if (camera_menu=="@string/profile_img_cancel"){
-            // 변화없음
-        }
+    // 앨범 이미지 불러오기
+    override fun onAlbumClick(intent: Intent) {
+        checkPermission(permissions)
+        getResultImage.launch(intent)
     }
+    // 카메라 촬영 후 이미지 불러오기
+    override fun onCameraClick(intent:Intent) {
+        checkPermission(permissions)
+        pictureUri = createImageFile()
+        getTakePicture.launch(pictureUri)
+    }
+    // 기본 이미지로 변경
+    override fun onBasicClick(intent: Intent) {
+        binding.ivProfilePic.setImageDrawable(getDrawable(R.drawable.ic_my_page_user))
+    }
+    // 이미지 변경 취소
+    override fun onCancelClick(intent: Intent) {    }
+
+    // 고유 이름으로 이미지 파일 생성
     private fun createImageFile(): Uri? {
         val now = SimpleDateFormat("yyMMdd_HHmmss").format(System.currentTimeMillis())
         val content = ContentValues().apply {
@@ -131,11 +139,10 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface {
         return contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, content)
     }
 
+
     // 직군정보 변경페이지로 이동
     private fun ChangeJobInterest() {
         binding.ibtnProfileJobChange.setOnClickListener {
-            //val intent = Intent(this,JobGroupActivity::class.java)
-            //startActivity(intent)
             val intent = Intent(this, JobGroupActivity::class.java)
             getResultText.launch(intent)
         }
@@ -173,4 +180,18 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface {
         }
     }
 
+    private fun checkPermission(permissions: Array<String>){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            // 권한 허용 여부 확인
+            if (permissions.all {
+                    ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
+                }) {
+                Toast.makeText(this, "카메라 권한이 허용되어 있습니다.", Toast.LENGTH_SHORT).show()
+            }
+            // 권한 요청
+            else {
+                getPermissionResult.launch(permissions)
+            }
+        }
+    }
 }

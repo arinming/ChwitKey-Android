@@ -66,17 +66,10 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".presentation.ui.searchList.SearchListActivity"
-            android:exported="true">
-
-
-        </activity>
 
         <activity
             android:name=".presentation.ui.mypage.ProfileActivity"
             android:exported="true">
-
         </activity>
 
 
