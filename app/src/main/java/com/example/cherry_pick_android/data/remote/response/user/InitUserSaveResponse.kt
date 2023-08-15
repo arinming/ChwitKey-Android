@@ -1,11 +1,9 @@
-package com.example.cherry_pick_android.data.remote.response.login
+package com.example.cherry_pick_android.data.remote.response.user
 
 
 import com.squareup.moshi.Json
 
-data class SaveUserResponse(
-    @field:Json(name = "data")
-    val `data`: String?,
+data class InitUserSaveResponse(
     @field:Json(name = "description")
     val description: Any?,
     @field:Json(name = "status")

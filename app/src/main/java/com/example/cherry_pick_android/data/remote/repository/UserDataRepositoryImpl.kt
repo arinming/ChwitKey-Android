@@ -23,14 +23,17 @@ class UserDataRepositoryImpl @Inject constructor(
 ): UserDataRepository {
 
     private val Context.dataStore by preferencesDataStore(name = "user_data")
-    private val _userData = MutableLiveData<UserData>()
+    private val _tokenLiveData = MutableLiveData<String>()
 
     companion object{
         const val TAG = "UserIdRepositoryImpl"
         private val USER_KEY = stringPreferencesKey("userId")
+        private val PLATFORM_KEY = stringPreferencesKey("platform")
+        private val TOKEN_KEY = stringPreferencesKey("token")
         private val NAME_KEY = stringPreferencesKey("name")
         private val GENDER_KEY = stringPreferencesKey("gender")
         private val BIRTHDAY_KEY = stringPreferencesKey("birthday")
+        private val ISINIT_KEY = stringPreferencesKey("isInit")
     }
 
     // 유저 정보 흭득
@@ -54,26 +57,38 @@ class UserDataRepositoryImpl @Inject constructor(
         context.dataStore.edit { preferences ->
             val preferencesKey = when(key){
                 "userId" -> USER_KEY
+                "platform" -> PLATFORM_KEY
+                "token" -> {
+                    _tokenLiveData.postValue(value)
+                    TOKEN_KEY
+                }
                 "name" -> NAME_KEY
                 "gender" -> GENDER_KEY
                 "birthday" -> BIRTHDAY_KEY
+                "isInit" -> ISINIT_KEY
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
             Log.d(TAG, "Key:${key} Value:${value}")
             preferences[preferencesKey] = value
-            _userData.postValue(mapperToUserData(preferences))
         }
+    }
+
+    override fun getTokenLiveData(): LiveData<String> {
+        return _tokenLiveData
     }
 
 
     // 유저 정보 매핑
     private fun mapperToUserData(preferences: Preferences): UserData {
         val userId = preferences[USER_KEY] ?: ""
+        val platform = preferences[PLATFORM_KEY] ?: ""
+        val token = preferences[TOKEN_KEY] ?: ""
         val name = preferences[NAME_KEY] ?: ""
         val gender = preferences[GENDER_KEY] ?: ""
         val birthday = preferences[BIRTHDAY_KEY] ?: ""
+        val isInit = preferences[ISINIT_KEY] ?: ""
 
-        return UserData(userId, name, gender, birthday)
+        return UserData(userId, platform, token, name, gender, birthday, isInit)
     }
 
 }

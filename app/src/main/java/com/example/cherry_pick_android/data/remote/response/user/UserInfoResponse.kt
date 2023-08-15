@@ -1,9 +1,9 @@
-package com.example.cherry_pick_android.data.remote.request.login
+package com.example.cherry_pick_android.data.remote.response.user
 
 
 import com.squareup.moshi.Json
 
-data class SaveUserRequest(
+data class UserInfoResponse(
     @field:Json(name = "birthdate")
     val birthdate: String?,
     @field:Json(name = "gender")
@@ -14,6 +14,8 @@ data class SaveUserRequest(
     val industryKeyword2: String?,
     @field:Json(name = "industryKeyword3")
     val industryKeyword3: String?,
+    @field:Json(name = "memberImgUrl")
+    val memberImgUrl: String?,
     @field:Json(name = "memberNumber")
     val memberNumber: String?,
     @field:Json(name = "name")
