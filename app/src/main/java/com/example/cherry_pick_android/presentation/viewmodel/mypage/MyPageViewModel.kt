@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 
 class MyPageViewModel: ViewModel() {
     private val _isDelete = MutableLiveData<String>()
+
     companion object{
         const val TAG = "MyPageViewModel"
     }
@@ -17,4 +18,5 @@ class MyPageViewModel: ViewModel() {
         _isDelete.value = value
         Log.d(TAG, "value:${value}")
     }
+
 }
