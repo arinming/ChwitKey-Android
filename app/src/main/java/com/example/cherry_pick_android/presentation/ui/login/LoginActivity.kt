@@ -70,10 +70,11 @@ class LoginActivity: AppCompatActivity() {
         viewModel.setUserData("isInit", "")
         viewModel.setUserData("birthday", "")*/
 
+        // 유저 id 감지
         userDataRepository.getUserIdLiveData().observe(this@LoginActivity, Observer {
             userId = it
         })
-
+        // 유저 플랫폼 감지 및 콜백
         userDataRepository.getPlatFormLiveData().observe(this@LoginActivity, Observer {
             platform = it
             viewModel.setFlag("OK")
@@ -81,7 +82,7 @@ class LoginActivity: AppCompatActivity() {
         // 기존 회원 여부 검사
         viewModel.flag.observe(this@LoginActivity, Observer {
             Log.d(TAG, "TEST:${it}")
-            if(it == "OK"){
+            if(it == "OK" && userId.isNotEmpty()){
                 lifecycleScope.launch {
                     val request = SignInRequest(
                         memberNumber = userId,
@@ -93,6 +94,7 @@ class LoginActivity: AppCompatActivity() {
                     withContext(Dispatchers.Main){
                         if(response?.isMember.toString() == "true"){
                             viewModel.setUserData("isInit", "exitUser")
+                            viewModel.setUserData("token", response?.access_token.toString())
                             val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                             startActivity(intent)
                             finish()
@@ -112,8 +114,10 @@ class LoginActivity: AppCompatActivity() {
             }
         })
 
-        Log.d(TAG, userDataRepository.getTokenLiveData().value.toString())
-
+        // 로그아웃 감지
+        viewModel.isOutView.observe(this@LoginActivity, Observer {
+            if(it == "out"){ }
+        })
 
         // 텍스트 스타일 설정
         binding.tvExplain.text = textToBold(binding.tvExplain.text.toString(), 7, 17)
@@ -122,8 +126,8 @@ class LoginActivity: AppCompatActivity() {
         onClickLogin()
         // 자동로그인 설정
         lifecycleScope.launch {
-            Log.d(TAG, userDataRepository.getUserData().toString())
-            if (userDataRepository.getUserData().token.isNotEmpty()) {
+            if (userDataRepository.getUserData().token.isNotEmpty() && userDataRepository.getUserData().userId.isNotEmpty()) {
+                Log.d(TAG, "자동로그인 token:${userDataRepository.getUserData().token} userId:${userDataRepository.getUserData().userId}")
                 val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                 viewModel.setUserData("isInit", "exitUser")
                 startActivity(intent)
@@ -154,7 +158,6 @@ class LoginActivity: AppCompatActivity() {
                     UserApiClient.instance.me { user, error ->
                         viewModel.setUserData("userId", user!!.id.toString())
                         viewModel.setUserData("platform", "kakao")
-                        Log.d(TAG, "userId:${user.id.toString()}")
                     }
                 }
             }
@@ -168,7 +171,6 @@ class LoginActivity: AppCompatActivity() {
                         override fun onSuccess(result: NidProfileResponse) {
                             viewModel.setUserData("userId", result.profile!!.id.toString())
                             viewModel.setUserData("platform", "naver")
-                            Log.d(TAG, "userId:${result.profile?.id}")
                         }
                     })
                 }

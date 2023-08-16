@@ -142,4 +142,16 @@
     <string name="job_change_instruction3">최대 3개 선택 및 추후 변경 가능합니다.</string>
     <string name="job_change_complete">완료</string>
 
+    <!-- userdelete -->
+    <string name="user_delete_title">회원탈퇴</string>
+    <string name="user_delete_sub_title">회원 탈퇴 시 사용자 계정의 모든 정보가 삭제 됩니다.</string>
+    <string name="user_delete_sub_title_2">정말로 탈퇴 하시겠습니까?</string>
+    <string name="user_delete_no">취소</string>
+
+    <!-- logout -->
+    <string name="logout_title">알림</string>
+    <string name="logout_sub_title">로그아웃 하시겠습니까?</string>
+    <string name="logout_ok">로그아웃</string>
+    <string name="logout_no">취소</string>
+
 </resources>

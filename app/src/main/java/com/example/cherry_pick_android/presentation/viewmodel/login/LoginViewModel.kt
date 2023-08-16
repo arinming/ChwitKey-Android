@@ -17,6 +17,7 @@ class LoginViewModel @Inject constructor(
     private val userDataRepository: UserDataRepository
 ): ViewModel() {
     private val _flag = MutableLiveData<String>()
+    private val _isOutView = MutableLiveData<String>()
     companion object{
         const val TAG = "LoginViewModel"
     }
@@ -24,6 +25,8 @@ class LoginViewModel @Inject constructor(
 
     val flag: LiveData<String>
         get() = _flag
+    val isOutView: LiveData<String>
+        get() = _isOutView
 
     fun getUserData(): LiveData<UserData>{
         return liveData {
@@ -41,6 +44,10 @@ class LoginViewModel @Inject constructor(
 
     fun setFlag(flag: String){
         _flag.value = flag
+    }
+
+    fun setIsOutView(value: String){
+        _isOutView.value = value
     }
 
 
