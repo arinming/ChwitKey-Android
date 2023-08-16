@@ -6,23 +6,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.data.Pageable
+import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
 import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
 import com.example.cherry_pick_android.presentation.adapter.ArticleAdapter
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
 import com.example.cherry_pick_android.presentation.viewmodel.article.ArticleViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     private var _binding: FragmentHomeNewsBinding? = null
     private val binding get() = _binding!!
+
+
+    @Inject
+    lateinit var articleService: ArticleSearchCommendService
 
     lateinit var recyclerViewAdapter: ArticleAdapter
     private val viewModel: ArticleViewModel by viewModels()
@@ -69,19 +75,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     }
 
     private fun liveNewsList() {
-        viewModel.getLiveDataObserver().observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                recyclerViewAdapter.setListData(it)
-                recyclerViewAdapter.notifyDataSetChanged()
-            } else {
-                Toast.makeText(context, "오류", Toast.LENGTH_SHORT).show()
-            }
-        })
 
-        // loadListOfData 함수를 호출하는 코루틴 시작
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.loadListOfData()
-        }
     }
 
     // 메뉴
