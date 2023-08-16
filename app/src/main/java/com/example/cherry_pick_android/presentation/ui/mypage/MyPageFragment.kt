@@ -8,10 +8,16 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.cherry_pick_android.databinding.FragmentMypageBinding
+import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.ui.login.LoginActivity
 import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class MyPageFragment : Fragment() {
@@ -19,6 +25,10 @@ class MyPageFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val loginViewModel: LoginViewModel by viewModels()
+
+    @Inject
+    lateinit var userDataRepository: UserDataRepository
+
     companion object{
         const val TAG = "MyPageFragment"
     }
@@ -29,6 +39,15 @@ class MyPageFragment : Fragment() {
     ): View {
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
         val view = binding.root
+
+        CoroutineScope(Dispatchers.Main).launch {
+            binding.tvMypageUserName.text = userDataRepository.getUserData().name
+        }
+
+        // 유저네임 변경 감지
+        userDataRepository.getNameLiveData().observe(requireActivity(), Observer {
+            binding.tvMypageUserName.text = it.toString()
+        })
 
         setButton()
 

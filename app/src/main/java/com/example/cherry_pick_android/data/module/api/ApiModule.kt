@@ -8,6 +8,7 @@ import com.example.cherry_pick_android.data.remote.service.user.DeleteUserServic
 import com.example.cherry_pick_android.data.remote.service.user.InitUserSaveService
 import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.data.remote.service.user.UserKeywordService
+import com.example.cherry_pick_android.data.remote.service.user.UserNameUpdateService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -97,5 +98,11 @@ class ApiModule {
     @Singleton
     fun provideUserDelete(retrofit: Retrofit): DeleteUserService{
         return retrofit.create(DeleteUserService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserNameUpdate(retrofit: Retrofit): UserNameUpdateService{
+        return retrofit.create(UserNameUpdateService::class.java)
     }
 }
