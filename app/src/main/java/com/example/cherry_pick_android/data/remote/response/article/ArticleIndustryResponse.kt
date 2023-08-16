@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.data.remote.response
+package com.example.cherry_pick_android.data.remote.response.article
 
 data class ArticleIndustryResponse(
     val `data`: Data,

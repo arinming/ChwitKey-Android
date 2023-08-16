@@ -1,15 +1,20 @@
 package com.example.cherry_pick_android.presentation.ui.home.homeNews
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.viewModelScope
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
@@ -18,7 +23,9 @@ import com.example.cherry_pick_android.presentation.adapter.ArticleAdapter
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
 import com.example.cherry_pick_android.presentation.viewmodel.article.ArticleViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -40,6 +47,17 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeNewsBinding.inflate(inflater, container, false)
+
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                val response = articleService.getArticleCommend("초전도체", "like", Pageable)
+                val statusCode = response.body()?.statusCode
+                if (statusCode == 200) {
+                } else {
+                    Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 
         return binding.root
     }
@@ -74,9 +92,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
         binding.rvNewsList.adapter = recyclerViewAdapter
     }
 
-    private fun liveNewsList() {
-
-    }
 
     // 메뉴
     private fun showSortingMenu(view: View) {

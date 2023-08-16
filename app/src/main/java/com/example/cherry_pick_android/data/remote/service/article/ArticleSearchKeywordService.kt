@@ -1,7 +1,7 @@
 package com.example.cherry_pick_android.data.remote.service.article
 
 import com.example.cherry_pick_android.data.data.Pageable
-import com.example.cherry_pick_android.data.remote.response.ArticleKeywordResponse
+import com.example.cherry_pick_android.data.remote.response.article.ArticleKeywordResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

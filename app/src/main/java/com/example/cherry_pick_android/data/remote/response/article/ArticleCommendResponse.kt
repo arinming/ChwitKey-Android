@@ -1,22 +1,20 @@
-package com.example.cherry_pick_android.data.remote.response
+package com.example.cherry_pick_android.data.remote.response.article
+
 
 import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 
-@JsonClass(generateAdapter = true)
 data class ArticleCommendResponse(
-    @field:Json(name = "`data`")
+    @field:Json(name = "data")
     val `data`: Data,
     @field:Json(name = "description")
-    val description: String,
+    val description: String?,
     @field:Json(name = "status")
     val status: String,
     @field:Json(name = "statusCode")
     val statusCode: Int,
     @field:Json(name = "transaction_time")
-    val transaction_time: String
+    val transactionTime: String?
 ) {
-    @JsonClass(generateAdapter = true)
     data class Data(
         @field:Json(name = "content")
         val content: List<Content>,
@@ -41,12 +39,15 @@ data class ArticleCommendResponse(
         @field:Json(name = "totalPages")
         val totalPages: Int
     ) {
-        @JsonClass(generateAdapter = true)
         data class Content(
+            @field:Json(name = "articleId")
+            val articleId: Int,
             @field:Json(name = "articlePhoto")
-            val articlePhoto: List<String>,
+            val articlePhoto: List<ArticlePhoto>,
             @field:Json(name = "content")
             val content: String,
+            @field:Json(name = "industry")
+            val industry: String,
             @field:Json(name = "publisher")
             val publisher: String,
             @field:Json(name = "reporter")
@@ -55,8 +56,15 @@ data class ArticleCommendResponse(
             val title: String,
             @field:Json(name = "uploadedAt")
             val uploadedAt: String
-        )
-        @JsonClass(generateAdapter = true)
+        ) {
+            data class ArticlePhoto(
+                @field:Json(name = "articleImgUrl")
+                val articleImgUrl: String,
+                @field:Json(name = "imgDesc")
+                val imgDesc: String
+            )
+        }
+
         data class Pageable(
             @field:Json(name = "offset")
             val offset: Int,
@@ -71,7 +79,6 @@ data class ArticleCommendResponse(
             @field:Json(name = "unpaged")
             val unpaged: Boolean
         ) {
-            @JsonClass(generateAdapter = true)
             data class Sort(
                 @field:Json(name = "empty")
                 val empty: Boolean,
@@ -81,7 +88,7 @@ data class ArticleCommendResponse(
                 val unsorted: Boolean
             )
         }
-        @JsonClass(generateAdapter = true)
+
         data class Sort(
             @field:Json(name = "empty")
             val empty: Boolean,

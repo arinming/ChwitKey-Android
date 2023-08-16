@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.example.cherry_pick_android.data.remote.response.ArticleCommendResponse
+import com.example.cherry_pick_android.data.remote.response.article.ArticleCommendResponse
 import com.example.cherry_pick_android.databinding.ItemNewsBinding
 import com.example.cherry_pick_android.presentation.ui.article.ArticleActivity
 
