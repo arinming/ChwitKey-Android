@@ -13,25 +13,43 @@ import android.view.Gravity
 import android.view.Window
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import coil.load
 import com.bumptech.glide.Glide
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.remote.service.user.DeleteUserService
 import com.example.cherry_pick_android.databinding.ActivityProfileBinding
 import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroupActivity
+import com.example.cherry_pick_android.presentation.ui.login.LoginActivity
 import com.example.cherry_pick_android.presentation.ui.mypage.dialog.CameraDialog
 import com.example.cherry_pick_android.presentation.ui.mypage.dialog.CameraDialogInterface
+import com.example.cherry_pick_android.presentation.ui.mypage.dialog.UserDeleteDialog
+import com.example.cherry_pick_android.presentation.ui.mypage.dialog.UserDeleteDialogInterface
+import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
+import com.example.cherry_pick_android.presentation.viewmodel.mypage.MyPageViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.sql.Date
 import java.text.SimpleDateFormat
+import javax.inject.Inject
 
-
-class ProfileActivity : AppCompatActivity(),CameraDialogInterface {
+@AndroidEntryPoint
+class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDialogInterface {
     private lateinit var binding: ActivityProfileBinding
 
     companion object {
         const val TAG = "ProfileActivity"
     }
+    // 회원탈퇴 API 주입받기
+    @Inject
+    lateinit var deleteUserService: DeleteUserService
+
     // 요청하고자 하는 권한들
     private val permissions = arrayOf(
         Manifest.permission.CAMERA,
@@ -47,6 +65,9 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface {
             Toast.makeText(this, "권한을 거부하였습니다.", Toast.LENGTH_SHORT).show()
         }
     }
+    // 뷰 모델 주입받기
+    private val viewModel: MyPageViewModel by viewModels()
+    private val loginViewModel: LoginViewModel by viewModels()
 
     // 촬영한 사진 불러오기
     // 이미지 로드
@@ -88,6 +109,33 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface {
         binding = ActivityProfileBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        // 회원탈퇴 값 감지
+        viewModel.isDelete.observe(this@ProfileActivity, Observer {
+            Log.d(TAG, "옵저버 감지! : $it")
+            lifecycleScope.launch {
+                val response = deleteUserService.deleteUser().body()?.statusCode
+                // 200: 성공, 404: 존재하지 않는 유저
+                withContext(Dispatchers.Main){
+                    if(response == 200){
+                        loginViewModel.setUserData("userId", "")
+                        loginViewModel.setUserData("token", "")
+                        loginViewModel.setUserData("platform", "")
+                        loginViewModel.setIsOutView("out")
+
+                        val intent = Intent(this@ProfileActivity, LoginActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // 백스택에 남아있는 액티비티 제거
+                        }
+                        startActivity(intent)
+                    }else if(response == 404){
+                        Log.d(TAG, "ERROR")
+                    }else{
+                        Toast.makeText(this@ProfileActivity, "통신 오류 발생", Toast.LENGTH_SHORT).show()
+                    }
+                }
+
+            }
+        })
 
         goBack()
         showCameraDialog()
@@ -176,7 +224,9 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface {
     // 회원 탈퇴
     private fun LeaveAccount() {
         binding.tvLeaveAccount.setOnClickListener{
-
+            val dialog = UserDeleteDialog(this)
+            dialog.isCancelable = false
+            dialog.show(this.supportFragmentManager, "UserDeleteDialog")
         }
     }
 
@@ -193,5 +243,9 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface {
                 getPermissionResult.launch(permissions)
             }
         }
+    }
+
+    override fun onClickBtn(value: String) {
+        viewModel.setDelete(value)
     }
 }

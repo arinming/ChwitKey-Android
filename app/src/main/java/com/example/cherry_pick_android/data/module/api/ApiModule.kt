@@ -4,6 +4,7 @@ package com.example.cherry_pick_android.data.module.api
 import com.example.cherry_pick_android.data.remote.repository.ArticleRepository
 import com.example.cherry_pick_android.data.remote.service.ArticleSearchService
 import com.example.cherry_pick_android.data.remote.service.login.SignInService
+import com.example.cherry_pick_android.data.remote.service.user.DeleteUserService
 import com.example.cherry_pick_android.data.remote.service.user.InitUserSaveService
 import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.data.remote.service.user.UserKeywordService
@@ -90,5 +91,11 @@ class ApiModule {
     @Singleton
     fun provideInitUserSave(retrofit: Retrofit): InitUserSaveService{
         return retrofit.create(InitUserSaveService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserDelete(retrofit: Retrofit): DeleteUserService{
+        return retrofit.create(DeleteUserService::class.java)
     }
 }
