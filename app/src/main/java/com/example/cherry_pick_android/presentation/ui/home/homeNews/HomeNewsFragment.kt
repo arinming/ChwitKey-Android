@@ -2,6 +2,7 @@ package com.example.cherry_pick_android.presentation.ui.home.homeNews
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -82,7 +83,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
                 val statusCode = response.body()?.statusCode
                 if (statusCode == 200) {
                     val articleItems = response.body()?.data?.content?.map { content ->
-                        ArticleItem(content.title, content.publisher, content.uploadedAt)
+                        ArticleItem(content.title, content.publisher, content.uploadedAt, content.articlePhoto[0].articleImgUrl)
                     }
                     binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
                 } else {

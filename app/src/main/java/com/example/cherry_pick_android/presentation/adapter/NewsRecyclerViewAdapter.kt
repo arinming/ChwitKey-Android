@@ -13,6 +13,7 @@ data class ArticleItem(
     val title: String,
     val company: String,
     val time: String,
+    val picture: String
 )
 
 class NewsRecyclerViewAdapter(private val articleDataSet: List<ArticleItem>?) :
@@ -54,6 +55,10 @@ class NewsRecyclerViewAdapter(private val articleDataSet: List<ArticleItem>?) :
         viewHolder.title.text = articleItem?.title
         viewHolder.company.text = articleItem?.company
         viewHolder.time.text = articleItem?.time
+
+        Glide.with(viewHolder.itemView.context)
+            .load(articleItem?.picture)
+            .into(viewHolder.image)
     }
 
     // 데이터 크기 반환
