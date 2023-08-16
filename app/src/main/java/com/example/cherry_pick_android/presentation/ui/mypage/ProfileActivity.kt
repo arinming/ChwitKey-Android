@@ -114,33 +114,10 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         // 회원탈퇴 값 감지
         viewModel.isDelete.observe(this@ProfileActivity, Observer {
             Log.d(TAG, "옵저버 감지! : $it")
-            if(it == "ok"){
-                lifecycleScope.launch {
-                    val response = deleteUserService.deleteUser().body()?.statusCode
-                    // 200: 성공, 404: 존재하지 않는 유저
-                    withContext(Dispatchers.Main){
-                        if(response == 200){
-                            loginViewModel.setUserData("userId", "")
-                            loginViewModel.setUserData("token", "")
-                            loginViewModel.setUserData("platform", "")
-                            loginViewModel.setIsOutView("out")
-
-                            val intent = Intent(this@ProfileActivity, LoginActivity::class.java).apply {
-                                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // 백스택에 남아있는 액티비티 제거
-                            }
-                            startActivity(intent)
-                        }else if(response == 404){
-                            Log.d(TAG, "ERROR")
-                        }else{
-                            Toast.makeText(this@ProfileActivity, "통신 오류 발생", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-
-                }
-            }
+            deleteUserData(it)
         })
 
-        // 닉네임 갱신
+        // 유저 정보 갱신
         lifecycleScope.launch {
             withContext(Dispatchers.Main){
                 binding.etProfileName.setText(userDataRepository.getUserData().name)
@@ -153,21 +130,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         })
 
         // 직군 키워드 업데이트
-        lifecycleScope.launch {
-            val response = userInfoService.getUserInfo().body()
-            val statusCode = response?.statusCode
-            val industryResponse =
-                "${mapperToJob(response?.data?.industryKeyword1.toString())}, " +
-                        "${mapperToJob(response?.data?.industryKeyword2.toString())}, " +
-                        mapperToJob(response?.data?.industryKeyword3.toString())
-            withContext(Dispatchers.Main){
-                if(statusCode == 200){
-                    binding.tvProfileJob.text = industryResponse
-                }else{
-                    Toast.makeText(this@ProfileActivity, "통신오류: $statusCode", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+        industryLoad()
 
         goBack()
         showCameraDialog()
@@ -252,7 +215,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
                 }
 
             }
-
         }
     }
 
@@ -303,13 +265,57 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
-    fun mapperToJob(value: String): String{
+    private fun mapperToJob(value: String): String{
         return when(value){
             "steel" -> "철강" "Petroleum/Chemical" -> "석유·화학" "oilrefining" -> "정유" "secondarybattery" -> "2차 전지"
             "Semiconductor" -> "반도체" "Display" -> "디스플레이" "Mobile" -> "휴대폰" "It" -> "IT"
             "car" -> "자동차" "Shipbuilding" -> "조선" "Shipping" -> "해운" "FnB" -> "F&B"
             "RetailDistribution" -> "소매유통" "Construction" -> "건설" "HotelTravel" -> "호텔·여행·항공" "FiberClothing" -> "섬유·의류"
             else -> ""
+        }
+    }
+
+    private fun deleteUserData(ck: String){
+        if(ck == "ok"){
+            lifecycleScope.launch {
+                val response = deleteUserService.deleteUser().body()?.statusCode
+                // 200: 성공, 404: 존재하지 않는 유저
+                withContext(Dispatchers.Main){
+                    if(response == 200){
+                        loginViewModel.setUserData("userId", "")
+                        loginViewModel.setUserData("token", "")
+                        loginViewModel.setUserData("platform", "")
+                        loginViewModel.setIsOutView("out")
+
+                        val intent = Intent(this@ProfileActivity, LoginActivity::class.java).apply {
+                            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // 백스택에 남아있는 액티비티 제거
+                        }
+                        startActivity(intent)
+                    }else if(response == 404){
+                        Log.d(TAG, "ERROR")
+                    }else{
+                        Toast.makeText(this@ProfileActivity, "통신 오류 발생", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
+        }
+    }
+
+    private fun industryLoad(){
+        lifecycleScope.launch {
+            val response = userInfoService.getUserInfo().body()
+            val statusCode = response?.statusCode
+            val industryResponse =
+                "${mapperToJob(response?.data?.industryKeyword1.toString())}, " +
+                        "${mapperToJob(response?.data?.industryKeyword2.toString())}, " +
+                        mapperToJob(response?.data?.industryKeyword3.toString())
+            withContext(Dispatchers.Main){
+                if(statusCode == 200){
+                    binding.tvProfileJob.text = industryResponse
+                }else{
+                    Toast.makeText(this@ProfileActivity, "통신오류: $statusCode", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
     }
 
