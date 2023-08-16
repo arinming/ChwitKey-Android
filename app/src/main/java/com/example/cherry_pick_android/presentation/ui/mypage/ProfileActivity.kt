@@ -21,8 +21,12 @@ import androidx.lifecycle.lifecycleScope
 import coil.load
 import com.bumptech.glide.Glide
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.remote.request.user.UpdateNameReq
+import com.example.cherry_pick_android.data.remote.request.user.updateNameRequest
 import com.example.cherry_pick_android.data.remote.service.user.DeleteUserService
+import com.example.cherry_pick_android.data.remote.service.user.UserNameUpdateService
 import com.example.cherry_pick_android.databinding.ActivityProfileBinding
+import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroupActivity
 import com.example.cherry_pick_android.presentation.ui.login.LoginActivity
 import com.example.cherry_pick_android.presentation.ui.mypage.dialog.CameraDialog
@@ -46,9 +50,13 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     companion object {
         const val TAG = "ProfileActivity"
     }
-    // 회원탈퇴 API 주입받기
+    // API 주입받기
     @Inject
     lateinit var deleteUserService: DeleteUserService
+    @Inject
+    lateinit var userNameUpdateService: UserNameUpdateService
+    @Inject
+    lateinit var userDataRepository: UserDataRepository
 
     // 요청하고자 하는 권한들
     private val permissions = arrayOf(
@@ -113,28 +121,39 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         // 회원탈퇴 값 감지
         viewModel.isDelete.observe(this@ProfileActivity, Observer {
             Log.d(TAG, "옵저버 감지! : $it")
-            lifecycleScope.launch {
-                val response = deleteUserService.deleteUser().body()?.statusCode
-                // 200: 성공, 404: 존재하지 않는 유저
-                withContext(Dispatchers.Main){
-                    if(response == 200){
-                        loginViewModel.setUserData("userId", "")
-                        loginViewModel.setUserData("token", "")
-                        loginViewModel.setUserData("platform", "")
-                        loginViewModel.setIsOutView("out")
+            if(it == "ok"){
+                lifecycleScope.launch {
+                    val response = deleteUserService.deleteUser().body()?.statusCode
+                    // 200: 성공, 404: 존재하지 않는 유저
+                    withContext(Dispatchers.Main){
+                        if(response == 200){
+                            loginViewModel.setUserData("userId", "")
+                            loginViewModel.setUserData("token", "")
+                            loginViewModel.setUserData("platform", "")
+                            loginViewModel.setIsOutView("out")
 
-                        val intent = Intent(this@ProfileActivity, LoginActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // 백스택에 남아있는 액티비티 제거
+                            val intent = Intent(this@ProfileActivity, LoginActivity::class.java).apply {
+                                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // 백스택에 남아있는 액티비티 제거
+                            }
+                            startActivity(intent)
+                        }else if(response == 404){
+                            Log.d(TAG, "ERROR")
+                        }else{
+                            Toast.makeText(this@ProfileActivity, "통신 오류 발생", Toast.LENGTH_SHORT).show()
                         }
-                        startActivity(intent)
-                    }else if(response == 404){
-                        Log.d(TAG, "ERROR")
-                    }else{
-                        Toast.makeText(this@ProfileActivity, "통신 오류 발생", Toast.LENGTH_SHORT).show()
                     }
-                }
 
+                }
             }
+        })
+
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main){
+                binding.etProfileName.setText(userDataRepository.getUserData().name)
+            }
+        }
+        userDataRepository.getNameLiveData().observe(this@ProfileActivity, Observer {
+            binding.etProfileName.setText(it)
         })
 
         goBack()
@@ -201,23 +220,26 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     private fun ChangeName() {
         binding.ibtnProfileNameChange.setOnClickListener{
             cnt+=1
+            isNameChange(cnt)
 
-            if (cnt%2==0) {
-                binding.etProfileName.isClickable= false
-                binding.etProfileName.isFocusable= false
-                binding.etProfileName.isFocusableInTouchMode= false
-                binding.etProfileName.isEnabled= false
-                binding.etProfileName.setTextColor(getColor(R.color.black))
-                binding.ibtnProfileNameChange.setImageResource(R.drawable.ic_pencil)
+            // 닉네임 수정
+            if(cnt%2 == 0){
+                val name = binding.etProfileName.text.toString()
+                lifecycleScope.launch {
+                    withContext(Dispatchers.Main){
+                        val request = updateNameRequest(UpdateNameReq(name))
+                        val response = userNameUpdateService.putUserName(request)
+                        val statusCode = response.body()?.statusCode
+                        if(statusCode == 200){
+                            loginViewModel.setUserData("name", binding.etProfileName.text.toString())
+                        }else{
+                            Toast.makeText(this@ProfileActivity, "통신오류: $statusCode", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
             }
-            else {
-                binding.etProfileName.isClickable= true
-                binding.etProfileName.isFocusable= true
-                binding.etProfileName.isFocusableInTouchMode= true
-                binding.etProfileName.isEnabled= true
-                binding.etProfileName.setTextColor(getColor(R.color.main_pink))
-                binding.ibtnProfileNameChange.setImageResource(R.drawable.ic_pencil_complete)
-            }
+
         }
     }
 
@@ -247,5 +269,24 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
 
     override fun onClickBtn(value: String) {
         viewModel.setDelete(value)
+    }
+
+    private fun isNameChange(cnt: Int){
+        if (cnt%2==0) {
+            binding.etProfileName.isClickable= false
+            binding.etProfileName.isFocusable= false
+            binding.etProfileName.isFocusableInTouchMode= false
+            binding.etProfileName.isEnabled= false
+            binding.etProfileName.setTextColor(getColor(R.color.black))
+            binding.ibtnProfileNameChange.setImageResource(R.drawable.ic_pencil)
+        }
+        else {
+            binding.etProfileName.isClickable= true
+            binding.etProfileName.isFocusable= true
+            binding.etProfileName.isFocusableInTouchMode= true
+            binding.etProfileName.isEnabled= true
+            binding.etProfileName.setTextColor(getColor(R.color.main_pink))
+            binding.ibtnProfileNameChange.setImageResource(R.drawable.ic_pencil_complete)
+        }
     }
 }

@@ -11,4 +11,8 @@ interface UserDataRepository {
 
     fun getUserIdLiveData(): LiveData<String>
     fun getPlatFormLiveData(): LiveData<String>
+
+    fun getNameLiveData(): LiveData<String>
+
+    fun getBirthLiveData(): LiveData<String>
 }
