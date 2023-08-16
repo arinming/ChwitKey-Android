@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.data.remote.service
+package com.example.cherry_pick_android.data.remote.service.article
 
 import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.response.ArticleCommendResponse
@@ -19,7 +19,7 @@ interface ArticleSearchService {
         @Query("cond") cond: String,
         @Query("sortType") sortType: String,
         @Query("pageable") pageable: Pageable
-    ): Call<ArticleCommendResponse>
+    ): Response<ArticleCommendResponse>
 
 
     // 직군 & 정렬
@@ -29,7 +29,7 @@ interface ArticleSearchService {
         @Query("sortType") sortType: String,
         @Query("industry") industry: String,
         @Query("pageable") pageable: Pageable
-    ): Call<ArticleIndustryResponse>
+    ): Response<ArticleIndustryResponse>
 
 
     // 키워드 & 정렬
@@ -39,5 +39,5 @@ interface ArticleSearchService {
         @Query("sortType") sortType: String,
         @Query("industry") industry: String,
         @Query("pageable") pageable: Pageable
-    ): Call<ArticleKeywordResponse>
+    ): Response<ArticleKeywordResponse>
 }

@@ -1,8 +1,7 @@
 package com.example.cherry_pick_android.data.module.api
 
 
-import com.example.cherry_pick_android.data.remote.repository.ArticleRepository
-import com.example.cherry_pick_android.data.remote.service.ArticleSearchService
+import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchService
 import com.example.cherry_pick_android.data.remote.service.login.SignInService
 import com.example.cherry_pick_android.data.remote.service.user.DeleteUserService
 import com.example.cherry_pick_android.data.remote.service.user.InitUserSaveService
@@ -18,7 +17,6 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
-import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -69,11 +67,6 @@ class ApiModule {
         return retrofit.create(ArticleSearchService::class.java)
     }
 
-    @Provides
-    @Singleton
-    fun provideArticleRepository(articleSearchService: ArticleSearchService): ArticleRepository {
-        return ArticleRepository(articleSearchService)
-    }
 
     @Provides
     @Singleton
