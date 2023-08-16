@@ -23,7 +23,6 @@ import com.example.cherry_pick_android.data.remote.request.user.UpdateNameReq
 import com.example.cherry_pick_android.data.remote.request.user.updateNameRequest
 import com.example.cherry_pick_android.data.remote.service.user.DeleteUserService
 import com.example.cherry_pick_android.data.remote.service.user.UserNameUpdateService
-import com.example.cherry_pick_android.data.remote.service.user.UserUploadImageService
 import com.example.cherry_pick_android.databinding.ActivityProfileBinding
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroupActivity
@@ -59,8 +58,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     lateinit var userNameUpdateService: UserNameUpdateService
     @Inject
     lateinit var userDataRepository: UserDataRepository
-    @Inject
-    lateinit var userUploadImageService : UserUploadImageService
+
 
 
     // 요청하고자 하는 권한들
@@ -207,12 +205,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
                     val response = userUploadImageService.postUploadImage(bodyFile)
                 }*/
 
-                if(response == 200){
-                    Log.d(TAG,"이미지 통신")
-                    //loginViewModel.setUserData("", binding.etProfileName.text.toString())
-                }else{
-                    Toast.makeText(this@ProfileActivity, "통신오류: $response", Toast.LENGTH_SHORT).show()
-                }
+
             }
         }
     }
