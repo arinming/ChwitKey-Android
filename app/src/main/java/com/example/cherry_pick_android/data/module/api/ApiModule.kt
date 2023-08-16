@@ -6,10 +6,10 @@ import com.example.cherry_pick_android.data.remote.service.ArticleSearchService
 import com.example.cherry_pick_android.data.remote.service.login.SignInService
 import com.example.cherry_pick_android.data.remote.service.user.DeleteUserService
 import com.example.cherry_pick_android.data.remote.service.user.InitUserSaveService
+import com.example.cherry_pick_android.data.remote.service.user.UpLoadImageService
 import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.data.remote.service.user.UserKeywordService
 import com.example.cherry_pick_android.data.remote.service.user.UserNameUpdateService
-import com.example.cherry_pick_android.data.remote.service.user.UserUploadImageService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -109,8 +109,8 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideUserImageUpload(retrofit: Retrofit): UserUploadImageService{
-        return retrofit.create(UserUploadImageService::class.java)
+    fun provideUserImageUpload(retrofit: Retrofit): UpLoadImageService{
+        return retrofit.create(UpLoadImageService::class.java)
     }
 
 }
