@@ -113,27 +113,29 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         // 회원탈퇴 값 감지
         viewModel.isDelete.observe(this@ProfileActivity, Observer {
             Log.d(TAG, "옵저버 감지! : $it")
-            lifecycleScope.launch {
-                val response = deleteUserService.deleteUser().body()?.statusCode
-                // 200: 성공, 404: 존재하지 않는 유저
-                withContext(Dispatchers.Main){
-                    if(response == 200){
-                        loginViewModel.setUserData("userId", "")
-                        loginViewModel.setUserData("token", "")
-                        loginViewModel.setUserData("platform", "")
-                        loginViewModel.setIsOutView("out")
+            if(it == "ok"){
+                lifecycleScope.launch {
+                    val response = deleteUserService.deleteUser().body()?.statusCode
+                    // 200: 성공, 404: 존재하지 않는 유저
+                    withContext(Dispatchers.Main){
+                        if(response == 200){
+                            loginViewModel.setUserData("userId", "")
+                            loginViewModel.setUserData("token", "")
+                            loginViewModel.setUserData("platform", "")
+                            loginViewModel.setIsOutView("out")
 
-                        val intent = Intent(this@ProfileActivity, LoginActivity::class.java).apply {
-                            flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // 백스택에 남아있는 액티비티 제거
+                            val intent = Intent(this@ProfileActivity, LoginActivity::class.java).apply {
+                                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // 백스택에 남아있는 액티비티 제거
+                            }
+                            startActivity(intent)
+                        }else if(response == 404){
+                            Log.d(TAG, "ERROR")
+                        }else{
+                            Toast.makeText(this@ProfileActivity, "통신 오류 발생", Toast.LENGTH_SHORT).show()
                         }
-                        startActivity(intent)
-                    }else if(response == 404){
-                        Log.d(TAG, "ERROR")
-                    }else{
-                        Toast.makeText(this@ProfileActivity, "통신 오류 발생", Toast.LENGTH_SHORT).show()
                     }
-                }
 
+                }
             }
         })
 
