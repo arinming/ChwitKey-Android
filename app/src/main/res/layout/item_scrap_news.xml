@@ -9,6 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/iv_news_image_preview"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -16,7 +17,6 @@
             android:id="@+id/tv_news_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:fontFamily="@font/pretendard_regular"
             android:text="@string/item_scrap_news_title"
             android:textColor="@android:color/black"
@@ -28,7 +28,6 @@
             android:id="@+id/tv_news_company"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/pretendard_regular"
             android:text="@string/item_news_editor"
@@ -60,18 +59,6 @@
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/tv_news_dot" />
-
-        <TextView
-            android:id="@+id/tv_news_time_previous"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="2dp"
-            android:fontFamily="@font/pretendard_regular"
-            android:text="@string/item_news_previous"
-            android:textColor="@color/gray_4"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/tv_news_time" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

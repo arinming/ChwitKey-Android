@@ -1,25 +1,22 @@
 package com.example.cherry_pick_android.presentation.ui.home.homeNews
 
-import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import androidx.lifecycle.viewModelScope
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
 import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
 import com.example.cherry_pick_android.presentation.adapter.ArticleAdapter
+import com.example.cherry_pick_android.presentation.adapter.ArticleItem
+import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
 import com.example.cherry_pick_android.presentation.viewmodel.article.ArticleViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,16 +45,8 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     ): View {
         _binding = FragmentHomeNewsBinding.inflate(inflater, container, false)
 
-        lifecycleScope.launch {
-            withContext(Dispatchers.Main) {
-                val response = articleService.getArticleCommend("초전도체", "like", Pageable)
-                val statusCode = response.body()?.statusCode
-                if (statusCode == 200) {
-                } else {
-                    Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
+
+        getArticleList()
 
         return binding.root
     }
@@ -74,6 +63,33 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun getArticleList() {
+        // API 통신
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                val industry = binding.ibtnKeyWord1.text
+                var sort = binding.tvSorting.text
+                if (sort == "인기순") {
+                    sort = "like"
+                } else if (sort == "오름차순") {
+                    sort = "asc"
+                } else if (sort == "내림차순") {
+                    sort = "desc"
+                }
+                val response = articleService.getArticleCommend(industry.toString(), sort.toString(), Pageable)
+                val statusCode = response.body()?.statusCode
+                if (statusCode == 200) {
+                    val articleItems = response.body()?.data?.content?.map { content ->
+                        ArticleItem(content.title, content.publisher, content.uploadedAt)
+                    }
+                    binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
+                } else {
+                    Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
 
@@ -107,6 +123,8 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
             }
             true
         }
+
+        getArticleList()
 
         popupMenu.show()
     }
