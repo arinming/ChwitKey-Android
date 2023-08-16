@@ -22,10 +22,14 @@ class UserDataRepositoryImpl @Inject constructor(
     private val context: Context
 ): UserDataRepository {
 
+    // Data stroe 생성
     private val Context.dataStore by preferencesDataStore(name = "user_data")
+    // 각종 LiveData 선언
     private val _tokenLiveData = MutableLiveData<String>()
     private val _userId = MutableLiveData<String>()
     private val _platForm = MutableLiveData<String>()
+    private val _name = MutableLiveData<String>()
+    private val _birthday = MutableLiveData<String>()
 
     companion object{
         const val TAG = "UserIdRepositoryImpl"
@@ -70,9 +74,15 @@ class UserDataRepositoryImpl @Inject constructor(
                     _tokenLiveData.postValue(value)
                     TOKEN_KEY
                 }
-                "name" -> NAME_KEY
+                "name" -> {
+                    _name.postValue(value)
+                    NAME_KEY
+                }
                 "gender" -> GENDER_KEY
-                "birthday" -> BIRTHDAY_KEY
+                "birthday" -> {
+                    _birthday.postValue(value)
+                    BIRTHDAY_KEY
+                }
                 "isInit" -> ISINIT_KEY
                 else -> throw IllegalArgumentException("Unknown key: $key")
             }
@@ -91,6 +101,14 @@ class UserDataRepositoryImpl @Inject constructor(
 
     override fun getPlatFormLiveData(): LiveData<String> {
         return _platForm
+    }
+
+    override fun getNameLiveData(): LiveData<String> {
+        return _name
+    }
+
+    override fun getBirthLiveData(): LiveData<String> {
+        return _birthday
     }
 
 

@@ -3,7 +3,7 @@ package com.example.cherry_pick_android.data.remote.response.user
 
 import com.squareup.moshi.Json
 
-data class DeleteUserResponse(
+data class ApiResponse(
     @field:Json(name = "data")
     val `data`: Any?,
     @field:Json(name = "description")

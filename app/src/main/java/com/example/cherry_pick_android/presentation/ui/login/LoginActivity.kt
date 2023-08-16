@@ -130,6 +130,7 @@ class LoginActivity: AppCompatActivity() {
                 Log.d(TAG, "자동로그인 token:${userDataRepository.getUserData().token} userId:${userDataRepository.getUserData().userId}")
                 val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                 viewModel.setUserData("isInit", "exitUser")
+                viewModel.setUserData("token", userDataRepository.getUserData().token)
                 startActivity(intent)
                 finish()
             }
