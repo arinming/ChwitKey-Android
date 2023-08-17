@@ -84,7 +84,7 @@ class GptAdapter: RecyclerView.Adapter<RecyclerView.ViewHolder>(){
                 endToEnd = ConstraintLayout.LayoutParams.PARENT_ID
                 topToTop = ConstraintLayout.LayoutParams.PARENT_ID
                 marginStart = 20
-                marginEnd = 50
+                marginEnd = 20
                 topMargin = 24
             }
         }

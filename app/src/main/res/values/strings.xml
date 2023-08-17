@@ -153,5 +153,10 @@
     <string name="logout_sub_title">로그아웃 하시겠습니까?</string>
     <string name="logout_ok">로그아웃</string>
     <string name="logout_no">취소</string>
+    
+    <!-- gpt -->
+    <string name="gpt_summary">기사 요약하기</string>
+    <string name="gpt_translation">기사 영어로 번역하기</string>
+    <string name="gpt_keyword">기사 키워드 보기</string>
 
 </resources>
