@@ -19,7 +19,6 @@ import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.remote.request.user.UpLoadImageRequest
-import com.example.cherry_pick_android.data.remote.request.user.UpdateNameReq
 import com.example.cherry_pick_android.data.remote.request.user.updateNameRequest
 import com.example.cherry_pick_android.data.remote.response.user.UpLoadImageResponse
 import com.example.cherry_pick_android.data.remote.service.user.DeleteUserService
@@ -40,11 +39,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import okhttp3.Call
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.Response
 import retrofit2.Callback
 import java.io.File
 import java.text.SimpleDateFormat
@@ -144,13 +141,17 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
 
         // 직군 키워드 업데이트
         industryLoad()
-
         goBack()
         showCameraDialog()
         ChangeName()
         ChangeJobInterest()
         LeaveAccount()
 
+    }
+
+    override fun onResume() {
+        industryLoad()
+        super.onResume()
     }
     // 생년월일 매핑함수
     fun mapperToBirth(birthday: String): String{
@@ -265,7 +266,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
                 val name = binding.etProfileName.text.toString()
                 lifecycleScope.launch {
                     withContext(Dispatchers.Main){
-                        val request = updateNameRequest(UpdateNameReq(name))
+                        val request = updateNameRequest(name)
                         val response = userNameUpdateService.putUserName(request)
                         val statusCode = response.body()?.statusCode
                         if(statusCode == 200){
@@ -383,7 +384,5 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
             }
         }
     }
-
-
 
 }

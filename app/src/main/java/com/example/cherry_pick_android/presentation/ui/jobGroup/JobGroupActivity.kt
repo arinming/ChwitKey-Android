@@ -1,6 +1,5 @@
 package com.example.cherry_pick_android.presentation.ui.jobGroup
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,7 +13,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.remote.request.user.IndustryKeyword
 import com.example.cherry_pick_android.data.remote.request.user.InitUserSaveRequest
-import com.example.cherry_pick_android.data.remote.request.user.UpdateIndustryReq
 import com.example.cherry_pick_android.data.remote.request.user.updateIndustryRequest
 import com.example.cherry_pick_android.data.remote.service.user.InitUserSaveService
 import com.example.cherry_pick_android.data.remote.service.user.UpdateIndustryService
@@ -145,18 +143,17 @@ class JobGroupActivity: AppCompatActivity() {
                     val industryList = getIndustryList(selecetedJobList)
                     withContext(Dispatchers.Main){
                         val request = updateIndustryRequest(
-                            UpdateIndustryReq(
-                                industryKeyword1 = industryList[0].industryKeyword,
-                                industryKeyword2 = industryList[1].industryKeyword,
-                                industryKeyword3 = industryList[2].industryKeyword
-                            ))
+                            industryKeyword1 = industryList[0].industryKeyword,
+                            industryKeyword2 = industryList[1].industryKeyword,
+                            industryKeyword3 = industryList[2].industryKeyword
+                            )
                         val response = updateIndustryService.putUpdateUserIndustry(request)
-                        val status = response.body()?.status
+                        val statusCode = response.body()?.statusCode
 
-                        if(status == 200){
+                        if(statusCode == 200){
                             finish()
                         }else{
-                            Toast.makeText(this@JobGroupActivity, "통신오류: $status", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@JobGroupActivity, "통신오류", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }else{
