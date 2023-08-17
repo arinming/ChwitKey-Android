@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.databinding.ItemKeywordBtnBinding
 import com.example.cherry_pick_android.presentation.ui.article.ArticleActivity
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
@@ -49,11 +50,11 @@ class IndustryAdapter(private val industries: List<String>) :
         // 버튼 스타일 업데이트 함수
         fun updateButtonStyles() {
             if (isSelected) {
-                industry.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.main_pink))
                 industry.setTextColor(ContextCompat.getColor(itemView.context, R.color.white))
+                industry.setBackgroundResource(R.drawable.bg_keyword)
             } else {
-                industry.setBackgroundColor(ContextCompat.getColor(itemView.context, R.color.gray_1))
                 industry.setTextColor(ContextCompat.getColor(itemView.context, R.color.gray_7))
+                industry.setBackgroundResource(R.drawable.bg_keyword_false)
             }
         }
     }

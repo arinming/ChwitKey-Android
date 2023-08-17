@@ -1,5 +1,6 @@
 package com.example.cherry_pick_android.presentation.ui.home.homeNews
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -33,7 +34,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     private var _binding: FragmentHomeNewsBinding? = null
     private val binding get() = _binding!!
 
-    private var industry1313 : String = ""
+    private var industry1313 : String = "초전도체"
 
     @Inject
     lateinit var articleService: ArticleSearchCommendService
@@ -50,19 +51,16 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     ): View {
         _binding = FragmentHomeNewsBinding.inflate(inflater, container, false)
 
-        industryLoad()
-
-        getArticleList()
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        industryLoad()
+        getArticleList()
         goToNewsSearch()
 
-        val intent = Intent(this.context, HomeActivity::class.java)
 
         // 유저 정보 갱신
         lifecycleScope.launch {
@@ -84,15 +82,15 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
                 var sort = binding.tvSorting.text
-                val industry = industry1313
-                Log.d("요청 직군", industry)
 
                 when (sort) {
                     "인기순" -> sort = "like"
                     "오름차순" -> sort = "asc"
                     "내림차순" -> sort = "desc"
                 }
-                val response = articleService.getArticleCommend(industry, sort.toString(), Pageable)
+                val response = articleService.getArticleCommend(industry1313, sort.toString(), Pageable)
+                Log.d("요청 직군", industry1313)
+
                 val statusCode = response.body()?.statusCode
                 if (statusCode == 200) {
                     val articleItems = response.body()?.data?.content?.map { content ->
@@ -173,7 +171,9 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
 
             withContext(Dispatchers.Main){
                 if(statusCode == 200){
-                    response.data?.industryKeyword1
+                    industry1313 = industry1
+                    Log.d("현재 직군", industry1313)
+
                     binding.rvIndustry.layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                     binding.rvIndustry.adapter = IndustryAdapter(industries)
