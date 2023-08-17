@@ -6,9 +6,12 @@ import android.text.TextWatcher
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.remote.service.gpt.NewGptService
 import com.example.cherry_pick_android.databinding.ActivityGptBinding
+import com.example.cherry_pick_android.presentation.adapter.GptAdapter
+import com.example.cherry_pick_android.presentation.adapter.Message
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -20,6 +23,7 @@ class GptActivity: AppCompatActivity() {
     }
     @Inject
     lateinit var gptService: NewGptService
+    private lateinit var gptAdapter: GptAdapter
 
     private val binding: ActivityGptBinding by lazy {
         ActivityGptBinding.inflate(layoutInflater)
@@ -28,6 +32,7 @@ class GptActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        initRecyclerView()
         gptCreate()
         goToBack()
 
@@ -64,9 +69,17 @@ class GptActivity: AppCompatActivity() {
         val id = intent.getIntExtra("id", -1)
         lifecycleScope.launch {
             val response = gptService.getNewGpt(id).body()
-            val status = response?.status
-            Log.d(
-                TAG, "[TEST] status: $status ,statusCode: ${response?.statusCode}, data:${response?.data?.greeting}")
+            val statusCode = response?.statusCode
+
+            if(statusCode == 200){
+                gptAdapter.addMessage(response.data?.greeting!!, false)
+            }
         }
+    }
+
+    private fun initRecyclerView(){
+        gptAdapter = GptAdapter()
+        binding.rvGptMessages.adapter = gptAdapter
+        binding.rvGptMessages.layoutManager = LinearLayoutManager(this)
     }
 }
