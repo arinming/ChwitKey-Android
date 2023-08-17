@@ -230,6 +230,16 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <Button
+        android:id="@+id/btn_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_light"
+        android:letterSpacing="-0.017"
+        android:text="이동하기"
+        app:layout_constraintBottom_toTopOf="@+id/cl_article_bottom_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!-- 하단 버튼 -->
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -270,6 +280,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

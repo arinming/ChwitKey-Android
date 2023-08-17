@@ -54,7 +54,6 @@ class ArticleActivity : AppCompatActivity() {
         val articleIntent: Intent = intent
         id = articleIntent.getIntExtra("id", 0)
     }
-
     private fun getDetailArticle() {
         // API 통신
         lifecycleScope.launch {
@@ -71,12 +70,18 @@ class ArticleActivity : AppCompatActivity() {
 
                         binding.tvExplainImage.text = imageDesc
                     }
+
                     binding.tvArticleTitle.text = response.body()?.data?.title
                     binding.tvArticleCompany.text = response.body()?.data?.publisher
                     binding.tvArticleEditor.text = response.body()?.data?.reporter
-                    // 엔터 적용
-                    binding.tvArticleDetail.text =
-                        response.body()?.data?.content?.replace("\\n", "\n")
+
+                    // 엔터 적용 및 줄바꿈 처리
+                    val content = response.body()?.data?.content ?: ""
+                    val sentences = content.split("\\.\\s*".toRegex()) // 문장 분리
+                    val firstTwoSentences = sentences.take(3).joinToString(". ") // 3문장 까지만
+
+                    binding.tvArticleDetail.text = firstTwoSentences.replace("\\n", "\n")
+
                     binding.tvArticleTime.text = response.body()?.data?.uploadedAt
                 } else {
                     Toast.makeText(this@ArticleActivity, "에러", Toast.LENGTH_SHORT).show()
@@ -84,6 +89,7 @@ class ArticleActivity : AppCompatActivity() {
             }
         }
     }
+
 
     private fun goToBack() {
         binding.ibtnBack.setOnClickListener {
