@@ -9,8 +9,6 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
-import android.view.Gravity
-import android.view.Window
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -18,12 +16,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
-import coil.load
 import com.bumptech.glide.Glide
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.remote.request.user.UpLoadImageRequest
 import com.example.cherry_pick_android.data.remote.request.user.UpdateNameReq
 import com.example.cherry_pick_android.data.remote.request.user.updateNameRequest
+import com.example.cherry_pick_android.data.remote.response.user.UpLoadImageResponse
 import com.example.cherry_pick_android.data.remote.service.user.DeleteUserService
+import com.example.cherry_pick_android.data.remote.service.user.UpLoadImageService
 import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.data.remote.service.user.UserNameUpdateService
 import com.example.cherry_pick_android.databinding.ActivityProfileBinding
@@ -40,7 +40,13 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.sql.Date
+import okhttp3.Call
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.Response
+import retrofit2.Callback
+import java.io.File
 import java.text.SimpleDateFormat
 import javax.inject.Inject
 
@@ -60,6 +66,11 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     lateinit var userDataRepository: UserDataRepository
     @Inject
     lateinit var userInfoService: UserInfoService
+    @Inject
+    lateinit var upLoadImageService: UpLoadImageService
+    @Inject
+    lateinit var userInfoService: UserInfoService
+
 
     // 요청하고자 하는 권한들
     private val permissions = arrayOf(
@@ -80,6 +91,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     private val viewModel: MyPageViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
 
+
     // 촬영한 사진 불러오기
     // 이미지 로드
     private val readImage = registerForActivityResult(
@@ -92,8 +104,8 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     private val getTakePicture = registerForActivityResult(
         ActivityResultContracts.TakePicture()) {
         if(it) { pictureUri.let {
-                Glide.with(this).load(pictureUri).circleCrop().into(binding.ivProfilePic)
-            }
+            Glide.with(this).load(pictureUri).circleCrop().into(binding.ivProfilePic)
+        }
         }
     }
     // 앨범으로부터 이미지 불러오기
@@ -102,6 +114,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         if (it.resultCode == RESULT_OK) {
             var imageUrl = it.data?.data
             Glide.with(this).load(imageUrl).circleCrop().into(binding.ivProfilePic)
+
         }
     }
 
@@ -158,16 +171,57 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     override fun onAlbumClick(intent: Intent) {
         checkPermission(permissions)
         getResultImage.launch(intent)
+
     }
     // 카메라 촬영 후 이미지 불러오기
     override fun onCameraClick(intent:Intent) {
-        checkPermission(permissions)
-        pictureUri = createImageFile()
-        getTakePicture.launch(pictureUri)
+        lifecycleScope.launch {
+
+            checkPermission(permissions)
+            pictureUri = createImageFile()
+            getTakePicture.launch(pictureUri)
+
+            withContext(Dispatchers.Main) {
+                val photofile = File(pictureUri.toString())
+                val requestFile = photofile.asRequestBody("image/*".toMediaTypeOrNull())
+                val bodyFile = MultipartBody.Part.createFormData("image", photofile.name, requestFile)
+                val request = UpLoadImageRequest(pictureUri.toString())
+
+                upLoadImageService.putUserImage(bodyFile, request).enqueue(object: Callback<UpLoadImageResponse>{
+                    override fun onResponse(
+                        call: retrofit2.Call<UpLoadImageResponse>,
+                        response: retrofit2.Response<UpLoadImageResponse>
+                    ) {
+                        val status = response.body()?.status
+                        if(status != 200){
+                            Toast.makeText(this@ProfileActivity, "ERROR: $status", Toast.LENGTH_SHORT).show()
+                        }
+                        Log.d(TAG, "Success: $status")
+                    }
+                    override fun onFailure(
+                        call: retrofit2.Call<UpLoadImageResponse>,
+                        t: Throwable
+                    ) {
+                        Log.d(TAG, "ERROR: ${t.message} / ${call.toString()}")
+                    }
+                })
+
+                val response = userInfoService.getUserInfo().body()?.memberImgUrl
+                Log.d(TAG, response.toString())
+
+
+                /*lifecycleScope.launch {
+                    val response = userUploadImageService.postUploadImage(bodyFile)
+                }*/
+
+
+            }
+        }
     }
     // 기본 이미지로 변경
     override fun onBasicClick(intent: Intent) {
         binding.ivProfilePic.setImageDrawable(getDrawable(R.drawable.ic_my_page_user))
+        //deleteImage
     }
     // 이미지 변경 취소
     override fun onCancelClick(intent: Intent) {    }
@@ -181,6 +235,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
         return contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, content)
     }
+
 
 
     // 직군정보 변경페이지로 이동

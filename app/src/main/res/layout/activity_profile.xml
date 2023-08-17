@@ -176,8 +176,8 @@
                     android:textColor="@color/gray_4"
                     android:fontFamily="@font/pretendard_regular" />
 
-                <EditText
-                    android:id="@+id/et_profile_sex"
+                <TextView
+                    android:id="@+id/tv_gender"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"
@@ -209,8 +209,8 @@
                     android:textColor="@color/gray_4"
                     android:fontFamily="@font/pretendard_regular" />
 
-                <EditText
-                    android:id="@+id/et_profile_birth"
+                <TextView
+                    android:id="@+id/tv_birth"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@null"

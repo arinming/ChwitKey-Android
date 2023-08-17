@@ -7,6 +7,7 @@ import com.example.cherry_pick_android.data.remote.service.login.SignInService
 import com.example.cherry_pick_android.data.remote.service.user.DeleteUserService
 import com.example.cherry_pick_android.data.remote.service.user.InitUserSaveService
 import com.example.cherry_pick_android.data.remote.service.user.UpdateIndustryService
+import com.example.cherry_pick_android.data.remote.service.user.UpLoadImageService
 import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.data.remote.service.user.UserKeywordService
 import com.example.cherry_pick_android.data.remote.service.user.UserNameUpdateService
@@ -111,6 +112,11 @@ class ApiModule {
     @Singleton
     fun provideUpdateIndustry(retrofit: Retrofit): UpdateIndustryService{
         return retrofit.create(UpdateIndustryService::class.java)
+        
+    @Provides
+    @Singleton
+    fun provideUserImageUpload(retrofit: Retrofit): UpLoadImageService{
+        return retrofit.create(UpLoadImageService::class.java)
     }
 
 }
