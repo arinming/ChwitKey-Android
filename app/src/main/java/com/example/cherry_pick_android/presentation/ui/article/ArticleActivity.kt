@@ -6,6 +6,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.service.article.ArticleDetailService
@@ -43,6 +44,7 @@ class ArticleActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+        initArticle()
         getDetailArticle()
         goToBack()
         goToGPT()
@@ -51,27 +53,28 @@ class ArticleActivity : AppCompatActivity() {
         articleShare()
     }
 
-    // 인텐트 값 받아서 초기화
+    // 인텐트 값으로 articleID 받기
     private fun initArticle() {
         val articleIntent: Intent = intent
-        val articleTitle: String? = articleIntent.getStringExtra("제목")
-        val articleCompany: String? = articleIntent.getStringExtra("회사")
-        val articleTime: String? = articleIntent.getStringExtra("시간")
         id = articleIntent.getIntExtra("id", 0)
-
-//        binding.tvArticleTitle.text = articleTitle.toString()
-//        binding.tvArticleCompany.text = articleCompany.toString()
-//        binding.tvArticleTime.text = articleTime.toString()
-
     }
 
     private fun getDetailArticle() {
         // API 통신
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
-                val response = articleDetailService.getArticleDetail(9312)
+                val response = articleDetailService.getArticleDetail(id)
                 val statusCode = response.body()?.statusCode
                 if (statusCode == 200) {
+                    response.body()?.data?.articlePhoto?.map { image ->
+                        val imageUrl = image.articleImgUrl.ifEmpty { "" } // 기사 사진이 없으면 빈 문자열로 처리
+                        val imageDesc = image.imgDesc.ifEmpty { "이미지 캡션이 없습니다." }
+                        Glide.with(this@ArticleActivity)
+                            .load(imageUrl)
+                            .into(binding.ivNewsImage)
+
+                        binding.tvExplainImage.text = imageDesc
+                    }
                     binding.tvArticleTitle.text = response.body()?.data?.title
                     binding.tvArticleCompany.text = response.body()?.data?.publisher
                     binding.tvArticleEditor.text = response.body()?.data?.reporter
