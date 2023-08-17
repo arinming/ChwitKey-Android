@@ -19,7 +19,6 @@ class IndustryAdapter(private val industries: List<String>) :
     RecyclerView.Adapter<IndustryAdapter.ViewHolder>() {
 
     private var selectedPosition = 0 // 선택된 버튼의 위치 추적 변수
-
     inner class ViewHolder(private val binding: ItemKeywordBtnBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
@@ -58,6 +57,7 @@ class IndustryAdapter(private val industries: List<String>) :
             }
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val binding = ItemKeywordBtnBinding.inflate(LayoutInflater.from(parent.context), parent, false)

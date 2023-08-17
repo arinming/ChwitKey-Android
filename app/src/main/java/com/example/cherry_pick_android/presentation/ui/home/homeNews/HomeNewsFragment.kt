@@ -1,6 +1,5 @@
 package com.example.cherry_pick_android.presentation.ui.home.homeNews
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -21,7 +20,6 @@ import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.adapter.ArticleItem
 import com.example.cherry_pick_android.presentation.adapter.IndustryAdapter
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
-import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -34,7 +32,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     private var _binding: FragmentHomeNewsBinding? = null
     private val binding get() = _binding!!
 
-    private var industry1313 : String = "초전도체"
+    private var industryInit : String = "초전도체"
 
     @Inject
     lateinit var articleService: ArticleSearchCommendService
@@ -88,11 +86,13 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
                     "오름차순" -> sort = "asc"
                     "내림차순" -> sort = "desc"
                 }
-                val response = articleService.getArticleCommend(industry1313, sort.toString(), Pageable)
-                Log.d("요청 직군", industry1313)
+
+                val response = articleService.getArticleCommend(industryInit, sort.toString(), Pageable)
+                Log.d("요청 직군", industryInit)
 
                 val statusCode = response.body()?.statusCode
                 if (statusCode == 200) {
+                    onIndustryButtonClick(industryInit)
                     val articleItems = response.body()?.data?.content?.map { content ->
                         val imageUrl = if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
                         ArticleItem(content.title, content.publisher, content.uploadedAt, imageUrl, content.articleId)
@@ -168,11 +168,12 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
             if (industry3.isNotBlank()) {
                 industries.add(industry3)
             }
+            onIndustryButtonClick(industry1)
+
 
             withContext(Dispatchers.Main){
                 if(statusCode == 200){
-                    industry1313 = industry1
-                    Log.d("현재 직군", industry1313)
+                    Log.d("현재 직군", industryInit)
 
                     binding.rvIndustry.layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
@@ -186,8 +187,9 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
 
     // 버튼 클릭 시 호출되는 함수
     fun onIndustryButtonClick(industry: String) {
-        industry1313 = industry // 클릭한 버튼의 텍스트를 industry1313에 저장
-        getArticleList() // 저장된 값을 이용하여 기사 리스트 다시 불러오기
+        industryInit = industry // 클릭한 버튼의 텍스트를 저장
+        Log.d("직군 함수 호출", industryInit) // 클릭한 버튼의 텍스트 로그로 출력
     }
+
 
 }

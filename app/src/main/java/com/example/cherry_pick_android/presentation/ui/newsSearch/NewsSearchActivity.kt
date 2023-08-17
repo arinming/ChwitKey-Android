@@ -3,6 +3,7 @@ package com.example.cherry_pick_android.presentation.ui.newsSearch
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -60,8 +61,9 @@ class NewsSearchActivity: AppCompatActivity() {
     }
 
     private fun changeText() {
-        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
-            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+        // 엔터 감지
+        binding.etSearch.setOnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 val text = binding.etSearch.text.toString()
                 if (text.isNotEmpty()) {
                     // ArticleSearchFragment를 SearchListFragment로 대체
