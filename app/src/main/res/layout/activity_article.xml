@@ -122,29 +122,15 @@
             android:id="@+id/tv_article_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
+            android:fontFamily="@font/pretendard_regular"
             android:letterSpacing="-0.017"
-            android:fontFamily="@font/pretendard_regular"
-            android:text="@string/article_news_time"
-            android:textColor="@color/news_intro"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/tv_article_previous"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/tv_article_previous"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
-            android:fontFamily="@font/pretendard_regular"
-            android:text="@string/item_news_previous"
+            android:text="@string/article_news_time"
             android:textColor="@color/news_intro"
             android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

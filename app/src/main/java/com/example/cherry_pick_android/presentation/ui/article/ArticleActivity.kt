@@ -3,12 +3,24 @@ package com.example.cherry_pick_android.presentation.ui.article
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.data.Pageable
+import com.example.cherry_pick_android.data.remote.service.article.ArticleDetailService
 import com.example.cherry_pick_android.databinding.ActivityArticleBinding
+import com.example.cherry_pick_android.presentation.adapter.ArticleItem
+import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.ui.gpt.GptActivity
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ArticleActivity : AppCompatActivity() {
     private lateinit var binding: ActivityArticleBinding
 
@@ -16,6 +28,9 @@ class ArticleActivity : AppCompatActivity() {
     private var isScrappedInit = false
     private var isLikeInit = false
     private var id = 0
+
+    @Inject
+    lateinit var articleDetailService: ArticleDetailService
 
     companion object{
         const val TAG = "ArticleActivity"
@@ -28,7 +43,7 @@ class ArticleActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        initArticle()
+        getDetailArticle()
         goToBack()
         goToGPT()
         articleScrap()
@@ -44,12 +59,31 @@ class ArticleActivity : AppCompatActivity() {
         val articleTime: String? = articleIntent.getStringExtra("시간")
         id = articleIntent.getIntExtra("id", 0)
 
-        binding.tvArticleTitle.text = articleTitle.toString()
-        binding.tvArticleCompany.text = articleCompany.toString()
-        binding.tvArticleTime.text = articleTime.toString()
+//        binding.tvArticleTitle.text = articleTitle.toString()
+//        binding.tvArticleCompany.text = articleCompany.toString()
+//        binding.tvArticleTime.text = articleTime.toString()
 
     }
 
+    private fun getDetailArticle() {
+        // API 통신
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                val response = articleDetailService.getArticleDetail(9312)
+                val statusCode = response.body()?.statusCode
+                if (statusCode == 200) {
+                    binding.tvArticleTitle.text = response.body()?.data?.title
+                    binding.tvArticleCompany.text = response.body()?.data?.publisher
+                    binding.tvArticleEditor.text = response.body()?.data?.reporter
+                    // 엔터 적용
+                    binding.tvArticleDetail.text = response.body()?.data?.content?.replace("\\n", "\n")
+                    binding.tvArticleTime.text = response.body()?.data?.uploadedAt
+                } else {
+                    Toast.makeText(this@ArticleActivity, "에러", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     private fun goToBack() {
         binding.ibtnBack.setOnClickListener {
