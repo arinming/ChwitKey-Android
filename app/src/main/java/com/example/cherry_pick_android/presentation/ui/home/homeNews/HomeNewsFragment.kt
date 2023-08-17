@@ -133,11 +133,10 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
                 R.id.menu_sort_desc -> binding.tvSorting.text = getString(R.string.sort_article_desc)
                 R.id.menu_sort_like -> binding.tvSorting.text = getString(R.string.sort_article_like)
             }
+            getArticleList()
+
             true
         }
-
-        getArticleList()
-
         popupMenu.show()
     }
 

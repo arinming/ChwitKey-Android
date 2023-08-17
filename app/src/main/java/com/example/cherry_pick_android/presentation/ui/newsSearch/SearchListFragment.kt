@@ -40,6 +40,8 @@ class SearchListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchListBinding.inflate(inflater, container, false)
+        getArticleList()
+        initNewsList()
 
         return binding.root
     }
@@ -47,8 +49,6 @@ class SearchListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        getArticleList()
-        initNewsList()
 
         binding.ibtnSortingMenu.setOnClickListener { showSortingMenu(it) }
 
@@ -71,7 +71,8 @@ class SearchListFragment : Fragment() {
                     "내림차순" -> sort = "desc"
                 }
 
-                val response = articleService.getArticleCommend(cond.toString(), sort.toString(), Pageable)
+                // trim으로 공백 제거
+                val response = articleService.getArticleCommend(cond.toString().trim(), sort.toString(), Pageable)
 
 
                 val statusCode = response.body()?.statusCode
@@ -105,8 +106,10 @@ class SearchListFragment : Fragment() {
                 R.id.menu_sort_desc -> binding.tvSorting.text = getString(R.string.sort_article_desc)
                 R.id.menu_sort_like -> binding.tvSorting.text = getString(R.string.sort_article_like)
             }
+            getArticleList()
             true
         }
+
 
         popupMenu.show()
     }
