@@ -68,7 +68,10 @@ class NewsSearchActivity: AppCompatActivity() {
                 if (text.isNotEmpty()) {
                     // ArticleSearchFragment를 SearchListFragment로 대체
                     val searchListFragment = SearchListFragment.newInstance()
-                    manager.beginTransaction().replace(R.id.fl_search, searchListFragment).commit()
+                    changeFragment(searchListFragment)
+                } else {
+                    val articleSearchFragment = ArticleSearchFragment.oldInstance()
+                    changeFragment(articleSearchFragment)
                 }
                 true
             } else {
