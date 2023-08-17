@@ -132,6 +132,8 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         lifecycleScope.launch {
             withContext(Dispatchers.Main){
                 binding.etProfileName.setText(userDataRepository.getUserData().name)
+                binding.tvBirth.text = mapperToBirth(userDataRepository.getUserData().birthday)
+                binding.tvGender.text = userDataRepository.getUserData().gender
             }
         }
 
@@ -149,6 +151,16 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         ChangeJobInterest()
         LeaveAccount()
 
+    }
+    // 생년월일 매핑함수
+    fun mapperToBirth(birthday: String): String{
+        if(birthday.length == 8){
+            val year = birthday.substring(0, 4)
+            val month = birthday.substring(4, 6)
+            val day = birthday.substring(6, 8)
+            return "$year.$month.$day"
+        }
+        return birthday
     }
 
     // 마이페이지로 돌아가기 = 뒤로가기
@@ -315,6 +327,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
+    // 영문->한글 매핑
     private fun mapperToJob(value: String): String{
         return when(value){
             "steel" -> "철강" "Petroleum/Chemical" -> "석유·화학" "oilrefining" -> "정유" "secondarybattery" -> "2차 전지"
@@ -325,6 +338,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
+    // 회원탈퇴 기능
     private fun deleteUserData(ck: String){
         if(ck == "ok"){
             lifecycleScope.launch {
@@ -351,6 +365,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
+    // 직군 갱신
     private fun industryLoad(){
         lifecycleScope.launch {
             val response = userInfoService.getUserInfo().body()
@@ -368,6 +383,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
             }
         }
     }
+
 
 
 }

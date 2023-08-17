@@ -13,7 +13,8 @@ data class ArticleItem(
     val title: String,
     val company: String,
     val time: String,
-    val picture: String
+    val picture: String,
+    val id: Int
 )
 
 class NewsRecyclerViewAdapter(private val articleDataSet: List<ArticleItem>?) :
@@ -25,6 +26,7 @@ class NewsRecyclerViewAdapter(private val articleDataSet: List<ArticleItem>?) :
         val company = binding.tvNewsCompany
         val time = binding.tvNewsTime
         val image = binding.ivNewsImagePreview
+        var id: Int? = 0
 
 
         // 아이템 클릭 이벤트 설정
@@ -35,6 +37,7 @@ class NewsRecyclerViewAdapter(private val articleDataSet: List<ArticleItem>?) :
                 intent.putExtra("제목", binding.tvNewsTitle.text)
                 intent.putExtra("회사", binding.tvNewsCompany.text)
                 intent.putExtra("시간", binding.tvNewsTime.text)
+                intent.putExtra("id", id)
                 ContextCompat.startActivity(context, intent, null)
             }
         }
@@ -55,6 +58,8 @@ class NewsRecyclerViewAdapter(private val articleDataSet: List<ArticleItem>?) :
         viewHolder.title.text = articleItem?.title
         viewHolder.company.text = articleItem?.company
         viewHolder.time.text = articleItem?.time
+        viewHolder.id = articleItem?.id
+
 
         Glide.with(viewHolder.itemView.context)
             .load(articleItem?.picture)

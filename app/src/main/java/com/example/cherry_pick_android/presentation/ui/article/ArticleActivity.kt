@@ -2,6 +2,7 @@ package com.example.cherry_pick_android.presentation.ui.article
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.ActivityArticleBinding
@@ -14,6 +15,11 @@ class ArticleActivity : AppCompatActivity() {
     // 좋아요, 스크랩 초기화
     private var isScrappedInit = false
     private var isLikeInit = false
+    private var id = 0
+
+    companion object{
+        const val TAG = "ArticleActivity"
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,6 +42,7 @@ class ArticleActivity : AppCompatActivity() {
         val articleTitle: String? = articleIntent.getStringExtra("제목")
         val articleCompany: String? = articleIntent.getStringExtra("회사")
         val articleTime: String? = articleIntent.getStringExtra("시간")
+        id = articleIntent.getIntExtra("id", 0)
 
         binding.tvArticleTitle.text = articleTitle.toString()
         binding.tvArticleCompany.text = articleCompany.toString()
@@ -54,8 +61,11 @@ class ArticleActivity : AppCompatActivity() {
 
     // GPT 버튼 이벤트
     private fun goToGPT() {
+        val intent = Intent(this, GptActivity::class.java)
+
+        intent.putExtra("id", id)
         binding.ibtnGpt.setOnClickListener {
-            startActivity(Intent(this, GptActivity::class.java))
+            startActivity(intent)
         }
     }
 
