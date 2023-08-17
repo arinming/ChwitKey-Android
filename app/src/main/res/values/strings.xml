@@ -76,7 +76,7 @@
 
     <!-- search_title -->
     <string name="search_title">전체</string>
-    <string name="search_count">23</string>
+    <string name="search_count"></string>
     <string name="search_sorting">인기순</string>
     <string name="search_menu">정렬 메뉴 버튼</string>
     <string name="search_button">검색</string>

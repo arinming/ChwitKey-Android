@@ -41,6 +41,9 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     @Inject
     lateinit var userDataRepository: UserDataRepository
 
+    companion object {
+        const val TAG = "HomeNewsFragmnet"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -111,6 +114,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
             activity?.let {
                 val intent = Intent(it, NewsSearchActivity::class.java)
                 it.startActivity(intent)
+                activity?.finish()
             }
         }
     }
@@ -179,7 +183,8 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
                         LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                     binding.rvIndustry.adapter = IndustryAdapter(industries)
                     Log.d("직군","$industry1, $industry2, $industry3")
-                }else{
+                } else{
+                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
                 }
             }
         }

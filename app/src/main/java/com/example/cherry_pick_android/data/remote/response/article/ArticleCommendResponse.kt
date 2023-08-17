@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 
 data class ArticleCommendResponse(
     @field:Json(name = "data")
-    val `data`: Data,
+    val `data`: Data?,
     @field:Json(name = "description")
     val description: String?,
     @field:Json(name = "status")

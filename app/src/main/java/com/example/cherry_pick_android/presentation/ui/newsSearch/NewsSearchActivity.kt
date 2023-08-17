@@ -1,10 +1,7 @@
 package com.example.cherry_pick_android.presentation.ui.newsSearch
 
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.view.KeyEvent
-import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -58,6 +55,10 @@ class NewsSearchActivity: AppCompatActivity() {
     fun updateSearchText(keyword: String) {
         binding.etSearch.setText(keyword)
         binding.etSearch.setSelection(binding.etSearch.text.length) // 커서를 텍스트 끝으로 이동
+    }
+
+    fun getNowText(): String {
+        return binding.etSearch.text.toString()
     }
 
     private fun changeText() {

@@ -5,32 +5,33 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
-import com.example.cherry_pick_android.data.data.Article
+import com.example.cherry_pick_android.data.data.Pageable
+import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
 import com.example.cherry_pick_android.databinding.FragmentSearchListBinding
+import com.example.cherry_pick_android.presentation.adapter.ArticleItem
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class SearchListFragment : Fragment() {
     private var _binding: FragmentSearchListBinding? = null
     private val binding get() = _binding!!
 
+    @Inject
+    lateinit var articleService: ArticleSearchCommendService
+
     companion object {
         const val TAG = "ArticleSearchFragment"
         fun newInstance(): SearchListFragment = SearchListFragment()
     }
-
-    private val articles = listOf(
-        Article("1", "뉴스1", "회사1", "9분"),
-        Article("2", "뉴스2", "회사2", "19분"),
-        Article("3", "뉴스3", "회사3", "29분"),
-        Article("4", "뉴스4", "회사4", "39분"),
-        Article("5", "뉴스5", "회사5", "49분"),
-        Article("6", "뉴스6", "회사6", "59분"),
-        Article("7", "뉴스7", "회사7", "1시간"),
-    )
 
 
     override fun onCreateView(
@@ -46,14 +47,50 @@ class SearchListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        getArticleList()
         initNewsList()
 
         binding.ibtnSortingMenu.setOnClickListener { showSortingMenu(it) }
 
     }
 
+
+    private fun getArticleList() {
+        // API 통신
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                val newsSearchActivity = activity as? NewsSearchActivity
+
+                // NewsSearchActivity 인스턴스의 binding.etSearch.text 가져오기
+                val cond = newsSearchActivity?.getNowText()
+                var sort = binding.tvSorting.text
+
+                when (sort) {
+                    "인기순" -> sort = "like"
+                    "오름차순" -> sort = "asc"
+                    "내림차순" -> sort = "desc"
+                }
+
+                val response = articleService.getArticleCommend(cond.toString(), sort.toString(), Pageable)
+
+
+                val statusCode = response.body()?.statusCode
+                if (statusCode == 200) {
+                    val articleItems = response.body()?.data?.content?.map { content ->
+                        val imageUrl = if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
+                        ArticleItem(content.title, content.publisher, content.uploadedAt, imageUrl, content.articleId)
+                    }
+                    binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
+                    binding.tvSearchCount.text = articleItems?.size.toString()
+                } else {
+                    Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+
     private fun initNewsList() {
-        binding.tvSearchCount.text = articles.size.toString()
     }
 
     // 메뉴
