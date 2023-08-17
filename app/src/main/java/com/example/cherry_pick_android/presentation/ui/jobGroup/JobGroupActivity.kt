@@ -7,13 +7,17 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.GridView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.remote.request.user.IndustryKeyword
 import com.example.cherry_pick_android.data.remote.request.user.InitUserSaveRequest
+import com.example.cherry_pick_android.data.remote.request.user.UpdateIndustryReq
+import com.example.cherry_pick_android.data.remote.request.user.updateIndustryRequest
 import com.example.cherry_pick_android.data.remote.service.user.InitUserSaveService
+import com.example.cherry_pick_android.data.remote.service.user.UpdateIndustryService
 import com.example.cherry_pick_android.databinding.ActivityJobGroupBinding
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.adapter.JobGroupAdapter
@@ -40,6 +44,8 @@ class JobGroupActivity: AppCompatActivity() {
     lateinit var initUserSaveService: InitUserSaveService
     @Inject
     lateinit var userDataRepository: UserDataRepository
+    @Inject
+    lateinit var updateIndustryService: UpdateIndustryService
 
     private val binding: ActivityJobGroupBinding by lazy {
         ActivityJobGroupBinding.inflate(layoutInflater)
@@ -61,6 +67,7 @@ class JobGroupActivity: AppCompatActivity() {
         val selectedData: ArrayList<String> = adapter.getSelectedList()
         Log.d(TAG, "$selectedData")
 
+        // 유저정보 갱신
         loginViewModel.getUserData().observe(this@JobGroupActivity, Observer {
             userId = it.userId
             nickname = it.name
@@ -76,6 +83,8 @@ class JobGroupActivity: AppCompatActivity() {
     private val onCompleteButtonStateChanged: () -> Unit = {
         updateCompleteButtonState() // 완료 버튼 상태 갱신
     }
+
+    // 직군 선택 개수에 따른 완료버튼 이벤트
     private fun updateCompleteButtonState() {
         val completeBtn: Button = binding.btnJobComplete
         val selectedJobList = adapter.getSelectedList()
@@ -104,14 +113,11 @@ class JobGroupActivity: AppCompatActivity() {
     private fun onCompleteBtn(){
         binding.btnJobComplete.setOnClickListener {
             val selecetedJobList = adapter.getSelectedList()
-            val resultIntent = Intent().apply {
-                putStringArrayListExtra("selectedJobList", selecetedJobList)
-            }
-            setResult(Activity.RESULT_OK, resultIntent)
 
             lifecycleScope.launch {
                 val isInit = userDataRepository.getUserData().isInit
                 Log.d(TAG, "list:${getIndustryList(selecetedJobList)}")
+                // 최초 사용자일 경우 직군 업데이트
                 if(isInit == "InitUser"){
                     val request = InitUserSaveRequest(
                         birth = birth,
@@ -133,8 +139,26 @@ class JobGroupActivity: AppCompatActivity() {
                             Log.d(TAG, "STATUS ERROR")
                         }
                     }
-                }else if(isInit == "exitUser"){
-                    finish()
+                }
+                // 기존 사용자일 경우 직군 업데이트
+                else if(isInit == "exitUser"){
+                    val industryList = getIndustryList(selecetedJobList)
+                    withContext(Dispatchers.Main){
+                        val request = updateIndustryRequest(
+                            UpdateIndustryReq(
+                                industryKeyword1 = industryList[0].industryKeyword,
+                                industryKeyword2 = industryList[1].industryKeyword,
+                                industryKeyword3 = industryList[2].industryKeyword
+                            ))
+                        val response = updateIndustryService.putUpdateUserIndustry(request)
+                        val status = response.body()?.status
+
+                        if(status == 200){
+                            finish()
+                        }else{
+                            Toast.makeText(this@JobGroupActivity, "통신오류: $status", Toast.LENGTH_SHORT).show()
+                        }
+                    }
                 }else{
                     Log.d(TAG, "TYPE ERROR : userStatus[${isInit}]")
                 }
