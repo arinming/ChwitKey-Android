@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.databinding.FragmentMypageBinding
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.ui.login.LoginActivity
@@ -40,7 +41,7 @@ class MyPageFragment : Fragment() {
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        CoroutineScope(Dispatchers.Main).launch {
+        lifecycleScope.launch {
             binding.tvMypageUserName.text = userDataRepository.getUserData().name
         }
 
@@ -62,24 +63,7 @@ class MyPageFragment : Fragment() {
         binding.apply {
             // 다이얼로그로 로그아웃 기능 구현
             ibtnMypageLogout.setOnClickListener {
-                AlertDialog.Builder(context)
-                    .setTitle("알림")
-                    .setMessage("로그아웃 하시겠습니까?")
-                    .setPositiveButton("로그아웃"){_,_->
-                        loginViewModel.setUserData("userId", "")
-                        loginViewModel.setUserData("platform", "")
-                        loginViewModel.setIsOutView("out")
-
-                        activity?.let {
-                            val intent = Intent(it, LoginActivity::class.java).apply {
-                                flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // 백스택에 남아있는 액티비티 제거
-                            }
-                            it.startActivity(intent)
-                        }
-                    }
-                    .setNegativeButton("취소"){_, _->}
-                    .create()
-                    .show()
+                dialogShow()
             }
             // 계정설정 (프로필) 페이지로 이동
             ibtnMypageSetting.setOnClickListener {
@@ -103,6 +87,27 @@ class MyPageFragment : Fragment() {
 
             // 개인정보처리방침
         }
+    }
+
+    private fun dialogShow(){
+        AlertDialog.Builder(context)
+            .setTitle("알림")
+            .setMessage("로그아웃 하시겠습니까?")
+            .setPositiveButton("로그아웃"){_,_->
+                loginViewModel.setUserData("userId", "")
+                loginViewModel.setUserData("platform", "")
+                loginViewModel.setIsOutView("out")
+
+                activity?.let {
+                    val intent = Intent(it, LoginActivity::class.java).apply {
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK // 백스택에 남아있는 액티비티 제거
+                    }
+                    it.startActivity(intent)
+                }
+            }
+            .setNegativeButton("취소"){_, _->}
+            .create()
+            .show()
     }
 
 
