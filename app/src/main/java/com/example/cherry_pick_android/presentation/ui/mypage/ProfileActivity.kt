@@ -68,8 +68,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     lateinit var userInfoService: UserInfoService
     @Inject
     lateinit var upLoadImageService: UpLoadImageService
-    @Inject
-    lateinit var userInfoService: UserInfoService
 
 
     // 요청하고자 하는 권한들
@@ -205,9 +203,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
                         Log.d(TAG, "ERROR: ${t.message} / ${call.toString()}")
                     }
                 })
-
-                val response = userInfoService.getUserInfo().body()?.memberImgUrl
-                Log.d(TAG, response.toString())
 
 
                 /*lifecycleScope.launch {

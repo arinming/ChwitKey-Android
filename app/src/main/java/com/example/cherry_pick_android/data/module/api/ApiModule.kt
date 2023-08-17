@@ -110,8 +110,9 @@ class ApiModule {
 
     @Provides
     @Singleton
-    fun provideUpdateIndustry(retrofit: Retrofit): UpdateIndustryService{
+    fun provideUpdateIndustry(retrofit: Retrofit): UpdateIndustryService {
         return retrofit.create(UpdateIndustryService::class.java)
+    }
         
     @Provides
     @Singleton
