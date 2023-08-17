@@ -27,7 +27,7 @@ class ApplicationClass: Application() {
         KakaoSdk.init(this, BuildConfig.KAKAO_NATIVE_KEY) // 초기화
 
         userDataRepository.getTokenLiveData().observeForever{
-            Log.d("ApplicationContext", "옵저버 감지!!")
+            Log.d("ApplicationContext", "옵저버 감지!!: $it")
             authToken = it
         }
     }
