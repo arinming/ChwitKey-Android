@@ -3,6 +3,7 @@ package com.example.cherry_pick_android.data.module.api
 
 import com.example.cherry_pick_android.data.remote.service.article.ArticleDetailService
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
+import com.example.cherry_pick_android.data.remote.service.gpt.GptSelectService
 import com.example.cherry_pick_android.data.remote.service.gpt.NewGptService
 import com.example.cherry_pick_android.data.remote.service.login.SignInService
 import com.example.cherry_pick_android.data.remote.service.user.DeleteUserService
@@ -22,6 +23,7 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.create
 import javax.inject.Singleton
 
 @Module
@@ -124,6 +126,12 @@ class ApiModule {
     @Singleton
     fun provideNewGpt(retrofit: Retrofit): NewGptService{
         return retrofit.create(NewGptService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSelectGpt(retrofit: Retrofit): GptSelectService{
+        return retrofit.create(GptSelectService::class.java)
     }
 
 }
