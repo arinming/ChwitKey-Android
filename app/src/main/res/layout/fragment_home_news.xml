@@ -117,23 +117,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <TextView
-            android:id="@+id/ibtn_key_word_1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/ic_keyword_btn"
-            android:fontFamily="@font/pretendard_semi_bold"
-            android:gravity="center"
-            android:letterSpacing="-0.017"
-            android:text="@string/news_search_keyword"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/constraintLayout" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <!-- 뉴스 리스트-->

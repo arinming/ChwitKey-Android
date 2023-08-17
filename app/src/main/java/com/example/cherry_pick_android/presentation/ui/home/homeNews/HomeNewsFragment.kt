@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
@@ -18,13 +17,11 @@ import com.example.cherry_pick_android.data.remote.service.article.ArticleSearch
 import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
-import com.example.cherry_pick_android.presentation.adapter.ArticleAdapter
 import com.example.cherry_pick_android.presentation.adapter.ArticleItem
 import com.example.cherry_pick_android.presentation.adapter.IndustryAdapter
-import com.example.cherry_pick_android.presentation.adapter.KeywordAdapter
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
+import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
-import com.example.cherry_pick_android.presentation.viewmodel.article.ArticleViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -36,6 +33,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     private var _binding: FragmentHomeNewsBinding? = null
     private val binding get() = _binding!!
 
+    private var industry1313 : String = ""
 
     @Inject
     lateinit var articleService: ArticleSearchCommendService
@@ -64,10 +62,13 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
 
         goToNewsSearch()
 
+        val intent = Intent(this.context, HomeActivity::class.java)
+
         // 유저 정보 갱신
         lifecycleScope.launch {
             userDataRepository.getUserData()
         }
+
 
 
         binding.ibtnSortingMenu.setOnClickListener { showSortingMenu(it) }
@@ -82,14 +83,16 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
         // API 통신
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
-                val industry = binding.ibtnKeyWord1.text
                 var sort = binding.tvSorting.text
+                val industry = industry1313
+                Log.d("요청 직군", industry)
+
                 when (sort) {
                     "인기순" -> sort = "like"
                     "오름차순" -> sort = "asc"
                     "내림차순" -> sort = "desc"
                 }
-                val response = articleService.getArticleCommend(industry.toString(), sort.toString(), Pageable)
+                val response = articleService.getArticleCommend(industry, sort.toString(), Pageable)
                 val statusCode = response.body()?.statusCode
                 if (statusCode == 200) {
                     val articleItems = response.body()?.data?.content?.map { content ->
@@ -136,7 +139,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
         popupMenu.show()
     }
 
-
     private fun mapperToJob(value: String): String{
         return when(value){
             "steel" -> "철강" "Petroleum/Chemical" -> "석유·화학" "oilrefining" -> "정유" "secondarybattery" -> "2차 전지"
@@ -147,6 +149,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
         }
     }
 
+
     private fun industryLoad(){
         lifecycleScope.launch {
             val response = userInfoService.getUserInfo().body()
@@ -154,7 +157,20 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
             val industry1 = mapperToJob(response?.data?.industryKeyword1.toString())
             val industry2 = mapperToJob(response?.data?.industryKeyword2.toString())
             val industry3 = mapperToJob(response?.data?.industryKeyword3.toString())
-            val industries = listOf(industry1, industry2, industry3)
+
+            val industries = mutableListOf<String>() // 사용자 직군을 저장할 리스트
+
+            // 빈 값을 추가하지 않도록 조건 체크 후 추가
+            if (industry1.isNotBlank()) {
+                industries.add(industry1)
+            }
+            if (industry2.isNotBlank()) {
+                industries.add(industry2)
+            }
+            if (industry3.isNotBlank()) {
+                industries.add(industry3)
+            }
+
             withContext(Dispatchers.Main){
                 if(statusCode == 200){
                     response.data?.industryKeyword1
@@ -166,6 +182,12 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
                 }
             }
         }
+    }
+
+    // 버튼 클릭 시 호출되는 함수
+    fun onIndustryButtonClick(industry: String) {
+        industry1313 = industry // 클릭한 버튼의 텍스트를 industry1313에 저장
+        getArticleList() // 저장된 값을 이용하여 기사 리스트 다시 불러오기
     }
 
 }
