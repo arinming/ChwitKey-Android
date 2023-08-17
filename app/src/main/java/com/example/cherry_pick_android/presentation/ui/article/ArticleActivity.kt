@@ -1,7 +1,9 @@
 package com.example.cherry_pick_android.presentation.ui.article
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
@@ -44,6 +46,7 @@ class ArticleActivity : AppCompatActivity() {
         getDetailArticle()
         goToBack()
         goToGPT()
+        goToLink()
         articleScrap()
         articleLike()
         articleShare()
@@ -54,6 +57,7 @@ class ArticleActivity : AppCompatActivity() {
         val articleIntent: Intent = intent
         id = articleIntent.getIntExtra("id", 0)
     }
+
     private fun getDetailArticle() {
         // API 통신
         lifecycleScope.launch {
@@ -64,20 +68,25 @@ class ArticleActivity : AppCompatActivity() {
                     response.body()?.data?.articlePhoto?.map { image ->
                         val imageUrl = image.articleImgUrl.ifEmpty { "" } // 기사 사진이 없으면 빈 문자열로 처리
                         val imageDesc = image.imgDesc.ifEmpty { "이미지 캡션이 없습니다." }
+
                         Glide.with(this@ArticleActivity)
                             .load(imageUrl)
                             .into(binding.ivNewsImage)
-
+                        binding.ivNewsImage.visibility = View.VISIBLE
                         binding.tvExplainImage.text = imageDesc
                     }
-
+                    if (response.body()?.data?.articlePhoto?.size == 0) {
+                        // 사진이 없으면 사진 지우기
+                        binding.ivNewsImage.visibility = View.GONE
+                        binding.tvExplainImage.visibility = View.GONE
+                    }
                     binding.tvArticleTitle.text = response.body()?.data?.title
                     binding.tvArticleCompany.text = response.body()?.data?.publisher
                     binding.tvArticleEditor.text = response.body()?.data?.reporter
 
                     // 엔터 적용 및 줄바꿈 처리
                     val content = response.body()?.data?.content ?: ""
-                    val sentences = content.split("\\.\\s*".toRegex()) // 문장 분리
+                    val sentences = content.split("\\.\\s\\n*".toRegex()) // 문장 분리
                     val firstTwoSentences = sentences.take(3).joinToString(". ") // 3문장 까지만
 
                     binding.tvArticleDetail.text = firstTwoSentences.replace("\\n", "\n")
@@ -165,6 +174,22 @@ class ArticleActivity : AppCompatActivity() {
             }
 
             startActivity(Intent.createChooser(articleShareIntent, null))
+        }
+    }
+
+    // 해당 기사 링크 이동
+    private fun goToLink() {
+        binding.btnLink.setOnClickListener {
+            lifecycleScope.launch {
+                withContext(Dispatchers.Main) {
+                    val response = articleDetailService.getArticleDetail(id)
+                    val urlIntent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(response.body()?.data?.url)
+                    )
+                    startActivity(urlIntent)
+                }
+            }
         }
     }
 }

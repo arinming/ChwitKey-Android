@@ -114,7 +114,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
             activity?.let {
                 val intent = Intent(it, NewsSearchActivity::class.java)
                 it.startActivity(intent)
-                activity?.finish()
             }
         }
     }

@@ -236,7 +236,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/pretendard_light"
         android:letterSpacing="-0.017"
-        android:text="이동하기"
+        android:text="@string/article_news_link_btn"
         app:layout_constraintBottom_toTopOf="@+id/cl_article_bottom_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
