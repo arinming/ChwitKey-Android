@@ -14,9 +14,12 @@ import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
+import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
+import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.adapter.ArticleAdapter
 import com.example.cherry_pick_android.presentation.adapter.ArticleItem
+import com.example.cherry_pick_android.presentation.adapter.KeywordAdapter
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
 import com.example.cherry_pick_android.presentation.viewmodel.article.ArticleViewModel
@@ -34,6 +37,10 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
 
     @Inject
     lateinit var articleService: ArticleSearchCommendService
+    @Inject
+    lateinit var userInfoService: UserInfoService
+    @Inject
+    lateinit var userDataRepository: UserDataRepository
 
     lateinit var recyclerViewAdapter: ArticleAdapter
     private val viewModel: ArticleViewModel by viewModels()
@@ -46,6 +53,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     ): View {
         _binding = FragmentHomeNewsBinding.inflate(inflater, container, false)
 
+        industryLoad()
 
         getArticleList()
 
@@ -57,6 +65,12 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
 
         initNewsList()
         goToNewsSearch()
+
+        // 유저 정보 갱신
+        lifecycleScope.launch {
+            userDataRepository.getUserData()
+        }
+
 
         binding.ibtnSortingMenu.setOnClickListener { showSortingMenu(it) }
     }
@@ -72,12 +86,10 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
             withContext(Dispatchers.Main) {
                 val industry = binding.ibtnKeyWord1.text
                 var sort = binding.tvSorting.text
-                if (sort == "인기순") {
-                    sort = "like"
-                } else if (sort == "오름차순") {
-                    sort = "asc"
-                } else if (sort == "내림차순") {
-                    sort = "desc"
+                when (sort) {
+                    "인기순" -> sort = "like"
+                    "오름차순" -> sort = "asc"
+                    "내림차순" -> sort = "desc"
                 }
                 val response = articleService.getArticleCommend(industry.toString(), sort.toString(), Pageable)
                 val statusCode = response.body()?.statusCode
@@ -130,6 +142,36 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
         getArticleList()
 
         popupMenu.show()
+    }
+
+
+    private fun mapperToJob(value: String): String{
+        return when(value){
+            "steel" -> "철강" "Petroleum/Chemical" -> "석유·화학" "oilrefining" -> "정유" "secondarybattery" -> "2차 전지"
+            "Semiconductor" -> "반도체" "Display" -> "디스플레이" "Mobile" -> "휴대폰" "It" -> "IT"
+            "car" -> "자동차" "Shipbuilding" -> "조선" "Shipping" -> "해운" "FnB" -> "F&B"
+            "RetailDistribution" -> "소매유통" "Construction" -> "건설" "HotelTravel" -> "호텔·여행·항공" "FiberClothing" -> "섬유·의류"
+            else -> ""
+        }
+    }
+
+    private fun industryLoad(){
+
+
+        lifecycleScope.launch {
+            val response = userInfoService.getUserInfo().body()
+            val statusCode = response?.statusCode
+            val industryResponse =
+                "${mapperToJob(response?.data?.industryKeyword1.toString())}, " +
+                        "${mapperToJob(response?.data?.industryKeyword2.toString())}, " +
+                        mapperToJob(response?.data?.industryKeyword3.toString())
+            withContext(Dispatchers.Main){
+                if(statusCode == 200){
+                    Log.d("직군", industryResponse)
+                }else{
+                }
+            }
+        }
     }
 
 }

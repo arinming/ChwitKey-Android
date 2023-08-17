@@ -2,10 +2,11 @@ package com.example.cherry_pick_android.data.remote.response.user
 
 
 import com.squareup.moshi.Json
+import org.apache.commons.lang3.ObjectUtils.Null
 
 data class UserInfoResponse(
     @field:Json(name = "data")
-    val `data`: UserData,
+    val `data`: UserData?,
     @field:Json(name = "description")
     val description: String?,
     @field:Json(name = "status")

@@ -3,6 +3,7 @@ package com.example.cherry_pick_android.presentation.ui.newsSearch
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
@@ -59,23 +60,24 @@ class NewsSearchActivity: AppCompatActivity() {
     }
 
     private fun changeText() {
-        binding.etSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) { }
-            override fun afterTextChanged(p0: Editable?) { }
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val text = p0.toString()
+        binding.etSearch.setOnEditorActionListener { _, actionId, _ ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                val text = binding.etSearch.text.toString()
                 if (text.isNotEmpty()) {
-                    SearchListFragment().changeFragment()
-                } else {
-                    ArticleSearchFragment().changeFragment()
+                    // ArticleSearchFragment를 SearchListFragment로 대체
+                    val searchListFragment = SearchListFragment.newInstance()
+                    manager.beginTransaction().replace(R.id.fl_search, searchListFragment).commit()
                 }
+                true
+            } else {
+                false
             }
-        })
+        }
     }
 
 
-    // 프래그먼트 전환 작업
-    private fun Fragment.changeFragment() {
-        manager.beginTransaction().replace(R.id.fl_search, this).commit()
+    private fun changeFragment(fragment: Fragment) {
+        manager.beginTransaction().replace(R.id.fl_search, fragment).commit()
     }
+
 }

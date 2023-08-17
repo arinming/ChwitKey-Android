@@ -33,6 +33,8 @@
             android:layout_margin="16dp"
             android:background="@drawable/ic_keyword_et"
             android:focusable="true"
+            android:maxLines="1"
+            android:inputType="text"
             android:focusableInTouchMode="true"
             android:paddingStart="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
