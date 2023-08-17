@@ -2,17 +2,13 @@ package com.example.cherry_pick_android.presentation.ui.article
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.cherry_pick_android.R
-import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.service.article.ArticleDetailService
 import com.example.cherry_pick_android.databinding.ActivityArticleBinding
-import com.example.cherry_pick_android.presentation.adapter.ArticleItem
-import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.ui.gpt.GptActivity
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
@@ -33,7 +29,7 @@ class ArticleActivity : AppCompatActivity() {
     @Inject
     lateinit var articleDetailService: ArticleDetailService
 
-    companion object{
+    companion object {
         const val TAG = "ArticleActivity"
     }
 
@@ -79,7 +75,8 @@ class ArticleActivity : AppCompatActivity() {
                     binding.tvArticleCompany.text = response.body()?.data?.publisher
                     binding.tvArticleEditor.text = response.body()?.data?.reporter
                     // 엔터 적용
-                    binding.tvArticleDetail.text = response.body()?.data?.content?.replace("\\n", "\n")
+                    binding.tvArticleDetail.text =
+                        response.body()?.data?.content?.replace("\\n", "\n")
                     binding.tvArticleTime.text = response.body()?.data?.uploadedAt
                 } else {
                     Toast.makeText(this@ArticleActivity, "에러", Toast.LENGTH_SHORT).show()
@@ -93,7 +90,6 @@ class ArticleActivity : AppCompatActivity() {
             finish()
         }
     }
-
 
 
     // GPT 버튼 이벤트
