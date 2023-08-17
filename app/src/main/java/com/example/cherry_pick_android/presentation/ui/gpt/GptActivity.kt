@@ -5,13 +5,22 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.remote.service.gpt.NewGptService
 import com.example.cherry_pick_android.databinding.ActivityGptBinding
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class GptActivity: AppCompatActivity() {
     companion object{
         const val TAG = "GPT Activity"
     }
+    @Inject
+    lateinit var gptService: NewGptService
+
     private val binding: ActivityGptBinding by lazy {
         ActivityGptBinding.inflate(layoutInflater)
     }
@@ -19,6 +28,7 @@ class GptActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        gptCreate()
         goToBack()
 
         Log.d(TAG, "onCreate")
@@ -44,9 +54,19 @@ class GptActivity: AppCompatActivity() {
         })
     }
 
-    fun goToBack() {
+    private fun goToBack() {
         binding.ibtnBack.setOnClickListener {
             finish()
+        }
+    }
+
+    private fun gptCreate(){
+        val id = intent.getIntExtra("id", -1)
+        lifecycleScope.launch {
+            val response = gptService.getNewGpt(id).body()
+            val status = response?.status
+            Log.d(
+                TAG, "[TEST] status: $status ,statusCode: ${response?.statusCode}, data:${response?.data?.greeting}")
         }
     }
 }

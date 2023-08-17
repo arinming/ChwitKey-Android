@@ -3,6 +3,7 @@ package com.example.cherry_pick_android.data.module.api
 
 import com.example.cherry_pick_android.data.remote.service.article.ArticleDetailService
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
+import com.example.cherry_pick_android.data.remote.service.gpt.NewGptService
 import com.example.cherry_pick_android.data.remote.service.login.SignInService
 import com.example.cherry_pick_android.data.remote.service.user.DeleteUserService
 import com.example.cherry_pick_android.data.remote.service.user.InitUserSaveService
@@ -107,8 +108,6 @@ class ApiModule {
         return retrofit.create(ArticleDetailService::class.java)
     }
 
-
-
     @Provides
     @Singleton
     fun provideUpdateIndustry(retrofit: Retrofit): UpdateIndustryService {
@@ -119,6 +118,12 @@ class ApiModule {
     @Singleton
     fun provideUserImageUpload(retrofit: Retrofit): UpLoadImageService{
         return retrofit.create(UpLoadImageService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNewGpt(retrofit: Retrofit): NewGptService{
+        return retrofit.create(NewGptService::class.java)
     }
 
 }
