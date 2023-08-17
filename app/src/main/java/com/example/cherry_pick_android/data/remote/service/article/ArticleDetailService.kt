@@ -1,7 +1,6 @@
-package com.example.cherry_pick_android.data.remote.service
+package com.example.cherry_pick_android.data.remote.service.article
 
-import com.example.cherry_pick_android.data.remote.response.ArticleDetailResponse
-import retrofit2.Call
+import com.example.cherry_pick_android.data.remote.response.article.ArticleDetailResponse
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -11,5 +10,5 @@ interface ArticleDetailService {
     @GET("/api/articles/detail/{articleId}")
     suspend fun getArticleDetail(
         @Path("articleId") articleId: Int
-    ) : Call<ArticleDetailResponse>
+    ) : Response<ArticleDetailResponse>
 }

@@ -1,7 +1,6 @@
-package com.example.cherry_pick_android.data.remote.service
+package com.example.cherry_pick_android.data.remote.service.article
 
-import com.example.cherry_pick_android.data.remote.response.ArticleUnlikeResponse
-import retrofit2.Call
+import com.example.cherry_pick_android.data.remote.response.article.ArticleUnlikeResponse
 import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.Path
@@ -14,5 +13,5 @@ interface ArticleUnlikeService {
         @Path("articleId") articleId: Int,
         @Query("memberId") memberId: Int,
         @Query("type") type: String
-    ): Call<ArticleUnlikeResponse>
+    ): Response<ArticleUnlikeResponse>
 }

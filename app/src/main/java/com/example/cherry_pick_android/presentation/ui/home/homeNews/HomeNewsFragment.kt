@@ -2,6 +2,7 @@ package com.example.cherry_pick_android.presentation.ui.home.homeNews
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,20 +10,30 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.data.Pageable
+import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
 import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
 import com.example.cherry_pick_android.presentation.adapter.ArticleAdapter
+import com.example.cherry_pick_android.presentation.adapter.ArticleItem
+import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
 import com.example.cherry_pick_android.presentation.viewmodel.article.ArticleViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     private var _binding: FragmentHomeNewsBinding? = null
     private val binding get() = _binding!!
+
+
+    @Inject
+    lateinit var articleService: ArticleSearchCommendService
 
     lateinit var recyclerViewAdapter: ArticleAdapter
     private val viewModel: ArticleViewModel by viewModels()
@@ -34,6 +45,9 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeNewsBinding.inflate(inflater, container, false)
+
+
+        getArticleList()
 
         return binding.root
     }
@@ -52,6 +66,34 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
         _binding = null
     }
 
+    private fun getArticleList() {
+        // API 통신
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                val industry = binding.ibtnKeyWord1.text
+                var sort = binding.tvSorting.text
+                if (sort == "인기순") {
+                    sort = "like"
+                } else if (sort == "오름차순") {
+                    sort = "asc"
+                } else if (sort == "내림차순") {
+                    sort = "desc"
+                }
+                val response = articleService.getArticleCommend(industry.toString(), sort.toString(), Pageable)
+                val statusCode = response.body()?.statusCode
+                if (statusCode == 200) {
+                    val articleItems = response.body()?.data?.content?.map { content ->
+                        val imageUrl = if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
+                        ArticleItem(content.title, content.publisher, content.uploadedAt, imageUrl)
+                    }
+
+                    binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
+                } else {
+                    Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     // 검색창 누르면 NewsSearch 액티비티로 이동
     private fun goToNewsSearch() {
@@ -68,21 +110,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
         binding.rvNewsList.adapter = recyclerViewAdapter
     }
 
-    private fun liveNewsList() {
-        viewModel.getLiveDataObserver().observe(viewLifecycleOwner, Observer {
-            if (it != null) {
-                recyclerViewAdapter.setListData(it)
-                recyclerViewAdapter.notifyDataSetChanged()
-            } else {
-                Toast.makeText(context, "오류", Toast.LENGTH_SHORT).show()
-            }
-        })
 
-        // loadListOfData 함수를 호출하는 코루틴 시작
-        viewLifecycleOwner.lifecycleScope.launch {
-            viewModel.loadListOfData()
-        }
-    }
 
     // 메뉴
     private fun showSortingMenu(view: View) {
@@ -98,6 +126,8 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
             }
             true
         }
+
+        getArticleList()
 
         popupMenu.show()
     }

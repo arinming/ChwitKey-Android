@@ -53,7 +53,6 @@ class SearchListFragment : Fragment() {
     }
 
     private fun initNewsList() {
-        binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(articles)
         binding.tvSearchCount.text = articles.size.toString()
     }
 

@@ -5,11 +5,18 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.example.cherry_pick_android.databinding.ItemNewsBinding
-import com.example.cherry_pick_android.data.data.Article
 import com.example.cherry_pick_android.presentation.ui.article.ArticleActivity
 
-class NewsRecyclerViewAdapter(private val articleDataSet: List<Article>) :
+data class ArticleItem(
+    val title: String,
+    val company: String,
+    val time: String,
+    val picture: String
+)
+
+class NewsRecyclerViewAdapter(private val articleDataSet: List<ArticleItem>?) :
     RecyclerView.Adapter<NewsRecyclerViewAdapter.ViewHolder>() {
 
     // 뷰 유형에 대한 참조 클래스
@@ -17,6 +24,8 @@ class NewsRecyclerViewAdapter(private val articleDataSet: List<Article>) :
         val title = binding.tvNewsTitle
         val company = binding.tvNewsCompany
         val time = binding.tvNewsTime
+        val image = binding.ivNewsImagePreview
+
 
         // 아이템 클릭 이벤트 설정
         init {
@@ -42,12 +51,17 @@ class NewsRecyclerViewAdapter(private val articleDataSet: List<Article>) :
 
     // 호출한 내용으로 bind
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.title.text = articleDataSet[position].title
-        viewHolder.company.text = articleDataSet[position].company
-        viewHolder.time.text = articleDataSet[position].time
+        val articleItem = articleDataSet?.get(position)
+        viewHolder.title.text = articleItem?.title
+        viewHolder.company.text = articleItem?.company
+        viewHolder.time.text = articleItem?.time
+
+        Glide.with(viewHolder.itemView.context)
+            .load(articleItem?.picture)
+            .into(viewHolder.image)
     }
 
     // 데이터 크기 반환
-    override fun getItemCount() = articleDataSet.size
+    override fun getItemCount() = articleDataSet?.size ?: 0
 
 }

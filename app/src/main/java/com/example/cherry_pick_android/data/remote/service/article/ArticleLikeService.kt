@@ -1,8 +1,8 @@
-package com.example.cherry_pick_android.data.remote.service
+package com.example.cherry_pick_android.data.remote.service.article
 
 import com.example.cherry_pick_android.data.remote.request.ArticleLikeDTO
-import com.example.cherry_pick_android.data.remote.response.ArticleLikeResponse
-import retrofit2.Call
+import com.example.cherry_pick_android.data.remote.response.article.ArticleLikeResponse
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.POST
 
@@ -11,5 +11,5 @@ interface ArticleLikeService {
     @POST("/api/articles/like/{articleId}")
     suspend fun postArticleLike(
         @Body articleLikeDTO: ArticleLikeDTO
-    ): Call<ArticleLikeResponse>
+    ): Response<ArticleLikeResponse>
 }
