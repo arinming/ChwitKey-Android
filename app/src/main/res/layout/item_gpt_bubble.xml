@@ -6,12 +6,16 @@
     >
 
     <TextView
+        android:id="@+id/tv_content_gpt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@mipmap/ic_gpt_bubble"
+        android:fontFamily="@font/pretendard_regular"
         android:text="@string/gpt_bubble"
+        android:background="@drawable/bg_gpt_bubble"
         android:textSize="14sp"
         android:gravity="center"
+        android:paddingVertical="10dp"
+        android:paddingHorizontal="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

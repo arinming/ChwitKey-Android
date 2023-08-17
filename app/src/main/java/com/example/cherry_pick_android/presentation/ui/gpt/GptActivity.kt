@@ -5,13 +5,26 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.remote.service.gpt.NewGptService
 import com.example.cherry_pick_android.databinding.ActivityGptBinding
+import com.example.cherry_pick_android.presentation.adapter.GptAdapter
+import com.example.cherry_pick_android.presentation.adapter.Message
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class GptActivity: AppCompatActivity() {
     companion object{
         const val TAG = "GPT Activity"
     }
+    @Inject
+    lateinit var gptService: NewGptService
+    private lateinit var gptAdapter: GptAdapter
+
     private val binding: ActivityGptBinding by lazy {
         ActivityGptBinding.inflate(layoutInflater)
     }
@@ -19,6 +32,8 @@ class GptActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
+        initRecyclerView()
+        gptCreate()
         goToBack()
 
         Log.d(TAG, "onCreate")
@@ -44,9 +59,27 @@ class GptActivity: AppCompatActivity() {
         })
     }
 
-    fun goToBack() {
+    private fun goToBack() {
         binding.ibtnBack.setOnClickListener {
             finish()
         }
+    }
+
+    private fun gptCreate(){
+        val id = intent.getIntExtra("id", -1)
+        lifecycleScope.launch {
+            val response = gptService.getNewGpt(id).body()
+            val statusCode = response?.statusCode
+
+            if(statusCode == 200){
+                gptAdapter.addMessage(response.data?.greeting!!, false)
+            }
+        }
+    }
+
+    private fun initRecyclerView(){
+        gptAdapter = GptAdapter()
+        binding.rvGptMessages.adapter = gptAdapter
+        binding.rvGptMessages.layoutManager = LinearLayoutManager(this)
     }
 }

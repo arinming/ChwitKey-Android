@@ -4,6 +4,7 @@ import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.data.remote.response.article.ArticleCommendResponse
 import com.example.cherry_pick_android.databinding.ItemNewsBinding
@@ -11,6 +12,7 @@ import com.example.cherry_pick_android.presentation.ui.article.ArticleActivity
 
 class ArticleAdapter : RecyclerView.Adapter<ArticleAdapter.ViewHolder>() {
     private var listData: List<ArticleCommendResponse.Data>? = null
+
 
     fun setListData(listData: List<ArticleCommendResponse.Data>?) {
         this.listData = listData

@@ -84,7 +84,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
                 if (statusCode == 200) {
                     val articleItems = response.body()?.data?.content?.map { content ->
                         val imageUrl = if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
-                        ArticleItem(content.title, content.publisher, content.uploadedAt, imageUrl)
+                        ArticleItem(content.title, content.publisher, content.uploadedAt, imageUrl, content.articleId)
                     }
 
                     binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
