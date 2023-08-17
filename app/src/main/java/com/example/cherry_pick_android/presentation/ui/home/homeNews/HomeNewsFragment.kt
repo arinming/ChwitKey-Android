@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
@@ -19,6 +20,7 @@ import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.adapter.ArticleAdapter
 import com.example.cherry_pick_android.presentation.adapter.ArticleItem
+import com.example.cherry_pick_android.presentation.adapter.IndustryAdapter
 import com.example.cherry_pick_android.presentation.adapter.KeywordAdapter
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
@@ -42,9 +44,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     @Inject
     lateinit var userDataRepository: UserDataRepository
 
-    lateinit var recyclerViewAdapter: ArticleAdapter
-    private val viewModel: ArticleViewModel by viewModels()
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,7 +62,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initNewsList()
         goToNewsSearch()
 
         // 유저 정보 갱신
@@ -98,7 +96,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
                         val imageUrl = if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
                         ArticleItem(content.title, content.publisher, content.uploadedAt, imageUrl)
                     }
-
                     binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
                 } else {
                     Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
@@ -115,11 +112,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
                 it.startActivity(intent)
             }
         }
-    }
-
-    private fun initNewsList() {
-        recyclerViewAdapter = ArticleAdapter()
-        binding.rvNewsList.adapter = recyclerViewAdapter
     }
 
 
@@ -156,18 +148,20 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     }
 
     private fun industryLoad(){
-
-
         lifecycleScope.launch {
             val response = userInfoService.getUserInfo().body()
             val statusCode = response?.statusCode
-            val industryResponse =
-                "${mapperToJob(response?.data?.industryKeyword1.toString())}, " +
-                        "${mapperToJob(response?.data?.industryKeyword2.toString())}, " +
-                        mapperToJob(response?.data?.industryKeyword3.toString())
+            val industry1 = mapperToJob(response?.data?.industryKeyword1.toString())
+            val industry2 = mapperToJob(response?.data?.industryKeyword2.toString())
+            val industry3 = mapperToJob(response?.data?.industryKeyword3.toString())
+            val industries = listOf(industry1, industry2, industry3)
             withContext(Dispatchers.Main){
                 if(statusCode == 200){
-                    Log.d("직군", industryResponse)
+                    response.data?.industryKeyword1
+                    binding.rvIndustry.layoutManager =
+                        LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                    binding.rvIndustry.adapter = IndustryAdapter(industries)
+                    Log.d("직군","$industry1, $industry2, $industry3")
                 }else{
                 }
             }
