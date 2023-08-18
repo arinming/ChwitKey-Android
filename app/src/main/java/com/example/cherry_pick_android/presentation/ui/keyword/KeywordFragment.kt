@@ -39,18 +39,27 @@ class KeywordFragment : Fragment(), DeleteListener {
     ): View {
         initView()
 
-        searchKeywordViewModel.loadKeyword().observe(viewLifecycleOwner){
-            searchKeywordAdapter.setList(it)
-            binding.tvKeywordCnt.text = it.size.toString()
+        searchKeywordViewModel.loadKeyword().observe(viewLifecycleOwner) { keywordList ->
+            searchKeywordAdapter.setList(keywordList)
+            binding.tvKeywordCnt.text = keywordList.size.toString()
 
             // 만약 키워드가 존재하지 않다면 firstkeyword 프래그먼트로 이동
-            if(it.isEmpty()){
+            if (keywordList.isEmpty()) {
                 val transaction: FragmentTransaction =
                     requireActivity().supportFragmentManager.beginTransaction()
-                        .replace(R.id.fv_home, FirstKeywordFragment.newInstance(), FirstKeywordFragment.TAG)
+                        .replace(
+                            R.id.fv_home,
+                            FirstKeywordFragment.newInstance(),
+                            FirstKeywordFragment.TAG
+                        )
                 transaction.commitAllowingStateLoss()
+            } else {
+                // 처음 아이템 선택 처리
+                keywordList[0].isSelected = true
+                searchKeywordAdapter.notifyDataSetChanged()
             }
         }
+
 
         // 키워드 검색 프래그먼트로 전환할 때 바텀네비게이션 뷰 비활성화
         bottomNavigationView = requireActivity().findViewById(R.id.btm_nav_view_home)
