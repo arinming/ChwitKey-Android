@@ -1,11 +1,17 @@
 package com.example.cherry_pick_android.data.remote.response.article
 
+
+import com.squareup.moshi.Json
+
 data class ArticleUnlikeResponse(
-    val `data`: Data,
-    val description: String,
-    val status: String,
-    val statusCode: Int,
-    val transaction_time: String
-) {
-    class Data
-}
+    @Json(name = "data")
+    val `data`: Any?,
+    @Json(name = "description")
+    val description: String?,
+    @Json(name = "status")
+    val status: Int,
+    @Json(name = "statusCode")
+    val statusCode: Int?,
+    @Json(name = "transaction_time")
+    val transactionTime: String?
+)
