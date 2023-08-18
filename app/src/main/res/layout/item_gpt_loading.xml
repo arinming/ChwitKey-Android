@@ -1,27 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="15dp"
-    android:layout_marginEnd="60dp"
     android:layout_marginStart="10dp"
     android:layout_marginBottom="10dp"
     >
 
-    <TextView
-        android:id="@+id/tv_content_gpt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="@font/pretendard_regular"
-        android:text="@string/gpt_bubble"
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_dot_loading"
         android:background="@drawable/bg_gpt_bubble"
-        android:textSize="14sp"
-        android:gravity="center"
-        android:paddingVertical="10dp"
-        android:paddingHorizontal="10dp"
+        android:layout_width="125dp"
+        android:layout_height="55dp"
+        app:lottie_rawRes="@raw/lottie_dot_gpt_loading"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
