@@ -9,7 +9,7 @@ data class ArticleUnlikeResponse(
     @Json(name = "description")
     val description: String?,
     @Json(name = "status")
-    val status: Int,
+    val status: String,
     @Json(name = "statusCode")
     val statusCode: Int?,
     @Json(name = "transaction_time")
