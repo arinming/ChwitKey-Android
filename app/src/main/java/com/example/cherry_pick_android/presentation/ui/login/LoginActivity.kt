@@ -61,14 +61,6 @@ class LoginActivity: AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login)
-        // 테스트 할 때 사용
-        /*viewModel.setUserData("userId", "")
-        viewModel.setUserData("token", "")
-        viewModel.setUserData("platform", "")
-        viewModel.setUserData("name", "")
-        viewModel.setUserData("gender", "")
-        viewModel.setUserData("isInit", "")
-        viewModel.setUserData("birthday", "")*/
 
         // 유저 id 감지
         userDataRepository.getUserIdLiveData().observe(this@LoginActivity, Observer {
@@ -127,10 +119,8 @@ class LoginActivity: AppCompatActivity() {
         // 자동로그인 설정
         lifecycleScope.launch {
             if (userDataRepository.getUserData().token.isNotEmpty() && userDataRepository.getUserData().userId.isNotEmpty()) {
-                Log.d(TAG, "자동로그인 token:${userDataRepository.getUserData().token} userId:${userDataRepository.getUserData().userId}")
                 val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                 viewModel.setUserData("isInit", "exitUser")
-                viewModel.setUserData("token", userDataRepository.getUserData().token)
                 startActivity(intent)
                 finish()
             }

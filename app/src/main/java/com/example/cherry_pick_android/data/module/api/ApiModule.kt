@@ -1,6 +1,7 @@
 package com.example.cherry_pick_android.data.module.api
 
 
+import android.util.Log
 import com.example.cherry_pick_android.data.remote.service.article.ArticleDetailService
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
 import com.example.cherry_pick_android.data.remote.service.gpt.GptQnaService
@@ -32,10 +33,14 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 class ApiModule {
     private val BASE_URL = "https://umcserver.shop"
+    companion object{
+        const val TAG = "ApiModule"
+    }
 
     @Singleton
     @Provides
     fun getInterceptor(): AppInterceptor{
+        Log.d(TAG, "getInterceptor")
         return AppInterceptor()
     }
     @Singleton
