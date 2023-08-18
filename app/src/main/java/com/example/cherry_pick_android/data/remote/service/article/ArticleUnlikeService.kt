@@ -11,7 +11,6 @@ interface ArticleUnlikeService {
     @DELETE("/api/articles/unlike/{articleId}")
     suspend fun deleteArticleUnlike(
         @Path("articleId") articleId: Int,
-        @Query("memberId") memberId: Int,
         @Query("type") type: String
     ): Response<ArticleUnlikeResponse>
 }

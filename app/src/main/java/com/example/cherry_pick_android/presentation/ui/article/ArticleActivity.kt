@@ -4,12 +4,15 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.remote.service.article.ArticleDetailService
+import com.example.cherry_pick_android.data.remote.service.article.ArticleLikeService
+import com.example.cherry_pick_android.data.remote.service.article.ArticleUnlikeService
 import com.example.cherry_pick_android.databinding.ActivityArticleBinding
 import com.example.cherry_pick_android.presentation.ui.gpt.GptActivity
 import com.google.android.material.snackbar.Snackbar
@@ -30,6 +33,10 @@ class ArticleActivity : AppCompatActivity() {
 
     @Inject
     lateinit var articleDetailService: ArticleDetailService
+    @Inject
+    lateinit var articleLikeService: ArticleLikeService
+    @Inject
+    lateinit var articleUnlikeService: ArticleUnlikeService
 
     companion object {
         const val TAG = "ArticleActivity"
@@ -122,19 +129,27 @@ class ArticleActivity : AppCompatActivity() {
         binding.ibtnScrap.setOnClickListener {
             val isScrapped = !isScrappedInit
             // 스크랩 여부 판별해서 버튼 변경
-            val changeScrapButton = if (isScrapped) {
-                isScrappedInit = true
-                R.drawable.ic_scrap_true
-            } else {
-                isScrappedInit = false
-                R.drawable.ic_scrap_false
-            }
+            var changeScrapButton = 0
+            var snackbarText = 0
 
-            // 스크랩 여부 판별해서 SnackBar 띄우기
-            val snackbarText = if (isScrapped) {
-                R.string.scrap_snackbar_true
-            } else {
-                R.string.scrap_snackbar_false
+            // 통신을 성공할 때에만 스크랩 수행
+            if(isScrapped){
+                if(onScrapOrLike("scrap")){
+                    isScrappedInit = true
+                    changeScrapButton = R.drawable.ic_scrap_true
+                    snackbarText = R.string.scrap_snackbar_true
+                }else{
+                    snackbarText = R.string.scrap_and_like_error
+                }
+
+            }else{
+                if(outScrapOrLike("scrap")){
+                    isScrappedInit = false
+                    changeScrapButton = R.drawable.ic_scrap_false
+                    snackbarText = R.string.scrap_snackbar_false
+                }else{
+                    snackbarText = R.string.scrap_and_like_error
+                }
             }
 
             binding.ibtnScrap.setImageResource(changeScrapButton)
@@ -191,5 +206,23 @@ class ArticleActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun onScrapOrLike(type: String): Boolean{
+        var status = 0
+        lifecycleScope.launch {
+            val response = articleLikeService.postArticleLike(id, type).body()
+            status = response?.status!!
+        }
+        return status == 200
+    }
+
+    private fun outScrapOrLike(type: String): Boolean{
+        var statusCode = 0
+        lifecycleScope.launch {
+            val response = articleUnlikeService.deleteArticleUnlike(id, type).body()
+            statusCode = response?.statusCode!!
+        }
+        return statusCode == 200
     }
 }
