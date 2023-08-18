@@ -1,5 +1,6 @@
 package com.example.cherry_pick_android.presentation.ui.keyword
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -13,6 +14,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.FragmentKeywordBinding
+import com.example.cherry_pick_android.presentation.adapter.KeywordListAdapter
 import com.example.cherry_pick_android.presentation.adapter.SearchKeywordAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.search.SearchKeywordFragment
@@ -26,7 +28,7 @@ class KeywordFragment : Fragment(), DeleteListener {
         FragmentKeywordBinding.inflate(layoutInflater)
     }
     private val searchKeywordViewModel: SearchKeywordViewModel by viewModels()
-    private lateinit var searchKeywordAdapter: SearchKeywordAdapter
+    private lateinit var keywordListAdapter: KeywordListAdapter
     private lateinit var bottomNavigationView: BottomNavigationView
     companion object{
         const val TAG = "keywordFragment"
@@ -37,10 +39,18 @@ class KeywordFragment : Fragment(), DeleteListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        initView()
+
+        return binding.root
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         searchKeywordViewModel.loadKeyword().observe(viewLifecycleOwner) { keywordList ->
-            searchKeywordAdapter.setList(keywordList)
+            keywordListAdapter.setList(keywordList)
             binding.tvKeywordCnt.text = keywordList.size.toString()
 
             // 만약 키워드가 존재하지 않다면 firstkeyword 프래그먼트로 이동
@@ -56,10 +66,11 @@ class KeywordFragment : Fragment(), DeleteListener {
             } else {
                 // 처음 아이템 선택 처리
                 keywordList[0].isSelected = true
-                searchKeywordAdapter.notifyDataSetChanged()
+                keywordListAdapter.notifyDataSetChanged()
             }
         }
 
+        initView()
 
         // 키워드 검색 프래그먼트로 전환할 때 바텀네비게이션 뷰 비활성화
         bottomNavigationView = requireActivity().findViewById(R.id.btm_nav_view_home)
@@ -68,13 +79,12 @@ class KeywordFragment : Fragment(), DeleteListener {
             bottomNavigationView.isGone = true
         }
 
-        return binding.root
     }
 
     private fun initView(){
         binding.rvKeyword.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        searchKeywordAdapter = SearchKeywordAdapter(this)
-        binding.rvKeyword.adapter = searchKeywordAdapter
+        keywordListAdapter = KeywordListAdapter(this)
+        binding.rvKeyword.adapter = keywordListAdapter
 
     }
 
