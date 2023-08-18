@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.FragmentKeywordBinding
 import com.example.cherry_pick_android.presentation.adapter.KeywordListAdapter
-import com.example.cherry_pick_android.presentation.adapter.SearchKeywordAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.search.SearchKeywordFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
@@ -98,7 +97,7 @@ class KeywordFragment : Fragment(), DeleteListener {
         super.onResume()
     }
 
-    fun showFragment(fragment: Fragment, tag: String){
+    private fun showFragment(fragment: Fragment, tag: String){
         val transaction: FragmentTransaction =
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(
