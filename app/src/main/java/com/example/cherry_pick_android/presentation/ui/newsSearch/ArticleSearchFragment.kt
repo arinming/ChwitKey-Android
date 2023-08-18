@@ -34,6 +34,10 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
         Keyword("반도체"), Keyword("해운"), Keyword("F&B"), Keyword("건설"), Keyword("소매유통")
     )
 
+    companion object {
+        fun oldInstance(): ArticleSearchFragment = ArticleSearchFragment()
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,

@@ -9,17 +9,18 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
+import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
-import com.example.cherry_pick_android.presentation.adapter.ArticleAdapter
+import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.adapter.ArticleItem
+import com.example.cherry_pick_android.presentation.adapter.IndustryAdapter
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
-import com.example.cherry_pick_android.presentation.viewmodel.article.ArticleViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -31,13 +32,18 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     private var _binding: FragmentHomeNewsBinding? = null
     private val binding get() = _binding!!
 
+    private var industryInit : String = "초전도체"
 
     @Inject
     lateinit var articleService: ArticleSearchCommendService
+    @Inject
+    lateinit var userInfoService: UserInfoService
+    @Inject
+    lateinit var userDataRepository: UserDataRepository
 
-    lateinit var recyclerViewAdapter: ArticleAdapter
-    private val viewModel: ArticleViewModel by viewModels()
-
+    companion object {
+        const val TAG = "HomeNewsFragmnet"
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -46,17 +52,23 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     ): View {
         _binding = FragmentHomeNewsBinding.inflate(inflater, container, false)
 
-
-        getArticleList()
-
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initNewsList()
+        industryLoad()
+        getArticleList()
         goToNewsSearch()
+
+
+        // 유저 정보 갱신
+        lifecycleScope.launch {
+            userDataRepository.getUserData()
+        }
+
+
 
         binding.ibtnSortingMenu.setOnClickListener { showSortingMenu(it) }
     }
@@ -70,23 +82,24 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
         // API 통신
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
-                val industry = binding.ibtnKeyWord1.text
                 var sort = binding.tvSorting.text
-                if (sort == "인기순") {
-                    sort = "like"
-                } else if (sort == "오름차순") {
-                    sort = "asc"
-                } else if (sort == "내림차순") {
-                    sort = "desc"
+
+                when (sort) {
+                    "인기순" -> sort = "like"
+                    "오름차순" -> sort = "asc"
+                    "내림차순" -> sort = "desc"
                 }
-                val response = articleService.getArticleCommend(industry.toString(), sort.toString(), Pageable)
+
+                val response = articleService.getArticleCommend(industryInit, sort.toString(), Pageable)
+                Log.d("요청 직군", industryInit)
+
                 val statusCode = response.body()?.statusCode
                 if (statusCode == 200) {
+                    onIndustryButtonClick(industryInit)
                     val articleItems = response.body()?.data?.content?.map { content ->
                         val imageUrl = if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
                         ArticleItem(content.title, content.publisher, content.uploadedAt, imageUrl, content.articleId)
                     }
-
                     binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
                 } else {
                     Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
@@ -105,11 +118,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
         }
     }
 
-    private fun initNewsList() {
-        recyclerViewAdapter = ArticleAdapter()
-        binding.rvNewsList.adapter = recyclerViewAdapter
-    }
-
 
 
     // 메뉴
@@ -124,12 +132,67 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
                 R.id.menu_sort_desc -> binding.tvSorting.text = getString(R.string.sort_article_desc)
                 R.id.menu_sort_like -> binding.tvSorting.text = getString(R.string.sort_article_like)
             }
+            getArticleList()
+
             true
         }
-
-        getArticleList()
-
         popupMenu.show()
     }
+
+    private fun mapperToJob(value: String): String{
+        return when(value){
+            "steel" -> "철강" "Petroleum/Chemical" -> "석유·화학" "oilrefining" -> "정유" "secondarybattery" -> "2차 전지"
+            "Semiconductor" -> "반도체" "Display" -> "디스플레이" "Mobile" -> "휴대폰" "It" -> "IT"
+            "car" -> "자동차" "Shipbuilding" -> "조선" "Shipping" -> "해운" "FnB" -> "F&B"
+            "RetailDistribution" -> "소매유통" "Construction" -> "건설" "HotelTravel" -> "호텔·여행·항공" "FiberClothing" -> "섬유·의류"
+            else -> ""
+        }
+    }
+
+
+    private fun industryLoad(){
+        lifecycleScope.launch {
+            val response = userInfoService.getUserInfo().body()
+            val statusCode = response?.statusCode
+            val industry1 = mapperToJob(response?.data?.industryKeyword1.toString())
+            val industry2 = mapperToJob(response?.data?.industryKeyword2.toString())
+            val industry3 = mapperToJob(response?.data?.industryKeyword3.toString())
+
+            val industries = mutableListOf<String>() // 사용자 직군을 저장할 리스트
+
+            // 빈 값을 추가하지 않도록 조건 체크 후 추가
+            if (industry1.isNotBlank()) {
+                industries.add(industry1)
+            }
+            if (industry2.isNotBlank()) {
+                industries.add(industry2)
+            }
+            if (industry3.isNotBlank()) {
+                industries.add(industry3)
+            }
+            onIndustryButtonClick(industry1)
+
+
+            withContext(Dispatchers.Main){
+                if(statusCode == 200){
+                    Log.d("현재 직군", industryInit)
+
+                    binding.rvIndustry.layoutManager =
+                        LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+                    binding.rvIndustry.adapter = IndustryAdapter(industries)
+                    Log.d("직군","$industry1, $industry2, $industry3")
+                } else{
+                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    // 버튼 클릭 시 호출되는 함수
+    fun onIndustryButtonClick(industry: String) {
+        industryInit = industry // 클릭한 버튼의 텍스트를 저장
+        Log.d("직군 함수 호출", industryInit) // 클릭한 버튼의 텍스트 로그로 출력
+    }
+
 
 }

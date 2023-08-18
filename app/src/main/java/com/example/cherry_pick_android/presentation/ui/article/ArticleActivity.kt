@@ -1,14 +1,25 @@
 package com.example.cherry_pick_android.presentation.ui.article
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
+import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.remote.service.article.ArticleDetailService
 import com.example.cherry_pick_android.databinding.ActivityArticleBinding
 import com.example.cherry_pick_android.presentation.ui.gpt.GptActivity
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ArticleActivity : AppCompatActivity() {
     private lateinit var binding: ActivityArticleBinding
 
@@ -17,7 +28,10 @@ class ArticleActivity : AppCompatActivity() {
     private var isLikeInit = false
     private var id = 0
 
-    companion object{
+    @Inject
+    lateinit var articleDetailService: ArticleDetailService
+
+    companion object {
         const val TAG = "ArticleActivity"
     }
 
@@ -29,25 +43,60 @@ class ArticleActivity : AppCompatActivity() {
         setContentView(view)
 
         initArticle()
+        getDetailArticle()
         goToBack()
         goToGPT()
+        goToLink()
         articleScrap()
         articleLike()
         articleShare()
     }
 
-    // 인텐트 값 받아서 초기화
+    // 인텐트 값으로 articleID 받기
     private fun initArticle() {
         val articleIntent: Intent = intent
-        val articleTitle: String? = articleIntent.getStringExtra("제목")
-        val articleCompany: String? = articleIntent.getStringExtra("회사")
-        val articleTime: String? = articleIntent.getStringExtra("시간")
         id = articleIntent.getIntExtra("id", 0)
+    }
 
-        binding.tvArticleTitle.text = articleTitle.toString()
-        binding.tvArticleCompany.text = articleCompany.toString()
-        binding.tvArticleTime.text = articleTime.toString()
+    private fun getDetailArticle() {
+        // API 통신
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                val response = articleDetailService.getArticleDetail(id)
+                val statusCode = response.body()?.statusCode
+                if (statusCode == 200) {
+                    response.body()?.data?.articlePhoto?.map { image ->
+                        val imageUrl = image.articleImgUrl.ifEmpty { "" } // 기사 사진이 없으면 빈 문자열로 처리
+                        val imageDesc = image.imgDesc.ifEmpty { "이미지 캡션이 없습니다." }
 
+                        Glide.with(this@ArticleActivity)
+                            .load(imageUrl)
+                            .into(binding.ivNewsImage)
+                        binding.ivNewsImage.visibility = View.VISIBLE
+                        binding.tvExplainImage.text = imageDesc
+                    }
+                    if (response.body()?.data?.articlePhoto?.size == 0) {
+                        // 사진이 없으면 사진 지우기
+                        binding.ivNewsImage.visibility = View.GONE
+                        binding.tvExplainImage.visibility = View.GONE
+                    }
+                    binding.tvArticleTitle.text = response.body()?.data?.title
+                    binding.tvArticleCompany.text = response.body()?.data?.publisher
+                    binding.tvArticleEditor.text = response.body()?.data?.reporter
+
+                    // 엔터 적용 및 줄바꿈 처리
+                    val content = response.body()?.data?.content ?: ""
+                    val sentences = content.split("\\.\\s\\n*".toRegex()) // 문장 분리
+                    val firstTwoSentences = sentences.take(3).joinToString(". ") // 3문장 까지만
+
+                    binding.tvArticleDetail.text = firstTwoSentences.replace("\\n", "\n")
+
+                    binding.tvArticleTime.text = response.body()?.data?.uploadedAt
+                } else {
+                    Toast.makeText(this@ArticleActivity, "에러", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
 
@@ -56,7 +105,6 @@ class ArticleActivity : AppCompatActivity() {
             finish()
         }
     }
-
 
 
     // GPT 버튼 이벤트
@@ -126,6 +174,22 @@ class ArticleActivity : AppCompatActivity() {
             }
 
             startActivity(Intent.createChooser(articleShareIntent, null))
+        }
+    }
+
+    // 해당 기사 링크 이동
+    private fun goToLink() {
+        binding.btnLink.setOnClickListener {
+            lifecycleScope.launch {
+                withContext(Dispatchers.Main) {
+                    val response = articleDetailService.getArticleDetail(id)
+                    val urlIntent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse(response.body()?.data?.url)
+                    )
+                    startActivity(urlIntent)
+                }
+            }
         }
     }
 }

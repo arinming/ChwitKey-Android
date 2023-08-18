@@ -97,23 +97,25 @@
             app:layout_constraintEnd_toEndOf="@+id/ibtn_home_search_background"
             app:layout_constraintTop_toTopOf="@+id/ibtn_home_search_background" />
 
-        <TextView
-            android:id="@+id/ibtn_key_word_1"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraintLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="8dp"
-            android:background="@drawable/ic_keyword_btn"
-            android:fontFamily="@font/pretendard_semi_bold"
-            android:gravity="center"
-            android:letterSpacing="-0.017"
-            android:text="@string/news_search_keyword"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/ibtn_home_search_background" />
+            app:layout_constraintTop_toBottomOf="@+id/ibtn_home_search_background">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_industry"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
