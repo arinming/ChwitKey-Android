@@ -113,6 +113,10 @@ class SearchKeywordFragment : Fragment(), DeleteListener {
         }
     }
 
+    fun getNowText() : String {
+        return binding.etSearch.text.toString()
+    }
+
     // 키패드 제거 함수
     private fun hideKeyboard() {
         val imm =
