@@ -91,8 +91,7 @@ class SearchListFragment : Fragment() {
     }
 
 
-    private fun initNewsList() {
-    }
+    private fun initNewsList() { }
 
     // 메뉴
     private fun showSortingMenu(view: View) {
