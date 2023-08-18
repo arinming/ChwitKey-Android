@@ -39,6 +39,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/rv_gpt_messages"
         >
 
         <EditText
@@ -53,23 +54,18 @@
             android:gravity="center|start"
             android:hint="@string/gpt_et"
             android:textSize="14sp" />
-        <FrameLayout
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+        <ImageButton
+            android:id="@+id/ibtn_gpt_send"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="#F8F8F8"
+            android:layout_marginEnd="15dp"
+            android:src="@drawable/ic_gpt_send"
+            android:layout_alignTop="@+id/et_sendMessage"
             android:layout_alignEnd="@+id/et_sendMessage"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="5dp"
-            >
-            <ImageButton
-                android:id="@+id/ibtn_gpt_send"
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="#F8F8F8"
-                android:src="@drawable/ic_gpt_send"
-                />
-
-        </FrameLayout>
+            android:layout_alignBottom="@id/et_sendMessage"
+            />
 
     </RelativeLayout>
 

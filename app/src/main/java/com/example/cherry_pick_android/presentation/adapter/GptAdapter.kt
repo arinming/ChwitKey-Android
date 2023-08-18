@@ -5,10 +5,16 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
+import com.example.cherry_pick_android.databinding.ActivityGptBinding
 import com.example.cherry_pick_android.databinding.ItemGptBubbleBinding
 import com.example.cherry_pick_android.databinding.ItemGptChoiceBinding
+import com.example.cherry_pick_android.databinding.ItemGptLoadingBinding
 import com.example.cherry_pick_android.databinding.ItemGptUserBubbleBinding
 import com.example.cherry_pick_android.presentation.ui.gpt.GptClickListener
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 class GptAdapter(private val listener: GptClickListener): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
@@ -17,6 +23,11 @@ class GptAdapter(private val listener: GptClickListener): RecyclerView.Adapter<R
         const val TAG = "GptAdapter"
     }
     private val messageList = mutableListOf<Message>()
+    private lateinit var binding: ActivityGptBinding
+
+    fun setBinding(setBinding: ActivityGptBinding){
+        binding = setBinding
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         Log.d(TAG, "OnCreateViewHolder/ viewType:$viewType")
         // 0: 최초 선택 1: gpt 2: 유저에 따른 반환
@@ -37,6 +48,14 @@ class GptAdapter(private val listener: GptClickListener): RecyclerView.Adapter<R
                 )
                 GptMessageViewHolder(binding)
             }
+            2 -> {
+                val binding = ItemGptLoadingBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+                )
+                GptLoadingViewHolder(binding)
+            }
             else -> {
                 val binding = ItemGptUserBubbleBinding.inflate(
                     LayoutInflater.from(parent.context),
@@ -56,6 +75,7 @@ class GptAdapter(private val listener: GptClickListener): RecyclerView.Adapter<R
         when(message.isUser){
             0 -> {(holder as GptChoiceViewHolder).bindChoice()}
             1 -> {(holder as GptMessageViewHolder).bindGPTMessage(message.content)}
+            2 -> {(holder as GptLoadingViewHolder)}
             else -> {(holder as UserMessageViewHolder).bindUserMessage(message.content)}
         }
 
@@ -108,21 +128,45 @@ class GptAdapter(private val listener: GptClickListener): RecyclerView.Adapter<R
                 topMargin = 20
             }
         }
-
-
+    }
+    inner class GptLoadingViewHolder(val binding: ItemGptLoadingBinding): RecyclerView.ViewHolder(binding.root){
     }
 
 
+    // 메세지가 추가되면 추가된 후에 스크롤이 최하단으로 이동
     fun addMessage(content: String, isUser: Int){
-        Log.d(TAG, "addMessage 감지")
-        val newMessage = Message(content, isUser)
-        messageList.add(newMessage)
-        notifyItemInserted(messageList.size - 1)
+        Log.d(TAG, "addMessage 감지: $content")
+        CoroutineScope(Dispatchers.Main).launch {
+            val newMessage = Message(content, isUser)
+
+            if(isUser == 1 && messageList.size > 1) {
+                deleteLoading(messageList.size)
+            }
+            messageList.add(newMessage)
+
+            notifyItemInserted(messageList.size - 1)
+
+            if (messageList.size > 0) {
+                binding.rvGptMessages.scrollToPosition(messageList.size - 1)
+            }
+        }
     }
+
+    // 로딩 삭제 (코루틴을 이용해 삭제 작업이 완료되면 리스트 갱신)
+    private fun deleteLoading(position: Int){
+        val positionToDelete = position-1
+        if(positionToDelete >= 0 && positionToDelete < messageList.size){
+            CoroutineScope(Dispatchers.Main).launch {
+                messageList.removeAt(positionToDelete)
+                notifyItemRemoved(positionToDelete)
+            }
+        }
+    }
+
 
 }
 
-// isUser 규칙 - 0: 최초 선택 기능 1: gpt 2: 유저
+// isUser 규칙 - 0: 최초 선택 기능 1: gpt 2: gpt 로딩 3: 유저
 data class Message(
     val content: String,
     val isUser: Int
