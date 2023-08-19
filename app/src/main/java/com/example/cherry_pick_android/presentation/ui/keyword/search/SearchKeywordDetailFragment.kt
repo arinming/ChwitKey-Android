@@ -14,15 +14,12 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.Pageable
-import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchKeywordService
 import com.example.cherry_pick_android.databinding.FragmentSearchKeywordDetailBinding
 import com.example.cherry_pick_android.presentation.adapter.ArticleItem
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.adapter.SearchKeywordAdapter
-import com.example.cherry_pick_android.presentation.ui.keyword.DeleteListener
 import com.example.cherry_pick_android.presentation.ui.keyword.dialog.KeywordDialog
-import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -67,6 +64,7 @@ class SearchKeywordDetailFragment: Fragment() {
 
     }
 
+
     private fun getKeyword() {
         // 키워드 등록 버튼 이벤트
         binding.btnComplete.setOnClickListener {
@@ -95,7 +93,7 @@ class SearchKeywordDetailFragment: Fragment() {
 
 
 
-    private fun getArticleList() {
+    fun getArticleList() {
         // API 통신
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
@@ -103,19 +101,32 @@ class SearchKeywordDetailFragment: Fragment() {
                 val keyword = searchKeywordFragment?.getNowText().toString().trim()
 
                 // trim으로 공백 제거
-                val response = articleService.getArticleKeyword(loginStatus = "", sortType = "like", keyword = keyword, pageable =  Pageable)
+                if (::articleService.isInitialized) {
+                    val response = articleService.getArticleKeyword(
+                        loginStatus = "",
+                        sortType = "desc",
+                        keyword = keyword,
+                        pageable = Pageable
+                    )
 
-
-                val statusCode = response.body()?.statusCode
-                if (statusCode == 200) {
-                    val articleItems = response.body()?.data?.content?.map { content ->
-                        val imageUrl = if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
-                        ArticleItem(content.title, content.publisher, content.uploadedAt, imageUrl, content.articleId)
+                    val statusCode = response.body()?.statusCode
+                    if (statusCode == 200) {
+                        val articleItems = response.body()?.data?.content?.map { content ->
+                            val imageUrl =
+                                if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
+                            ArticleItem(
+                                content.title,
+                                content.publisher,
+                                content.uploadedAt,
+                                imageUrl,
+                                content.articleId
+                            )
+                        }
+                        Log.d("기사", articleItems.toString())
+                        binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
+                    } else {
+                        Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
                     }
-                    Log.d("기사", articleItems.toString())
-                    binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
-                } else {
-                    Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -140,4 +151,7 @@ class SearchKeywordDetailFragment: Fragment() {
                 .add(R.id.fv_home, fragment, tag)
         transaction.addToBackStack(tag).commitAllowingStateLoss()
     }
+
+
+
 }

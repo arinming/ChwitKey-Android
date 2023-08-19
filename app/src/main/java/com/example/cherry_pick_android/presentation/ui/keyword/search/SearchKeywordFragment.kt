@@ -15,13 +15,17 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchKeywordService
 import com.example.cherry_pick_android.databinding.FragmentSearchKeywordBinding
 import com.example.cherry_pick_android.presentation.adapter.SearchKeywordAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.DeleteListener
 import com.example.cherry_pick_android.presentation.ui.keyword.KeywordFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
+import com.example.cherry_pick_android.presentation.ui.newsSearch.ArticleSearchFragment
+import com.example.cherry_pick_android.presentation.ui.newsSearch.SearchListFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 // 키워드 검색 프래그먼트
 @AndroidEntryPoint
@@ -29,9 +33,12 @@ class SearchKeywordFragment : Fragment(), DeleteListener {
     private val binding: FragmentSearchKeywordBinding by lazy {
         FragmentSearchKeywordBinding.inflate(layoutInflater)
     }
-    private var searchKeywordDetailFragment: SearchKeywordDetailFragment? = null
+    var searchKeywordDetailFragment: SearchKeywordDetailFragment? = null
     private val searchKeywordViewModel: SearchKeywordViewModel by viewModels() // 뷰모델 초기화 불필요 (Hilt)
     private lateinit var searchKeywordAdapter: SearchKeywordAdapter
+
+    @Inject
+    lateinit var articleService: ArticleSearchKeywordService
 
     companion object {
         const val TAG = "SearchKeywordFragment"
@@ -51,6 +58,7 @@ class SearchKeywordFragment : Fragment(), DeleteListener {
         binding.etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {}
+
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                 changeText()
             }
@@ -148,11 +156,12 @@ class SearchKeywordFragment : Fragment(), DeleteListener {
 
     private fun changeText() {
         // 엔터 감지
-        binding.etSearch.setOnKeyListener { _, keyCode, _ ->
+        binding.etSearch.setOnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 val text = binding.etSearch.text.toString()
                 if (text.isNotEmpty()) {
                     addDetailFragment()
+                    searchKeywordDetailFragment?.getArticleList()
                 } else {
                     removeDetailFragment()
                 }
