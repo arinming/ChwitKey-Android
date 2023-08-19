@@ -7,9 +7,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.model.KeywordEntity
 import com.example.cherry_pick_android.databinding.ItemKeywordCompleteBtnBinding
+import com.example.cherry_pick_android.presentation.ui.keyword.AdapterInteractionListener
 import com.example.cherry_pick_android.presentation.ui.keyword.DeleteListener
 
-class KeywordListAdapter (private val deleteListener: DeleteListener): RecyclerView.Adapter<KeywordListAdapter.KeywordListHolder>() {
+class KeywordListAdapter (
+    private val deleteListener: DeleteListener,
+    private val interactionListener: AdapterInteractionListener
+): RecyclerView.Adapter<KeywordListAdapter.KeywordListHolder>() {
     private val items = ArrayList<KeywordEntity>()
     private var selectedPosition = 0 // 선택된 버튼의 위치 추적 변수, 초기값 -1로 설정
 
@@ -39,6 +43,7 @@ class KeywordListAdapter (private val deleteListener: DeleteListener): RecyclerV
 
         // 클릭 이벤트 핸들러에서 선택된 버튼의 위치를 업데이트하고 어댑터를 갱신
         button.setOnClickListener { view ->
+            Log.d("키워드 선택", button.text.toString())
             val clickedPosition = holder.adapterPosition
             if (selectedPosition != clickedPosition) {
                 items[selectedPosition].isSelected = false
@@ -46,6 +51,9 @@ class KeywordListAdapter (private val deleteListener: DeleteListener): RecyclerV
                 keywordEntity.isSelected = true
                 notifyDataSetChanged()
             }
+
+            val keyword = button.text.toString()
+            interactionListener.onKeywordSelected(keyword)
         }
 
         holder.binding.btnClearKeyword.setOnClickListener {

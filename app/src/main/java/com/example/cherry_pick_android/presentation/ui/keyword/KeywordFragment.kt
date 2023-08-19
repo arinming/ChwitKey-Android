@@ -32,13 +32,14 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class KeywordFragment : Fragment(), DeleteListener {
+class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
     private val binding: FragmentKeywordBinding by lazy {
         FragmentKeywordBinding.inflate(layoutInflater)
     }
     private val searchKeywordViewModel: SearchKeywordViewModel by viewModels()
     private lateinit var keywordListAdapter: KeywordListAdapter
     private lateinit var bottomNavigationView: BottomNavigationView
+    private lateinit var selectedKeyword: String
 
 
     @Inject
@@ -55,14 +56,16 @@ class KeywordFragment : Fragment(), DeleteListener {
         savedInstanceState: Bundle?
     ): View {
 
-        getArticleList()
+        getArticleList("네이버")
 
         return binding.root
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        keywordListAdapter = KeywordListAdapter(this, this)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -82,8 +85,18 @@ class KeywordFragment : Fragment(), DeleteListener {
                 transaction.commitAllowingStateLoss()
             } else {
                 // 처음 아이템 선택 처리
+                val firstKeyword = keywordList[0].keyword
                 keywordList[0].isSelected = true
                 keywordListAdapter.notifyDataSetChanged()
+
+                // 기사 가져오기
+                getArticleList(firstKeyword)
+            }
+
+            // 처음 아이템 선택 처리
+            if (keywordList.isNotEmpty()) {
+                selectedKeyword = keywordList[0].keyword
+                loadArticlesByKeyword(selectedKeyword)
             }
         }
 
@@ -95,17 +108,15 @@ class KeywordFragment : Fragment(), DeleteListener {
             showFragment(SearchKeywordFragment.newInstance(), SearchKeywordFragment.TAG)
             bottomNavigationView.isGone = true
         }
-
     }
 
-    private fun initView(){
+    private fun initView() {
         binding.rvKeyword.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-        keywordListAdapter = KeywordListAdapter(this)
+        keywordListAdapter = KeywordListAdapter(this, this)
         binding.rvKeyword.adapter = keywordListAdapter
-
     }
 
-    private fun getArticleList() {
+    private fun getArticleList(keyword: String) {
         // API 통신
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
@@ -113,7 +124,7 @@ class KeywordFragment : Fragment(), DeleteListener {
                 val keyword = searchKeywordFragment?.getNowText().toString().trim()
 
                 // trim으로 공백 제거
-                val response = articleService.getArticleKeyword(loginStatus = "", sortType = "desc", keyword = "카카오", pageable = Pageable)
+                val response = articleService.getArticleKeyword(loginStatus = "", sortType = "desc", keyword = keyword, pageable = Pageable)
 
 
                 val statusCode = response.body()?.statusCode
@@ -155,4 +166,25 @@ class KeywordFragment : Fragment(), DeleteListener {
         transaction.addToBackStack(tag).commitAllowingStateLoss()
     }
 
+    override fun onKeywordSelected(keyword: String) {
+        selectedKeyword = keyword
+        loadArticlesByKeyword(keyword)
+    }
+
+
+    // 버튼 클릭시 뉴스 리스트 갱신
+    private fun loadArticlesByKeyword(keyword: String) {
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                val response = articleService.getArticleKeyword(loginStatus = "", sortType = "desc", keyword = keyword, pageable = Pageable)
+
+                // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신
+                val articleItems = response.body()?.data?.content?.map { content ->
+                    val imageUrl = if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else ""
+                    ArticleItem(content.title, content.publisher, content.uploadedAt, imageUrl, content.articleId)
+                }
+                binding.rvKeywordArticle.adapter = NewsRecyclerViewAdapter(articleItems)
+            }
+        }
+    }
 }
