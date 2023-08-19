@@ -125,14 +125,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
             deleteUserData(it)
         })
 
-        // 유저 정보 갱신
-        lifecycleScope.launch {
-            withContext(Dispatchers.Main){
-                binding.etProfileName.setText(userDataRepository.getUserData().name)
-                binding.tvBirth.text = mapperToBirth(userDataRepository.getUserData().birthday)
-                binding.tvGender.text = userDataRepository.getUserData().gender
-            }
-        }
 
         // 닉네임 변경 감지
         userDataRepository.getNameLiveData().observe(this@ProfileActivity, Observer {
@@ -140,7 +132,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         })
 
         // 직군 키워드 업데이트
-        industryLoad()
+        userInfoLoad()
         goBack()
         showCameraDialog()
         ChangeName()
@@ -150,7 +142,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     }
 
     override fun onResume() {
-        industryLoad()
+        userInfoLoad()
         super.onResume()
     }
     // 생년월일 매핑함수
@@ -366,8 +358,8 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
-    // 직군 갱신
-    private fun industryLoad(){
+    // 유저 정보 갱신
+    private fun userInfoLoad(){
         lifecycleScope.launch {
             val response = userInfoService.getUserInfo().body()
             val statusCode = response?.statusCode
@@ -375,9 +367,16 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
                 "${mapperToJob(response?.data?.industryKeyword1.toString())}, " +
                         "${mapperToJob(response?.data?.industryKeyword2.toString())}, " +
                         mapperToJob(response?.data?.industryKeyword3.toString())
+            val name = response?.data?.name
+            val birth = response?.data?.birthdate
+            val gender = response?.data?.gender
+
             withContext(Dispatchers.Main){
                 if(statusCode == 200){
                     binding.tvProfileJob.text = industryResponse
+                    binding.etProfileName.setText(name)
+                    binding.tvBirth.text = mapperToBirth(birth!!)
+                    binding.tvGender.text = gender
                 }else{
                     Toast.makeText(this@ProfileActivity, "통신오류: $statusCode", Toast.LENGTH_SHORT).show()
                 }

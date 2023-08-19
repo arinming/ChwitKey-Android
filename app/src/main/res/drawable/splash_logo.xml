@@ -27,10 +27,10 @@
         <item android:offset="0.88" android:color="#FFFEA9A7"/>
         <item android:offset="0.95" android:color="#FFFE7A89"/>
         <item android:offset="1" android:color="#FFFF4F6E"/>
+
       </gradient>
     </aapt:attr>
   </path>
-  <path
-      android:pathData="M30.01,63.81C21.34,63.81 15.22,74.91 15.22,88.46C15.22,81.67 13.45,75.51 10.58,71.06C7.71,66.58 4.76,63.81 0.43,63.81C9.1,63.81 15.22,52.72 15.22,39.15C15.22,52.72 21.34,63.81 30.01,63.81Z"
-      android:fillColor="#ffffff"/>
 </vector>
+
+

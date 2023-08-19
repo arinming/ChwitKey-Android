@@ -20,7 +20,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.Cherry_pick_android"
+        android:theme="@style/AppTheme.Starting"
         tools:targetApi="31">
 
         <activity
@@ -28,17 +28,23 @@
             android:exported="true"></activity>
         <activity
             android:name=".presentation.ui.home.HomeActivity"
+            android:theme="@style/Theme.Cherry_pick_android"
             android:exported="true">
 
 
         </activity>
 
-        <activity android:name=".presentation.ui.infrom.InformSettingActivity">
+        <activity
+            android:name=".presentation.ui.infrom.InformSettingActivity"
+            android:theme="@style/Theme.Cherry_pick_android"
+            android:exported="true"
+            >
 
         </activity>
 
         <activity
             android:name=".presentation.ui.newsSearch.NewsSearchActivity"
+            android:theme="@style/Theme.Cherry_pick_android"
             android:exported="true">
 
         </activity>
@@ -49,7 +55,6 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -71,17 +76,20 @@
 
         <activity
             android:name=".presentation.ui.mypage.ProfileActivity"
+            android:theme="@style/Theme.Cherry_pick_android"
             android:exported="true">
         </activity>
 
 
         <activity
             android:name=".presentation.ui.article.ArticleActivity"
+            android:theme="@style/Theme.Cherry_pick_android"
             android:exported="true">
         </activity>
 
         <activity
             android:name=".presentation.ui.jobGroup.JobGroupActivity"
+            android:theme="@style/Theme.Cherry_pick_android"
             android:exported="true">
         </activity>
 
