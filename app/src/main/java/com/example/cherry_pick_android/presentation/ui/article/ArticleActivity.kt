@@ -3,6 +3,7 @@ package com.example.cherry_pick_android.presentation.ui.article
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
@@ -134,21 +135,26 @@ class ArticleActivity : AppCompatActivity() {
 
             // 통신을 성공할 때에만 스크랩 수행
             if(isScrapped){
-                if(onScrapOrLike("scrap")){
-                    isScrappedInit = true
-                    changeScrapButton = R.drawable.ic_scrap_true
-                    snackbarText = R.string.scrap_snackbar_true
-                }else{
-                    snackbarText = R.string.scrap_and_like_error
+                lifecycleScope.launch(Dispatchers.Main){
+                    val statusCode = articleLikeService.postArticleLike(id, "scrap").body()?.statusCode
+                    if(statusCode == 200){
+                        isScrappedInit = true
+                        changeScrapButton = R.drawable.ic_scrap_true
+                        snackbarText = R.string.scrap_snackbar_true
+                    }else{
+                        snackbarText = R.string.scrap_and_like_error
+                    }
                 }
-
             }else{
-                if(outScrapOrLike("scrap")){
-                    isScrappedInit = false
-                    changeScrapButton = R.drawable.ic_scrap_false
-                    snackbarText = R.string.scrap_snackbar_false
-                }else{
-                    snackbarText = R.string.scrap_and_like_error
+                lifecycleScope.launch(Dispatchers.Main) {
+                    val statusCode = articleUnlikeService.deleteArticleUnlike(id, "scrap").body()?.statusCode
+                    if(statusCode == 200){
+                        isScrappedInit = false
+                        changeScrapButton = R.drawable.ic_scrap_false
+                        snackbarText = R.string.scrap_snackbar_false
+                    }else{
+                        snackbarText = R.string.scrap_and_like_error
+                    }
                 }
             }
 
@@ -177,18 +183,23 @@ class ArticleActivity : AppCompatActivity() {
 
     // 공유하기 버튼 이벤트
     private fun articleShare() {
-        binding.ibtnShare.setOnClickListener {
-            val articleShareIntent = Intent().apply {
-                action = Intent.ACTION_SEND
-                // 전달하려는 데이터 값
-                putExtra(
-                    Intent.EXTRA_TEXT,
-                    "${R.string.article_news_title}"
-                )
-                type = "text/plain"
+        lifecycleScope.launch(Dispatchers.Main){
+            val response = articleDetailService.getArticleDetail(id).body()
+
+            binding.ibtnShare.setOnClickListener {
+                val articleShareIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    // 전달하려는 데이터 값
+                    putExtra(
+                        Intent.EXTRA_TEXT,
+                        "${response?.data?.url}"
+                    )
+                    type = "text/plain"
+                }
+
+                startActivity(Intent.createChooser(articleShareIntent, null))
             }
 
-            startActivity(Intent.createChooser(articleShareIntent, null))
         }
     }
 
@@ -206,23 +217,5 @@ class ArticleActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    private fun onScrapOrLike(type: String): Boolean{
-        var status = 0
-        lifecycleScope.launch {
-            val response = articleLikeService.postArticleLike(id, type).body()
-            status = response?.status!!
-        }
-        return status == 200
-    }
-
-    private fun outScrapOrLike(type: String): Boolean{
-        var statusCode = 0
-        lifecycleScope.launch {
-            val response = articleUnlikeService.deleteArticleUnlike(id, type).body()
-            statusCode = response?.statusCode!!
-        }
-        return statusCode == 200
     }
 }
