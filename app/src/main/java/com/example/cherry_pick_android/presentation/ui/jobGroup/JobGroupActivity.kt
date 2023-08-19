@@ -88,10 +88,10 @@ class JobGroupActivity: AppCompatActivity() {
         val selectedJobList = adapter.getSelectedList()
 
         if (selectedJobList.size > 0) {
-            completeBtn.setBackgroundResource(R.drawable.ic_job_complete_clicked)
+            completeBtn.setBackgroundResource(R.drawable.bg_active_btn)
             completeBtn.isEnabled = true
         } else {
-            completeBtn.setBackgroundResource(R.drawable.ic_job_complete)
+            completeBtn.setBackgroundResource(R.drawable.bg_disabled_btn)
             completeBtn.isEnabled = false
         }
     }
@@ -164,7 +164,7 @@ class JobGroupActivity: AppCompatActivity() {
     }
 
     private fun onBackBtn(){
-        binding.ibtnJobChangeBack.setOnClickListener {
+        binding.ibtnBack.setOnClickListener {
             finish()
         }
     }
