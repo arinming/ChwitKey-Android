@@ -1,5 +1,6 @@
 package com.example.cherry_pick_android.presentation.ui.home.homeNews
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -12,14 +13,16 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.data.ArticleItem
 import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
 import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
-import com.example.cherry_pick_android.presentation.adapter.ArticleItem
 import com.example.cherry_pick_android.presentation.adapter.IndustryAdapter
+import com.example.cherry_pick_android.presentation.adapter.KeywordListAdapter
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
+import com.example.cherry_pick_android.presentation.ui.keyword.AdapterInteractionListener
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -28,11 +31,11 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
+class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteractionListener {
     private var _binding: FragmentHomeNewsBinding? = null
     private val binding get() = _binding!!
 
-    private var industryInit : String = "초전도체"
+    private var industryInit : String = ""
 
     @Inject
     lateinit var articleService: ArticleSearchCommendService
@@ -40,6 +43,9 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
     lateinit var userInfoService: UserInfoService
     @Inject
     lateinit var userDataRepository: UserDataRepository
+
+    private lateinit var selectedIndustry: String
+    private lateinit var industryAdapter: IndustryAdapter
 
     companion object {
         const val TAG = "HomeNewsFragmnet"
@@ -106,6 +112,10 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
                 }
             }
         }
+    }
+
+    private fun initView() {
+        industryInit
     }
 
     // 검색창 누르면 NewsSearch 액티비티로 이동
@@ -179,7 +189,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
 
                     binding.rvIndustry.layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-                    binding.rvIndustry.adapter = IndustryAdapter(industries)
+                    binding.rvIndustry.adapter = IndustryAdapter(industries, this@HomeNewsFragment)
                     Log.d("직군","$industry1, $industry2, $industry3")
                 } else{
                     Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
@@ -194,5 +204,24 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news) {
         Log.d("직군 함수 호출", industryInit) // 클릭한 버튼의 텍스트 로그로 출력
     }
 
+    // 버튼 클릭시 뉴스 리스트 갱신
+    private fun loadArticlesByKeyword(keyword: String) {
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                val response = articleService.getArticleCommend(sortType = "desc", cond = keyword, pageable = Pageable)
 
+                // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신
+                val articleItems = response.body()?.data?.content?.map { content ->
+                    val imageUrl = if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else ""
+                    ArticleItem(content.title, content.publisher, content.uploadedAt, imageUrl, content.articleId)
+                }
+                binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
+            }
+        }
+    }
+
+    override fun onButtonSelected(button: String) {
+        selectedIndustry = button
+        loadArticlesByKeyword(button)
+    }
 }

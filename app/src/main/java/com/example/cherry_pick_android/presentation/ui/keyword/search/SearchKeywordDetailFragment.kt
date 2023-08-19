@@ -13,10 +13,10 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.data.ArticleItem
 import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchKeywordService
 import com.example.cherry_pick_android.databinding.FragmentSearchKeywordDetailBinding
-import com.example.cherry_pick_android.presentation.adapter.ArticleItem
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.adapter.SearchKeywordAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.dialog.KeywordDialog

@@ -53,7 +53,7 @@ class KeywordListAdapter (
             }
 
             val keyword = button.text.toString()
-            interactionListener.onKeywordSelected(keyword)
+            interactionListener.onButtonSelected(keyword)
         }
 
         holder.binding.btnClearKeyword.setOnClickListener {

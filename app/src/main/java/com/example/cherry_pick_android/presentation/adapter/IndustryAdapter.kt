@@ -7,10 +7,13 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.databinding.ItemKeywordBtnBinding
-import com.example.cherry_pick_android.presentation.ui.home.homeNews.HomeNewsFragment
+import com.example.cherry_pick_android.presentation.ui.keyword.AdapterInteractionListener
+import kotlinx.coroutines.CoroutineScope
 
-class IndustryAdapter(private val industries: List<String>) :
-    RecyclerView.Adapter<IndustryAdapter.ViewHolder>() {
+class IndustryAdapter(
+    private val industries: List<String>,
+    private var interactionListener: AdapterInteractionListener
+) : RecyclerView.Adapter<IndustryAdapter.ViewHolder>() {
 
     private var selectedPosition = 0 // 선택된 버튼의 위치 추적 변수
     inner class ViewHolder(private val binding: ItemKeywordBtnBinding) :
@@ -33,8 +36,7 @@ class IndustryAdapter(private val industries: List<String>) :
                 }
                 updateButtonStyles()
 
-                // 클릭한 버튼의 텍스트를 HomeNewsFragment로 전달하여 사용
-                (view.context as? HomeNewsFragment)?.onIndustryButtonClick(industryText)
+                interactionListener.onButtonSelected(industryText)
             }
         }
 

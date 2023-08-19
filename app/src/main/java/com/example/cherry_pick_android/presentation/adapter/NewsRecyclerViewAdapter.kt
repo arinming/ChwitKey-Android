@@ -6,16 +6,10 @@ import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.cherry_pick_android.data.data.ArticleItem
 import com.example.cherry_pick_android.databinding.ItemNewsBinding
 import com.example.cherry_pick_android.presentation.ui.article.ArticleActivity
 
-data class ArticleItem(
-    val title: String,
-    val company: String,
-    val time: String,
-    val picture: String,
-    val id: Int
-)
 
 class NewsRecyclerViewAdapter(private val articleDataSet: List<ArticleItem>?) :
     RecyclerView.Adapter<NewsRecyclerViewAdapter.ViewHolder>() {
@@ -59,7 +53,6 @@ class NewsRecyclerViewAdapter(private val articleDataSet: List<ArticleItem>?) :
         viewHolder.company.text = articleItem?.company
         viewHolder.time.text = articleItem?.time
         viewHolder.id = articleItem?.id
-
 
         Glide.with(viewHolder.itemView.context)
             .load(articleItem?.picture)
