@@ -19,7 +19,6 @@
             android:id="@+id/cl_scrap_none_toolbar_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/bg_scrap_toolbar"
             android:elevation="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

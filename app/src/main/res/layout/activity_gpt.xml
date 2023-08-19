@@ -6,30 +6,48 @@
     android:layout_height="match_parent"
     android:backgroundTint="@color/gpt_background_pink">
 
-    <TextView
-        android:id="@+id/tv_appName"
-        android:layout_width="wrap_content"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ll_gpt_top"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/gpt_app_name"
-        android:layout_marginTop="19dp"
-        android:layout_marginBottom="19dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/rv_gpt_messages"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/rv_gpt_messages"
+        >
 
-    <ImageButton
-        android:id="@+id/ibtn_back"
-        android:layout_width="35dp"
-        android:layout_height="34dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="19dp"
-        android:background="@color/white"
-        android:src="@drawable/ic_gpt_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageButton
+            android:id="@+id/ibtn_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@android:color/transparent"
+            android:src="@drawable/ic_back"
+            android:scaleType="fitCenter"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+        <TextView
+            android:id="@+id/tv_appName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_regular"
+            android:text="@string/gpt_app_name"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintStart_toEndOf="@+id/ibtn_back"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <RelativeLayout
         android:id="@+id/linear_gpt"
@@ -50,7 +68,9 @@
             android:layout_marginTop="9dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="9dp"
-            android:background="@drawable/ic_gpt_et"
+            android:paddingVertical="10dp"
+            android:paddingStart="10dp"
+            android:background="@drawable/bg_gray1"
             android:gravity="center|start"
             android:hint="@string/gpt_et"
             android:textSize="14sp" />
@@ -73,9 +93,8 @@
         android:id="@+id/rv_gpt_messages"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="20dp"
         android:background="@color/gpt_background_pink"
-        app:layout_constraintTop_toBottomOf="@+id/tv_appName"
+        app:layout_constraintTop_toBottomOf="@+id/ll_gpt_top"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/linear_gpt"

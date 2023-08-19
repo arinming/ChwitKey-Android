@@ -179,12 +179,12 @@ class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
     private fun isComplete(){
         if(nickFlag && genderFlag && birthFlag){
             with(binding.tvComplete){
-                setBackgroundResource(R.drawable.ic_keyword_complete)
+                setBackgroundResource(R.drawable.bg_active_btn)
                 isEnabled = true
             }
         }else{
             with(binding.tvComplete){
-                setBackgroundResource(R.drawable.ic_setting_no_complete)
+                setBackgroundResource(R.drawable.bg_disabled_btn)
                 isEnabled = false
             }
         }

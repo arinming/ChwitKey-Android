@@ -16,10 +16,10 @@
         tools:ignore="MissingConstraints">
 
         <ImageButton
-            android:id="@+id/ibtn_job_change_back"
+            android:id="@+id/ibtn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_margin="16dp"
             android:background="@null"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_back"
@@ -134,8 +134,11 @@
 
         <android.widget.Button
             android:id="@+id/btn_job_complete"
-            android:layout_width="350dp"
-            android:layout_height="48dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:background="@drawable/bg_disabled_btn"
+            android:paddingVertical="10dp"
             android:text="@string/job_change_complete"
             android:textColor="@color/white"
             android:textSize="16sp"
