@@ -37,9 +37,6 @@ class SearchKeywordFragment : Fragment(), DeleteListener {
     private val searchKeywordViewModel: SearchKeywordViewModel by viewModels() // 뷰모델 초기화 불필요 (Hilt)
     private lateinit var searchKeywordAdapter: SearchKeywordAdapter
 
-    @Inject
-    lateinit var articleService: ArticleSearchKeywordService
-
     companion object {
         const val TAG = "SearchKeywordFragment"
         fun newInstance(): SearchKeywordFragment = SearchKeywordFragment()

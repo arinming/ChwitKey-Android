@@ -100,7 +100,6 @@ class SearchKeywordDetailFragment: Fragment() {
                 val searchKeywordFragment = parentFragment as? SearchKeywordFragment
                 val keyword = searchKeywordFragment?.getNowText().toString().trim()
 
-                // trim으로 공백 제거
                 if (::articleService.isInitialized) {
                     val response = articleService.getArticleKeyword(
                         loginStatus = "",

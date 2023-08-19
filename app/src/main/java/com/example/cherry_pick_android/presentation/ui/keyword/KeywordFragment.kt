@@ -6,20 +6,30 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.data.Pageable
+import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchKeywordService
 import com.example.cherry_pick_android.databinding.FragmentKeywordBinding
+import com.example.cherry_pick_android.presentation.adapter.ArticleItem
 import com.example.cherry_pick_android.presentation.adapter.KeywordListAdapter
+import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.search.SearchKeywordFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
 @AndroidEntryPoint
 class KeywordFragment : Fragment(), DeleteListener {
@@ -29,6 +39,12 @@ class KeywordFragment : Fragment(), DeleteListener {
     private val searchKeywordViewModel: SearchKeywordViewModel by viewModels()
     private lateinit var keywordListAdapter: KeywordListAdapter
     private lateinit var bottomNavigationView: BottomNavigationView
+
+
+    @Inject
+    lateinit var articleService: ArticleSearchKeywordService
+
+
     companion object{
         const val TAG = "keywordFragment"
         fun newInstance(): KeywordFragment = KeywordFragment()
@@ -38,6 +54,8 @@ class KeywordFragment : Fragment(), DeleteListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+        getArticleList()
 
         return binding.root
     }
@@ -85,6 +103,32 @@ class KeywordFragment : Fragment(), DeleteListener {
         keywordListAdapter = KeywordListAdapter(this)
         binding.rvKeyword.adapter = keywordListAdapter
 
+    }
+
+    private fun getArticleList() {
+        // API 통신
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+                val searchKeywordFragment = parentFragment as? SearchKeywordFragment
+                val keyword = searchKeywordFragment?.getNowText().toString().trim()
+
+                // trim으로 공백 제거
+                val response = articleService.getArticleKeyword(loginStatus = "", sortType = "desc", keyword = "카카오", pageable = Pageable)
+
+
+                val statusCode = response.body()?.statusCode
+                if (statusCode == 200) {
+                    val articleItems = response.body()?.data?.content?.map { content ->
+                        val imageUrl = if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
+                        ArticleItem(content.title, content.publisher, content.uploadedAt, imageUrl, content.articleId)
+                    }
+                    Log.d("기사", articleItems.toString())
+                    binding.rvKeywordArticle.adapter = NewsRecyclerViewAdapter(articleItems)
+                } else {
+                    Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
     }
 
     override fun onDeleteClick(keyword: String) {
