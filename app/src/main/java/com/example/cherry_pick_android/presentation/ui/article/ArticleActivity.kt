@@ -183,18 +183,23 @@ class ArticleActivity : AppCompatActivity() {
 
     // 공유하기 버튼 이벤트
     private fun articleShare() {
-        binding.ibtnShare.setOnClickListener {
-            val articleShareIntent = Intent().apply {
-                action = Intent.ACTION_SEND
-                // 전달하려는 데이터 값
-                putExtra(
-                    Intent.EXTRA_TEXT,
-                    "${R.string.article_news_title}"
-                )
-                type = "text/plain"
+        lifecycleScope.launch(Dispatchers.Main){
+            val response = articleDetailService.getArticleDetail(id).body()
+
+            binding.ibtnShare.setOnClickListener {
+                val articleShareIntent = Intent().apply {
+                    action = Intent.ACTION_SEND
+                    // 전달하려는 데이터 값
+                    putExtra(
+                        Intent.EXTRA_TEXT,
+                        "${response?.data?.url}"
+                    )
+                    type = "text/plain"
+                }
+
+                startActivity(Intent.createChooser(articleShareIntent, null))
             }
 
-            startActivity(Intent.createChooser(articleShareIntent, null))
         }
     }
 
