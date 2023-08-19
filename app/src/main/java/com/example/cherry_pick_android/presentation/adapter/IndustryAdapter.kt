@@ -1,20 +1,14 @@
 package com.example.cherry_pick_android.presentation.adapter
 
-import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.R
-import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.databinding.ItemKeywordBtnBinding
-import com.example.cherry_pick_android.presentation.ui.article.ArticleActivity
-import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.home.homeNews.HomeNewsFragment
-import kotlinx.coroutines.CoroutineScope
+
 class IndustryAdapter(private val industries: List<String>) :
     RecyclerView.Adapter<IndustryAdapter.ViewHolder>() {
 
@@ -36,8 +30,6 @@ class IndustryAdapter(private val industries: List<String>) :
                     isSelected = true
                     notifyItemChanged(selectedPosition)
                     selectedPosition = clickedPosition
-                } else {
-                    isSelected = !isSelected
                 }
                 updateButtonStyles()
 
@@ -53,7 +45,7 @@ class IndustryAdapter(private val industries: List<String>) :
                 industry.setBackgroundResource(R.drawable.bg_keyword)
             } else {
                 industry.setTextColor(ContextCompat.getColor(itemView.context, R.color.gray_7))
-                industry.setBackgroundResource(R.drawable.bg_keyword_false)
+                industry.setBackgroundResource(R.drawable.bg_industry_false)
             }
         }
     }

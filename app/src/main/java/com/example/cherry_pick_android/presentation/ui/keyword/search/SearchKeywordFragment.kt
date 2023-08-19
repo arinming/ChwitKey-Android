@@ -5,35 +5,39 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchKeywordService
 import com.example.cherry_pick_android.databinding.FragmentSearchKeywordBinding
 import com.example.cherry_pick_android.presentation.adapter.SearchKeywordAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.DeleteListener
-import com.example.cherry_pick_android.presentation.ui.keyword.dialog.KeywordDialog
 import com.example.cherry_pick_android.presentation.ui.keyword.KeywordFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
+import com.example.cherry_pick_android.presentation.ui.newsSearch.ArticleSearchFragment
+import com.example.cherry_pick_android.presentation.ui.newsSearch.SearchListFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 // 키워드 검색 프래그먼트
 @AndroidEntryPoint
-class SearchKeywordFragment: Fragment(), DeleteListener {
+class SearchKeywordFragment : Fragment(), DeleteListener {
     private val binding: FragmentSearchKeywordBinding by lazy {
         FragmentSearchKeywordBinding.inflate(layoutInflater)
     }
-    private var searchKeywordDetailFragment: SearchKeywordDetailFragment? = null
+    var searchKeywordDetailFragment: SearchKeywordDetailFragment? = null
     private val searchKeywordViewModel: SearchKeywordViewModel by viewModels() // 뷰모델 초기화 불필요 (Hilt)
     private lateinit var searchKeywordAdapter: SearchKeywordAdapter
-    companion object{
+
+    companion object {
         const val TAG = "SearchKeywordFragment"
         fun newInstance(): SearchKeywordFragment = SearchKeywordFragment()
     }
@@ -51,18 +55,14 @@ class SearchKeywordFragment: Fragment(), DeleteListener {
         binding.etSearch.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
             override fun afterTextChanged(p0: Editable?) {}
+
             override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                val text = p0.toString()
-                if (text.isNotEmpty()) { // 입력하는 순간 검색 세부사항 프래그먼트로 이동
-                    addDetailFragment()
-                } else { // EditText값이 없다면 세부사항 프래그먼트 삭제
-                    removeDetailFragment()
-                }
+                changeText()
             }
         })
 
         // DB 데이터 로드 및 개수 초기화
-        searchKeywordViewModel.loadKeyword().observe(viewLifecycleOwner){
+        searchKeywordViewModel.loadKeyword().observe(viewLifecycleOwner) {
             searchKeywordAdapter.setList(it)
             binding.tvKeywordCnt.text = it.size.toString()
         }
@@ -78,28 +78,7 @@ class SearchKeywordFragment: Fragment(), DeleteListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
 
-        // 키워드 등록 버튼 이벤트
-        binding.btnComplete.setOnClickListener {
-            val keyword = binding.etSearch.text.toString().trim() // EditText 내용 가져오기
-            val isKeywordNew = searchKeywordViewModel.checkKeyword(keyword) // 중복 키워드 검사
-            val isKeywordCnt = searchKeywordViewModel.checkKeywordCnt() // 키워드 개수 검사
 
-            if(keyword.isNotEmpty() && isKeywordNew && isKeywordCnt){
-                searchKeywordViewModel.addKeyword(keyword)
-                hideKeyboard()
-                binding.etSearch.text = null
-                KeywordDialog().show(parentFragmentManager, "keyword_dialog")
-            }
-            else if(keyword.isEmpty()){
-                Toast.makeText(context, "키워드를 입력하지 않았습니다",Toast.LENGTH_SHORT).show()
-            }
-            else if(!isKeywordCnt){
-                Toast.makeText(context, "키워드 최대 개수를 초과했습니다", Toast.LENGTH_SHORT).show()
-            }
-            else{
-                Toast.makeText(context, "이미 존재하는 키워드입니다", Toast.LENGTH_SHORT).show()
-            }
-        }
 
         return binding.root
     }
@@ -107,9 +86,9 @@ class SearchKeywordFragment: Fragment(), DeleteListener {
     // 키워드가 존재 유무에 따른 프래그먼트 전환
     override fun onDestroyView() {
         Log.d(TAG, "onDestoryView")
-        if(searchKeywordViewModel.loadKeyword().value!!.isNotEmpty()){
+        if (searchKeywordViewModel.loadKeyword().value!!.isNotEmpty()) {
             showFragment(KeywordFragment.newInstance(), KeywordFragment.TAG)
-        }else{
+        } else {
             showFragment(FirstKeywordFragment.newInstance(), FirstKeywordFragment.TAG)
         }
         super.onDestroyView()
@@ -121,7 +100,8 @@ class SearchKeywordFragment: Fragment(), DeleteListener {
         if (searchKeywordDetailFragment == null) {
             searchKeywordDetailFragment = SearchKeywordDetailFragment.newInstance()
             childFragmentManager.beginTransaction()
-                .replace(R.id.fv_search_keyword, searchKeywordDetailFragment!!,
+                .replace(
+                    R.id.fv_search_keyword, searchKeywordDetailFragment!!,
                     SearchKeywordDetailFragment.TAG
                 )
                 .commitAllowingStateLoss()
@@ -138,13 +118,20 @@ class SearchKeywordFragment: Fragment(), DeleteListener {
         }
     }
 
+    fun getNowText() : String {
+        return binding.etSearch.text.toString()
+    }
+
     // 키패드 제거 함수
-    private fun hideKeyboard(){
-        val imm = requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    private fun hideKeyboard() {
+        val imm =
+            requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(requireActivity().window.decorView.applicationWindowToken, 0)
     }
-    private fun initView(){
-        binding.rvKeyword.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+
+    private fun initView() {
+        binding.rvKeyword.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         searchKeywordAdapter = SearchKeywordAdapter(this)
         binding.rvKeyword.adapter = searchKeywordAdapter
     }
@@ -157,11 +144,29 @@ class SearchKeywordFragment: Fragment(), DeleteListener {
     }
 
     // 프래그먼트 전환 함수
-    fun showFragment(fragment: Fragment, tag: String){
+    private fun showFragment(fragment: Fragment, tag: String) {
         val transaction: FragmentTransaction =
             requireActivity().supportFragmentManager.beginTransaction()
                 .replace(R.id.fv_home, fragment, tag)
         transaction.commitAllowingStateLoss()
+    }
+
+    private fun changeText() {
+        // 엔터 감지
+        binding.etSearch.setOnKeyListener { v, keyCode, event ->
+            if (keyCode == KeyEvent.KEYCODE_ENTER) {
+                val text = binding.etSearch.text.toString()
+                if (text.isNotEmpty()) {
+                    addDetailFragment()
+                    searchKeywordDetailFragment?.getArticleList()
+                } else {
+                    removeDetailFragment()
+                }
+                true
+            } else {
+                false
+            }
+        }
     }
 
 }

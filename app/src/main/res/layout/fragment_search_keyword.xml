@@ -38,6 +38,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/ic_keyword_et"
+                android:maxLines="1"
+                android:inputType="text"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:paddingStart="16dp"
@@ -61,8 +63,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="23dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_complete"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linear_search">
@@ -76,27 +77,26 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/keyword_isKeyword"
-                android:textSize="16sp"
                 android:fontFamily="@font/pretendard_bold"
-                />
+                android:text="@string/keyword_isKeyword"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/tv_keyword_cnt"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="7dp"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="@string/keyword_count_none"
                 android:textColor="@color/main_pink"
-                android:textSize="16sp"
-                android:fontFamily="@font/pretendard_bold" />
+                android:textSize="16sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/pretendard_bold"
                 android:text="@string/keyword_count_max"
-                android:textSize="16sp"
-                android:fontFamily="@font/pretendard_bold" />
+                android:textSize="16sp" />
         </LinearLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -122,33 +122,10 @@
         android:id="@+id/fv_search_keyword"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="23dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        app:layout_constraintBottom_toTopOf="@+id/btn_complete"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linear_search"
-        />
-
-    <android.widget.Button
-        android:id="@+id/btn_complete"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/ic_keyword_complete"
-        android:fontFamily="@font/pretendard_bold"
-        android:text="@string/keyword_up_lode_button"
-        android:textColor="@color/white"
-        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fv_search_keyword" />
-
+        app:layout_constraintTop_toTopOf="@+id/frameLayout2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
