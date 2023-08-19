@@ -9,10 +9,10 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.data.ArticleItem
 import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
 import com.example.cherry_pick_android.databinding.FragmentSearchListBinding
-import com.example.cherry_pick_android.presentation.adapter.ArticleItem
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -41,7 +41,6 @@ class SearchListFragment : Fragment() {
     ): View {
         _binding = FragmentSearchListBinding.inflate(inflater, container, false)
         getArticleList()
-        initNewsList()
 
         return binding.root
     }
@@ -89,9 +88,6 @@ class SearchListFragment : Fragment() {
             }
         }
     }
-
-
-    private fun initNewsList() { }
 
     // 메뉴
     private fun showSortingMenu(view: View) {

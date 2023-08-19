@@ -15,10 +15,10 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.data.ArticleItem
 import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchKeywordService
 import com.example.cherry_pick_android.databinding.FragmentKeywordBinding
-import com.example.cherry_pick_android.presentation.adapter.ArticleItem
 import com.example.cherry_pick_android.presentation.adapter.KeywordListAdapter
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
@@ -166,9 +166,9 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
         transaction.addToBackStack(tag).commitAllowingStateLoss()
     }
 
-    override fun onKeywordSelected(keyword: String) {
-        selectedKeyword = keyword
-        loadArticlesByKeyword(keyword)
+    override fun onButtonSelected(button: String) {
+        selectedKeyword = button
+        loadArticlesByKeyword(button)
     }
 
 

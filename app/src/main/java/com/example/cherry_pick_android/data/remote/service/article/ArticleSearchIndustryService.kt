@@ -10,11 +10,8 @@ interface ArticleSearchIndustryService {
     // 직군 & 정렬
     @GET("/api/articles/search/industry")
     suspend fun getArticleIndustry(
-        @Query("memberId") memberId: Int,
         @Query("sortType") sortType: String,
         @Query("industry") industry: String,
         @Query("pageable") pageable: Pageable
     ): Response<ArticleIndustryResponse>
-
-
 }
