@@ -5,6 +5,7 @@ import android.util.Log
 import com.example.cherry_pick_android.data.remote.service.article.ArticleDetailService
 import com.example.cherry_pick_android.data.remote.service.article.ArticleLikeService
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
+import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchIndustryService
 import com.example.cherry_pick_android.data.remote.service.article.ArticleUnlikeService
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchKeywordService
 import com.example.cherry_pick_android.data.remote.service.gpt.GptQnaService
@@ -171,4 +172,9 @@ class ApiModule {
         return retrofit.create(ArticleSearchKeywordService::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun provideIndustryArticle(retrofit: Retrofit): ArticleSearchIndustryService {
+        return retrofit.create(ArticleSearchIndustryService::class.java)
+    }
 }

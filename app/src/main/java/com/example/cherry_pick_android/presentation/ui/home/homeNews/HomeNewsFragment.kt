@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.ArticleItem
 import com.example.cherry_pick_android.data.data.Pageable
-import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
+import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchIndustryService
 import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.databinding.FragmentHomeNewsBinding
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
@@ -34,10 +34,9 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
     private val binding get() = _binding!!
 
     private var industryInit: String = ""
-    private var isMenuOpen = false
 
     @Inject
-    lateinit var articleService: ArticleSearchCommendService
+    lateinit var articleService: ArticleSearchIndustryService
 
     @Inject
     lateinit var userInfoService: UserInfoService
@@ -87,16 +86,17 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
         // API 통신
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
-                val response = articleService.getArticleCommend(
-                    cond = industryInit,
+                var nowIndustry = mapperToIndustry(industryInit)
+                val response = articleService.getArticleIndustry(
+                    industry = nowIndustry,
                     sortType = sort,
                     pageable = Pageable
                 )
-                Log.d("직군 정렬", "$industryInit, $sort")
+                Log.d("초기 직군", "$industryInit, $nowIndustry")
 
                 val statusCode = response.body()?.statusCode
                 if (statusCode == 200) {
-                    onIndustryButtonClick(industryInit)
+                    onIndustryButtonClick(nowIndustry)
 
                     val articleItems = response.body()?.data?.content?.map { content ->
                         val imageUrl =
@@ -118,7 +118,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
     }
 
 
-
     // 검색창 누르면 NewsSearch 액티비티로 이동
     private fun goToNewsSearch() {
         binding.ibtnHomeSearchBackground.setOnClickListener {
@@ -126,6 +125,29 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
                 val intent = Intent(it, NewsSearchActivity::class.java)
                 it.startActivity(intent)
             }
+        }
+    }
+
+    // 한글 -> 영문 매핑
+    private fun mapperToIndustry(value: String): String {
+        return when (value) {
+            "철강" -> "steel"
+            "석유·화학" -> "Petroleum/Chemical"
+            "정" -> "oilrefining"
+            "2차 전지" -> "secon유arybattery"
+            "반도체" -> "Semiconductor"
+            "디스플레이" -> "Display"
+            "휴대폰" -> "Mobile"
+            "IT" -> "It"
+            "자동차" -> "car"
+            "조선" -> "Shipbuilding"
+            "해운" -> "Shipping"
+            "F&B" -> "FnB"
+            "소매유통" -> "RetailDistribution"
+            "건설" -> "Construction"
+            "호텔·여행·항공" -> "HotelTravel"
+            "섬유·의류" -> "FiberClothing"
+            else -> ""
         }
     }
 
@@ -142,10 +164,12 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
                     binding.tvSorting.text = getString(R.string.sort_article_asc)
                     getArticleList("asc")
                 }
+
                 R.id.menu_sort_desc -> {
                     binding.tvSorting.text = getString(R.string.sort_article_desc)
                     getArticleList("desc")
                 }
+
                 R.id.menu_sort_like -> {
                     binding.tvSorting.text = getString(R.string.sort_article_like)
                     getArticleList("like")
@@ -222,24 +246,24 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
     // 버튼 클릭 시 호출되는 함수
     private fun onIndustryButtonClick(industry: String) {
         industryInit = industry // 클릭한 버튼의 텍스트를 저장
-        Log.d("직군 함수 호출", industryInit) // 클릭한 버튼의 텍스트 로그로 출력
     }
 
     // 버튼 클릭시 뉴스 리스트 갱신
-    private fun loadArticlesByIndustry(keyword: String) {
+    private fun loadArticlesByIndustry(industry: String) {
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
-                val response = articleService.getArticleCommend(
+                var nowIndustry = mapperToIndustry(industry)
+                val response = articleService.getArticleIndustry(
                     sortType = when (binding.tvSorting.text) {
                         "인기순" -> "like"
                         "오름차순" -> "asc"
                         "내림차순" -> "desc"
                         else -> ""
                     },
-                    cond = keyword,
+                    industry = nowIndustry,
                     pageable = Pageable
                 )
-
+                Log.d("직군", "$industryInit, $nowIndustry")
                 // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신
                 val articleItems = response.body()?.data?.content?.map { content ->
                     val imageUrl =
