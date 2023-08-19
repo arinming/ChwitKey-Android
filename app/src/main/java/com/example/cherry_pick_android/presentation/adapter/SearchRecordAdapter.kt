@@ -12,16 +12,16 @@ class SearchRecordAdapter(
 
     // 뷰 홀더 클래스
     inner class ViewHolder(val binding: ItemSearchBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun setRecordItem(records: String) {
-            binding.btnRecentSearchItem.text = records
-        }
+        fun bind(record: SearchRecordEntity) {
+            binding.btnRecentSearchItem.text = record.record
 
-        init {
             // 삭제 버튼 클릭 이벤트 설정
             binding.ibtnDeleteRecentSearch.setOnClickListener {
                 val position = adapterPosition
                 if (position != RecyclerView.NO_POSITION) {
-                    deleteListener.onDeleteClick(records[position].record)
+                    deleteListener.onDeleteClick(record.record)
+                    // 삭제한 아이템만 제거하도록 수정
+                    removeRecord(record)
                 }
             }
         }
@@ -38,12 +38,8 @@ class SearchRecordAdapter(
 
     // 호출한 내용으로 bind
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
-        viewHolder.setRecordItem(records[position].record)
-
-        // 삭제 버튼 클릭 이벤트 설정
-        viewHolder.binding.ibtnDeleteRecentSearch.setOnClickListener {
-            deleteListener.onDeleteClick(records[position].record)
-        }
+        val record = records[position]
+        viewHolder.bind(record)
     }
 
     // 데이터 크기 반환
@@ -59,12 +55,12 @@ class SearchRecordAdapter(
         return records
     }
 
+
     fun removeRecord(record: SearchRecordEntity) {
         val position = records.indexOf(record)
         if (position != -1) {
             records.removeAt(position)
             notifyItemRemoved(position)
-            notifyItemRangeChanged(position, itemCount)
         }
     }
 }
