@@ -2,6 +2,7 @@ package com.example.cherry_pick_android.presentation.ui.keyword.search
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -111,7 +112,8 @@ class SearchKeywordDetailFragment: Fragment() {
                         val imageUrl = if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
                         ArticleItem(content.title, content.publisher, content.uploadedAt, imageUrl, content.articleId)
                     }
-                    binding.rvKeywordSearch.adapter = NewsRecyclerViewAdapter(articleItems)
+                    Log.d("기사", articleItems.toString())
+                    binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
                 } else {
                     Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
                 }
