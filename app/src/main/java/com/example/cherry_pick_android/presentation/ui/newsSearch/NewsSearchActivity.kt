@@ -1,6 +1,8 @@
 package com.example.cherry_pick_android.presentation.ui.newsSearch
 
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.KeyEvent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -26,6 +28,20 @@ class NewsSearchActivity: AppCompatActivity() {
         initFragment()
         changeText()
         goToBack()
+
+        // 텍스트가 변경될 때마다 프래그먼트 변경 감지
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val newText = s?.toString() ?: ""
+                if (newText.isEmpty()) {
+                    changeFragment(ArticleSearchFragment.oldInstance())
+                }
+            }
+        })
     }
 
     override fun onDestroy() {
@@ -82,7 +98,7 @@ class NewsSearchActivity: AppCompatActivity() {
     }
 
 
-    private fun changeFragment(fragment: Fragment) {
+    fun changeFragment(fragment: Fragment) {
         manager.beginTransaction().replace(R.id.fl_search, fragment).commit()
     }
 

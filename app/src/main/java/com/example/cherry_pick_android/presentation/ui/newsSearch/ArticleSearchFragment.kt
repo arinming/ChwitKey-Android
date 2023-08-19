@@ -31,7 +31,7 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
     private val keywords = listOf(
         Keyword("2차전지"), Keyword("IT"), Keyword("철강"), Keyword("정유"),
         Keyword("석유"), Keyword("반도체"), Keyword("디스플레이"), Keyword("휴대폰"),
-        Keyword("반도체"), Keyword("해운"), Keyword("F&B"), Keyword("건설"), Keyword("소매유통")
+        Keyword("해운"), Keyword("F&B"), Keyword("건설"), Keyword("소매유통")
     )
 
     companion object {
@@ -116,5 +116,7 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
                 }
             }
         }
+        val newsSearchActivity = activity as? NewsSearchActivity
+        newsSearchActivity?.changeFragment(SearchListFragment.newInstance())
     }
 }
