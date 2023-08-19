@@ -30,15 +30,15 @@ class KeywordListAdapter (private val deleteListener: DeleteListener): RecyclerV
 
         // 버튼 색상 설정
         val isSelected = keywordEntity.isSelected
-        val button = holder.binding.rlKeywordComplete
+        val button = holder.binding.btnKeyword
         if (isSelected) {
-            button.setBackgroundResource(R.drawable.bg_keyword)
+            holder.binding.rlKeywordComplete.setBackgroundResource(R.drawable.bg_keyword)
         } else {
-            button.setBackgroundResource(R.drawable.bg_keyword_false)
+            holder.binding.rlKeywordComplete.setBackgroundResource(R.drawable.bg_keyword_false)
         }
 
         // 클릭 이벤트 핸들러에서 선택된 버튼의 위치를 업데이트하고 어댑터를 갱신
-        holder.itemView.setOnClickListener { view ->
+        button.setOnClickListener { view ->
             val clickedPosition = holder.adapterPosition
             if (selectedPosition != clickedPosition) {
                 items[selectedPosition].isSelected = false
@@ -56,26 +56,6 @@ class KeywordListAdapter (private val deleteListener: DeleteListener): RecyclerV
 
     inner class KeywordListHolder(val binding: ItemKeywordCompleteBtnBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
-        var keyword = binding.btnKeyword
-        var isSelected = false // 추가: 버튼이 선택되었는지 여부를 추적하는 변수
-
-        init {
-            keyword.setOnClickListener { view ->
-                val keywordText = keyword.text.toString()
-                Log.d("키워드 버튼 클릭", keywordText)
-
-                // 선택된 버튼의 위치 업데이트
-                val clickedPosition = adapterPosition
-                if (selectedPosition != clickedPosition) {
-                    isSelected = true
-                    notifyItemChanged(selectedPosition)
-                    selectedPosition = clickedPosition
-                }
-
-            }
-        }
-
         fun setItem(keyword: String) {
             binding.btnKeyword.text = keyword
         }
