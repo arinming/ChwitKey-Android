@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.cherry_pick_android.R
@@ -28,8 +29,8 @@ class ArticleActivity : AppCompatActivity() {
     private lateinit var binding: ActivityArticleBinding
 
     // 좋아요, 스크랩 초기화
-    private var isScrappedInit = false
-    private var isLikeInit = false
+    private var isScraped = false
+    private var isLiked = false
     private var id = 0
 
     @Inject
@@ -69,9 +70,9 @@ class ArticleActivity : AppCompatActivity() {
     private fun getDetailArticle() {
         // API 통신
         lifecycleScope.launch {
+            val response = articleDetailService.getArticleDetail(id)
+            val statusCode = response.body()?.statusCode
             withContext(Dispatchers.Main) {
-                val response = articleDetailService.getArticleDetail(id)
-                val statusCode = response.body()?.statusCode
                 if (statusCode == 200) {
                     response.body()?.data?.articlePhoto?.map { image ->
                         val imageUrl = image.articleImgUrl.ifEmpty { "" } // 기사 사진이 없으면 빈 문자열로 처리
@@ -100,6 +101,17 @@ class ArticleActivity : AppCompatActivity() {
                     binding.tvArticleDetail.text = firstTwoSentences.replace("\\n", "\n")
 
                     binding.tvArticleTime.text = response.body()?.data?.uploadedAt
+
+                    // 스크랩 or 좋아요 여부
+                    val isScrap = response.body()?.data?.isScrapped!!
+                    val isLike = response.body()?.data?.isLiked!!
+                    isScraped = isScrap
+                    isLiked = isLike
+
+                    // 스크랩, 좋아요 표시
+                    loadIsScraped(isScrap)
+                    loadIsLiked(isLike)
+
                 } else {
                     Toast.makeText(this@ArticleActivity, "에러", Toast.LENGTH_SHORT).show()
                 }
@@ -128,56 +140,62 @@ class ArticleActivity : AppCompatActivity() {
     // 스크랩 버튼 이벤트
     private fun articleScrap() {
         binding.ibtnScrap.setOnClickListener {
-            val isScrapped = !isScrappedInit
+            Log.d(TAG, "SCRAP:$isScraped")
             // 스크랩 여부 판별해서 버튼 변경
             var changeScrapButton = 0
             var snackbarText = 0
+            var likeStatusCode = 0
+            var unStatusCode = 0
 
-            // 통신을 성공할 때에만 스크랩 수행
-            if(isScrapped){
-                lifecycleScope.launch(Dispatchers.Main){
-                    val statusCode = articleLikeService.postArticleLike(id, "scrap").body()?.statusCode
-                    if(statusCode == 200){
-                        isScrappedInit = true
+            lifecycleScope.launch(Dispatchers.Main) {
+                if(!isScraped){
+                    likeStatusCode = articleLikeService.postArticleLike(id, "scrap").body()?.statusCode ?: 0
+                    if(likeStatusCode == 200){
                         changeScrapButton = R.drawable.ic_scrap_true
                         snackbarText = R.string.scrap_snackbar_true
+                        isScraped = true
                     }else{
                         snackbarText = R.string.scrap_and_like_error
                     }
-                }
-            }else{
-                lifecycleScope.launch(Dispatchers.Main) {
-                    val statusCode = articleUnlikeService.deleteArticleUnlike(id, "scrap").body()?.statusCode
-                    if(statusCode == 200){
-                        isScrappedInit = false
+                }else{
+                    unStatusCode = articleUnlikeService.deleteArticleUnlike(id, "scrap").body()?.statusCode ?: 0
+                    if(unStatusCode == 200){
                         changeScrapButton = R.drawable.ic_scrap_false
                         snackbarText = R.string.scrap_snackbar_false
+                        isScraped = false
                     }else{
                         snackbarText = R.string.scrap_and_like_error
                     }
                 }
+                binding.ibtnScrap.setImageResource(changeScrapButton)
+                Snackbar.make(binding.root, snackbarText, Snackbar.LENGTH_SHORT).show()
             }
-
-            binding.ibtnScrap.setImageResource(changeScrapButton)
-            Snackbar.make(binding.root, snackbarText, Snackbar.LENGTH_SHORT).show()
         }
     }
 
     // 좋아요 버튼 이벤트
     private fun articleLike() {
         binding.ibtnLike.setOnClickListener {
-            val isLike = !isLikeInit
+            var changeLikeButton = 0
 
-            // 좋아요 여부 판별해서 버튼 변경
-            val changeLikeButton = if (isLike) {
-                isLikeInit = true
-                R.drawable.ic_like_true
-            } else {
-                isLikeInit = false
-                R.drawable.ic_like_false
+            lifecycleScope.launch {
+                if(!isLiked){
+                    val statusCode = articleLikeService.postArticleLike(id, "like").body()?.statusCode ?: 0
+                    if(statusCode == 200){
+                        changeLikeButton = R.drawable.ic_like_true
+                        isLiked = true
+                    }else{Toast.makeText(this@ArticleActivity, "오류 발생", Toast.LENGTH_SHORT).show()}
+                }else{
+                    val statusCode = articleUnlikeService.deleteArticleUnlike(id, "like").body()?.statusCode ?: 0
+                    if(statusCode == 200){
+                        changeLikeButton = R.drawable.ic_like_false
+                        isLiked = false
+                    }else{Toast.makeText(this@ArticleActivity, "오류 발생", Toast.LENGTH_SHORT).show()}
+                }
+                withContext(Dispatchers.Main){
+                    binding.ibtnLike.setImageResource(changeLikeButton)
+                }
             }
-
-            binding.ibtnLike.setImageResource(changeLikeButton)
         }
     }
 
@@ -218,4 +236,21 @@ class ArticleActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun loadIsScraped(it: Boolean){
+        if(it){
+            binding.ibtnScrap.setImageResource(R.drawable.ic_scrap_true)
+        }else{
+            binding.ibtnScrap.setImageResource(R.drawable.ic_scrap_false)
+        }
+    }
+
+    private fun loadIsLiked(it: Boolean){
+        if(it){
+            binding.ibtnLike.setImageResource(R.drawable.ic_like_true)
+        }else{
+            binding.ibtnLike.setImageResource(R.drawable.ic_like_false)
+        }
+    }
+
 }

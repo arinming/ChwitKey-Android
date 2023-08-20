@@ -9,7 +9,6 @@ import android.text.style.StyleSpan
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -17,14 +16,13 @@ import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.remote.request.login.SignInRequest
 import com.example.cherry_pick_android.data.remote.service.login.SignInService
-import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
-import com.example.cherry_pick_android.data.remote.service.user.UserKeywordService
 import com.example.cherry_pick_android.databinding.ActivityLoginBinding
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.infrom.InformSettingActivity
 import com.example.cherry_pick_android.presentation.ui.login.loginManager.KakaoLoginManager
 import com.example.cherry_pick_android.presentation.ui.login.loginManager.NaverLoginManager
+import com.example.cherry_pick_android.presentation.util.ApplicationClass
 import com.example.cherry_pick_android.presentation.util.PlatformManager
 import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
 import com.kakao.sdk.user.UserApiClient
@@ -90,6 +88,7 @@ class LoginActivity: AppCompatActivity() {
                         if(response?.isMember.toString() == "true"){
                             viewModel.setUserData("isInit", "exitUser")
                             viewModel.setUserData("token", response?.access_token.toString())
+                            tokenLoad(response?.access_token.toString())
                             val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                             startActivity(intent)
                             finish()
@@ -97,6 +96,7 @@ class LoginActivity: AppCompatActivity() {
                             viewModel.setUserData("isInit", "InitUser")
                             viewModel.setUserData("token", response?.access_token.toString())
                             val intent = Intent(this@LoginActivity, InformSettingActivity::class.java)
+                            tokenLoad(response?.access_token.toString())
                             startActivity(intent)
                             Log.d(TAG, "토큰 등록 완료")
                             finish()
@@ -169,6 +169,12 @@ class LoginActivity: AppCompatActivity() {
                     })
                 }
             }
+        }
+    }
+
+    private fun tokenLoad(token: String){
+        if(ApplicationClass.authToken != token){
+            ApplicationClass.authToken = token
         }
     }
 

@@ -300,8 +300,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
 
         // 직군 키워드 업데이트
         userInfoLoad()
-        ImageLoad()
-
         goBack()
         showCameraDialog()
         ChangeName()
@@ -411,6 +409,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         binding.ibtnProfileNameChange.setOnClickListener{
             cnt+=1
             isNameChange(cnt)
+            binding.etProfileName.requestFocus()
 
             // 닉네임 수정
             if(cnt%2 == 0){
@@ -538,28 +537,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
-    private fun ImageLoad(){
-
-        lifecycleScope.launch {
-            val response = userInfoService.getUserInfo().body()
-            val statusCode = response?.statusCode
-            val imageResponse = response?.data?.memberImgUrl
-
-            withContext(Dispatchers.Main){
-                if(statusCode == 200){
-                    if(imageResponse!=null) {
-                        Glide.with(applicationContext).load(imageResponse).circleCrop()
-                            .into(binding.ivProfilePic)
-                    }else{
-                        binding.ivProfilePic.setImageDrawable(getDrawable(R.drawable.ic_my_page_user))
-                    }
-                }else{
-                    Toast.makeText(this@ProfileActivity, "통신오류: $statusCode", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
     private fun userInfoLoad(){
         lifecycleScope.launch {
             val response = userInfoService.getUserInfo().body()
@@ -570,10 +547,19 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
                         mapperToJob(response?.data?.industryKeyword3.toString())
             withContext(Dispatchers.Main){
                 if(statusCode == 200){
+                    val imageResponse = response?.data?.memberImgUrl
                     binding.tvProfileJob.text = industryResponse
                     binding.etProfileName.setText(response.data?.name)
-                    binding.tvBirth.text = response.data?.birthdate
-                    binding.tvGender.text = response.data?.gender
+                    binding.tvBirth.text = mapperToBirth(response.data?.birthdate!!)
+                    binding.tvGender.text = response.data.gender
+
+                    // 이미지 로드
+                    if(imageResponse!=null) {
+                        Glide.with(applicationContext).load(imageResponse).circleCrop()
+                            .into(binding.ivProfilePic)
+                    }else{
+                        binding.ivProfilePic.setImageDrawable(getDrawable(R.drawable.ic_my_page_user))
+                    }
                 }else{
                     Toast.makeText(this@ProfileActivity, "통신오류: $statusCode", Toast.LENGTH_SHORT).show()
                 }
@@ -592,6 +578,14 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
 
         return result!!
     }
+}
+
+private fun mapperToBirth(birth: String): String{
+    val year = birth.substring(0, 4)
+    val month = birth.substring(4, 6)
+    val day = birth.substring(6, 8)
+
+    return "$year.$month.$day"
 }
 
 enum class RequestCode {

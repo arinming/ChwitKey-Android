@@ -11,6 +11,8 @@ import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.databinding.FragmentMypageBinding
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
@@ -117,7 +119,14 @@ class MyPageFragment : Fragment() {
             val statusCode = response?.statusCode
 
             if(statusCode == 200){
+                val imageResponse = response?.data?.memberImgUrl
                 binding.tvMypageUserName.text = response.data?.name
+                if(imageResponse!=null) {
+                    Glide.with(requireActivity().applicationContext).load(imageResponse).circleCrop()
+                        .into(binding.ivProfilePic)
+                }else{
+                    binding.ivProfilePic.setImageResource(R.drawable.ic_my_page_user)
+                }
             }else{
                 Toast.makeText(requireContext(), "통신 오류:$statusCode", Toast.LENGTH_SHORT).show()
             }
