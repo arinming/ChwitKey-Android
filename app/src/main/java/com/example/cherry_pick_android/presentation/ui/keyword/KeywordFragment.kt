@@ -146,7 +146,7 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
                             imageUrl,
                             content.articleId
                         )
-                    }
+                    }?.toMutableList()
                     Log.d("기사", articleItems.toString())
                     binding.rvKeywordArticle.adapter = NewsRecyclerViewAdapter(articleItems)
                 } else {
@@ -208,7 +208,7 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
                         imageUrl,
                         content.articleId
                     )
-                }
+                }?.toMutableList()
                 binding.rvKeywordArticle.adapter = NewsRecyclerViewAdapter(articleItems)
             }
         }

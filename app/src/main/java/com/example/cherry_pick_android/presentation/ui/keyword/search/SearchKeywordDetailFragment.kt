@@ -120,7 +120,7 @@ class SearchKeywordDetailFragment: Fragment() {
                                 imageUrl,
                                 content.articleId
                             )
-                        }
+                        }?.toMutableList()
                         Log.d("기사", articleItems.toString())
                         binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
                     } else {

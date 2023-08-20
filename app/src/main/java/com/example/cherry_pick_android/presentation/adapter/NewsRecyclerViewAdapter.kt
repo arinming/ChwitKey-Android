@@ -13,7 +13,7 @@ import com.example.cherry_pick_android.databinding.ItemNewsBinding
 import com.example.cherry_pick_android.presentation.ui.article.ArticleActivity
 
 
-class NewsRecyclerViewAdapter(private val articleDataSet: List<ArticleItem>?) :
+class NewsRecyclerViewAdapter(private val articleDataSet: MutableList<ArticleItem>?) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     companion object {
@@ -100,9 +100,4 @@ class NewsRecyclerViewAdapter(private val articleDataSet: List<ArticleItem>?) :
             else -> ITEM
         }
     }
-
-    fun updateItem(list: List<ArticleItem>?) {
-        this.filteredList = list
-    }
-
 }
