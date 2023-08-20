@@ -25,6 +25,7 @@ import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.infrom.InformSettingActivity
 import com.example.cherry_pick_android.presentation.ui.login.loginManager.KakaoLoginManager
 import com.example.cherry_pick_android.presentation.ui.login.loginManager.NaverLoginManager
+import com.example.cherry_pick_android.presentation.util.ApplicationClass
 import com.example.cherry_pick_android.presentation.util.PlatformManager
 import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
 import com.kakao.sdk.user.UserApiClient
@@ -90,6 +91,7 @@ class LoginActivity: AppCompatActivity() {
                         if(response?.isMember.toString() == "true"){
                             viewModel.setUserData("isInit", "exitUser")
                             viewModel.setUserData("token", response?.access_token.toString())
+                            tokenLoad(response?.access_token.toString())
                             val intent = Intent(this@LoginActivity, HomeActivity::class.java)
                             startActivity(intent)
                             finish()
@@ -97,6 +99,7 @@ class LoginActivity: AppCompatActivity() {
                             viewModel.setUserData("isInit", "InitUser")
                             viewModel.setUserData("token", response?.access_token.toString())
                             val intent = Intent(this@LoginActivity, InformSettingActivity::class.java)
+                            tokenLoad(response?.access_token.toString())
                             startActivity(intent)
                             Log.d(TAG, "토큰 등록 완료")
                             finish()
@@ -169,6 +172,12 @@ class LoginActivity: AppCompatActivity() {
                     })
                 }
             }
+        }
+    }
+
+    private fun tokenLoad(token: String){
+        if(ApplicationClass.authToken != token){
+            ApplicationClass.authToken = token
         }
     }
 

@@ -3,6 +3,7 @@ package com.example.cherry_pick_android.presentation.util
 import android.app.Application
 import android.util.Log
 import com.example.cherry_pick_android.BuildConfig
+import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
@@ -17,6 +18,9 @@ import javax.inject.Inject
 class ApplicationClass: Application() {
     @Inject
     lateinit var userDataRepository: UserDataRepository
+    @Inject
+    lateinit var userInfoService: UserInfoService
+
     companion object{
         var authToken: String = ""
         const val TAG = "ApplicationContext"
