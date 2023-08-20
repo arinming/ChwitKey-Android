@@ -87,10 +87,16 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
                 var nowIndustry = mapperToIndustry(industryInit)
+                val pageable = Pageable(
+                    page = 1,
+                    size = 2,
+                    sort = "your_sort_value"
+                )
+
                 val response = articleService.getArticleIndustry(
                     industry = nowIndustry,
                     sortType = sort,
-                    pageable = Pageable
+                    pageable = pageable
                 )
                 Log.d("초기 직군", "$industryInit, $nowIndustry")
 
@@ -261,7 +267,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
                         else -> ""
                     },
                     industry = nowIndustry,
-                    pageable = Pageable
+                    pageable = Pageable(1, 10, "")
                 )
                 Log.d("직군", "$industryInit, $nowIndustry")
                 // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신

@@ -71,7 +71,7 @@ class SearchListFragment : Fragment() {
                 }
 
                 // trim으로 공백 제거
-                val response = articleService.getArticleCommend(cond.toString().trim(), sort.toString(), Pageable)
+                val response = articleService.getArticleCommend(cond.toString().trim(), sort.toString(), Pageable(1, 10, ""))
 
 
                 val statusCode = response.body()?.statusCode

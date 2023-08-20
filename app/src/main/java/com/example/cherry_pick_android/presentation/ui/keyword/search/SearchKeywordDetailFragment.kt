@@ -105,7 +105,7 @@ class SearchKeywordDetailFragment: Fragment() {
                         loginStatus = "",
                         sortType = "desc",
                         keyword = keyword,
-                        pageable = Pageable
+                        pageable = Pageable(1, 10, "")
                     )
 
                     val statusCode = response.body()?.statusCode

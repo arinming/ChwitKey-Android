@@ -1,5 +1,6 @@
 package com.example.cherry_pick_android.presentation.viewmodel.article
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.cherry_pick_android.data.remote.response.article.ArticleCommendResponse
@@ -10,9 +11,16 @@ import javax.inject.Inject
 class ArticleViewModel @Inject constructor(
 ) : ViewModel() {
 
-    private val liveDataList = MutableLiveData<List<ArticleCommendResponse.Data>>()
+    private val articleList = MutableLiveData<List<ArticleCommendResponse.Data>>()
 
     companion object {
         const val TAG = "ArticleViewModel"
+    }
+
+    fun initList() {
+
+    }
+
+    fun nextList() {
     }
 }

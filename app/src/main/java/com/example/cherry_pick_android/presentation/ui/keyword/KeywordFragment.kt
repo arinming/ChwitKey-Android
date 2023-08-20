@@ -46,10 +46,11 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
     lateinit var articleService: ArticleSearchKeywordService
 
 
-    companion object{
+    companion object {
         const val TAG = "keywordFragment"
         fun newInstance(): KeywordFragment = KeywordFragment()
     }
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -111,7 +112,8 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
     }
 
     private fun initView() {
-        binding.rvKeyword.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+        binding.rvKeyword.layoutManager =
+            LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         keywordListAdapter = KeywordListAdapter(this, this)
         binding.rvKeyword.adapter = keywordListAdapter
     }
@@ -124,14 +126,26 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
                 val keyword = searchKeywordFragment?.getNowText().toString().trim()
 
                 // trim으로 공백 제거
-                val response = articleService.getArticleKeyword(loginStatus = "", sortType = "desc", keyword = keyword, pageable = Pageable)
+                val response = articleService.getArticleKeyword(
+                    loginStatus = "",
+                    sortType = "desc",
+                    keyword = keyword,
+                    pageable = Pageable(1, 10, "")
+                )
 
 
                 val statusCode = response.body()?.statusCode
                 if (statusCode == 200) {
                     val articleItems = response.body()?.data?.content?.map { content ->
-                        val imageUrl = if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
-                        ArticleItem(content.title, content.publisher, content.uploadedAt, imageUrl, content.articleId)
+                        val imageUrl =
+                            if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
+                        ArticleItem(
+                            content.title,
+                            content.publisher,
+                            content.uploadedAt,
+                            imageUrl,
+                            content.articleId
+                        )
                     }
                     Log.d("기사", articleItems.toString())
                     binding.rvKeywordArticle.adapter = NewsRecyclerViewAdapter(articleItems)
@@ -152,7 +166,7 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
         super.onResume()
     }
 
-    private fun showFragment(fragment: Fragment, tag: String){
+    private fun showFragment(fragment: Fragment, tag: String) {
         val transaction: FragmentTransaction =
             requireActivity().supportFragmentManager.beginTransaction()
                 .setCustomAnimations(
@@ -176,12 +190,24 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
     private fun loadArticlesByKeyword(keyword: String) {
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
-                val response = articleService.getArticleKeyword(loginStatus = "", sortType = "desc", keyword = keyword, pageable = Pageable)
+                val response = articleService.getArticleKeyword(
+                    loginStatus = "",
+                    sortType = "desc",
+                    keyword = keyword,
+                    pageable = Pageable(1, 10, "")
+                )
 
                 // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신
                 val articleItems = response.body()?.data?.content?.map { content ->
-                    val imageUrl = if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else ""
-                    ArticleItem(content.title, content.publisher, content.uploadedAt, imageUrl, content.articleId)
+                    val imageUrl =
+                        if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else ""
+                    ArticleItem(
+                        content.title,
+                        content.publisher,
+                        content.uploadedAt,
+                        imageUrl,
+                        content.articleId
+                    )
                 }
                 binding.rvKeywordArticle.adapter = NewsRecyclerViewAdapter(articleItems)
             }
