@@ -135,6 +135,7 @@
                         android:textColor="@color/black"
                         android:textSize="18sp"
                         android:fontFamily="@font/pretendard_medium"/>
+
                     <View
                         android:layout_width="0dp"
                         android:layout_height="0dp"

@@ -5,7 +5,6 @@ import android.content.Intent
 interface CameraDialogInterface {
 
     fun onAlbumClick(intent : Intent)
-    fun onCameraClick(intent : Intent)
     fun onBasicClick(intent: Intent)
     fun onCancelClick(intent: Intent)
 }
