@@ -71,7 +71,7 @@ class SearchListFragment : Fragment() {
                 }
 
                 // trim으로 공백 제거
-                val response = articleService.getArticleCommend(cond.toString().trim(), sort.toString(), Pageable)
+                val response = articleService.getArticleCommend(cond.toString().trim(), sort.toString(), Pageable(1, 10, ""))
 
 
                 val statusCode = response.body()?.statusCode
@@ -79,7 +79,7 @@ class SearchListFragment : Fragment() {
                     val articleItems = response.body()?.data?.content?.map { content ->
                         val imageUrl = if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
                         ArticleItem(content.title, content.publisher, content.uploadedAt, imageUrl, content.articleId)
-                    }
+                    }?.toMutableList()
                     binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
                     binding.tvSearchCount.text = articleItems?.size.toString()
                 } else {

@@ -105,7 +105,7 @@ class SearchKeywordDetailFragment: Fragment() {
                         loginStatus = "",
                         sortType = "desc",
                         keyword = keyword,
-                        pageable = Pageable
+                        pageable = Pageable(1, 10, "")
                     )
 
                     val statusCode = response.body()?.statusCode
@@ -120,7 +120,7 @@ class SearchKeywordDetailFragment: Fragment() {
                                 imageUrl,
                                 content.articleId
                             )
-                        }
+                        }?.toMutableList()
                         Log.d("기사", articleItems.toString())
                         binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
                     } else {

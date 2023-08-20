@@ -1,6 +1,5 @@
 package com.example.cherry_pick_android.data.remote.service.article
 
-import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.response.article.ArticleIndustryResponse
 import retrofit2.Response
 import retrofit2.http.GET
@@ -12,6 +11,6 @@ interface ArticleSearchIndustryService {
     suspend fun getArticleIndustry(
         @Query("sortType") sortType: String,
         @Query("industry") industry: String,
-        @Query("pageable") pageable: Pageable
+        @Query("page") page: Int
     ): Response<ArticleIndustryResponse>
 }
