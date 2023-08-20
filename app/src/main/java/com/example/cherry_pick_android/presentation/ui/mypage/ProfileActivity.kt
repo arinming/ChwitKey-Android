@@ -299,7 +299,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         })
 
         // 직군 키워드 업데이트
-        industryLoad()
+        userInfoLoad()
         ImageLoad()
 
         goBack()
@@ -475,10 +475,10 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
 
     }
 
-
-
-
-
+    override fun onResume() {
+        userInfoLoad()
+        super.onResume()
+    }
     override fun onClickBtn(value: String) {
         viewModel.setDelete(value)
     }
@@ -560,7 +560,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
-    private fun industryLoad(){
+    private fun userInfoLoad(){
         lifecycleScope.launch {
             val response = userInfoService.getUserInfo().body()
             val statusCode = response?.statusCode
@@ -571,6 +571,9 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
             withContext(Dispatchers.Main){
                 if(statusCode == 200){
                     binding.tvProfileJob.text = industryResponse
+                    binding.etProfileName.setText(response.data?.name)
+                    binding.tvBirth.text = response.data?.birthdate
+                    binding.tvGender.text = response.data?.gender
                 }else{
                     Toast.makeText(this@ProfileActivity, "통신오류: $statusCode", Toast.LENGTH_SHORT).show()
                 }
