@@ -21,7 +21,7 @@ import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.adapter.IndustryAdapter
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.AdapterInteractionListener
-import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
+import com.example.cherry_pick_android.presentation.util.newsSearch.NewsSearchActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

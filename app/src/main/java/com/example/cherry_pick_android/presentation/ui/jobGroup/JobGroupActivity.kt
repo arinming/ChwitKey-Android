@@ -16,6 +16,7 @@ import com.example.cherry_pick_android.data.remote.request.user.InitUserSaveRequ
 import com.example.cherry_pick_android.data.remote.request.user.updateIndustryRequest
 import com.example.cherry_pick_android.data.remote.service.user.InitUserSaveService
 import com.example.cherry_pick_android.data.remote.service.user.UpdateIndustryService
+import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.databinding.ActivityJobGroupBinding
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.adapter.JobGroupAdapter
@@ -44,6 +45,8 @@ class JobGroupActivity: AppCompatActivity() {
     lateinit var userDataRepository: UserDataRepository
     @Inject
     lateinit var updateIndustryService: UpdateIndustryService
+    @Inject
+    lateinit var userInfoService: UserInfoService
 
     private val binding: ActivityJobGroupBinding by lazy {
         ActivityJobGroupBinding.inflate(layoutInflater)

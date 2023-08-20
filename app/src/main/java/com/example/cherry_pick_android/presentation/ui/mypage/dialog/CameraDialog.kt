@@ -71,13 +71,6 @@ class CameraDialog (
 
             dismiss()
         }
-        binding.tvImgFromCamera.setOnClickListener {
-            Log.d(TAG, "카메라로부터 이미지변경")
-            var photoCameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            this.cameraDialogInterface?.onCameraClick(photoCameraIntent)
-
-            dismiss()
-        }
         binding.tvImgBasic.setOnClickListener {
             Log.d(TAG, "기본 이미지로 변경")
             activity?.let {

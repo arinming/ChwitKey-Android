@@ -9,24 +9,34 @@ import android.widget.BaseAdapter
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.databinding.ActivityJobGroupBinding
 import com.example.cherry_pick_android.domain.model.JobGroup
+import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroupActivity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.w3c.dom.Text
 import java.util.LinkedList
 import java.util.Queue
+import javax.inject.Inject
 
 
 class JobGroupAdapter(
     var context: Context,
     private val jobgroups: List<JobGroup>,
     private val onCompleteBtnCallback: ()->Unit
+
 ) : BaseAdapter() {
+    @Inject
+    lateinit var userInfoService: UserInfoService
+
     private var selectedjobList = ArrayList<String>()
+
     companion object{
         const val TAG = "JobGroupAdapter"
     }
@@ -91,14 +101,8 @@ class JobGroupAdapter(
 
     }
     fun getSelectedList(): ArrayList<String>{
-
         return selectedjobList
-
     }
-
-
-
-
 }
 
 

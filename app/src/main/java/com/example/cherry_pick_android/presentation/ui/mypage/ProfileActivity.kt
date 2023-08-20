@@ -7,23 +7,22 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.database.Cursor
-import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment
-import android.os.Environment.getExternalStorageDirectory
 import android.os.Environment.getExternalStoragePublicDirectory
-import android.os.FileUtils
 import android.provider.MediaStore
 import android.util.Log
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
-import androidx.core.net.toFile
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -57,13 +56,12 @@ import retrofit2.Callback
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
-import java.io.IOException
 import java.io.InputStream
 import java.io.OutputStream
-import java.sql.Date
 import java.text.SimpleDateFormat
 import java.util.Locale
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDialogInterface {
@@ -121,49 +119,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         val uri = FileProvider.getUriForFile(this, "$packageName.provider", extraOutputFile!!)
         Log.d(TAG,"uri: ${uri}")
         return uri
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                RequestCode.Capture.ordinal -> {
-                    extraOutputFile?.let { originalCapturedImageFile ->
-                        val contentValues = ContentValues().apply {
-                            put(MediaStore.Images.Media.TITLE, originalCapturedImageFile.name)
-                            put(MediaStore.Images.Media.SIZE, originalCapturedImageFile.length())
-                        }
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                            contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM)
-                            contentValues.put(MediaStore.Images.Media.IS_PENDING, 1)
-                            contentUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
-                            if (contentUri != null) {
-                                contentResolver.openFileDescriptor(contentUri, "w")?.use { pfd ->
-                                    val outputStream = FileOutputStream(pfd.fileDescriptor)
-                                    copyFromTo(FileInputStream(extraOutputFile), outputStream)
-                                    contentValues.clear()
-                                    contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
-                                    contentResolver.update(contentUri, contentValues, null, null)
-                                }
-                                //loginViewModel.setUserData("memberImgUrl",contentUri.toString())
-                            }
-                        } else {
-                            val externalFile = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), originalCapturedImageFile.name)
-                            copyFromTo(FileInputStream(extraOutputFile), FileOutputStream(externalFile))
-                            contentValues.put(MediaStore.Images.Media.DATA, externalFile.absolutePath)
-                            contentUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
-                            if (contentUri != null) {
-                                //loginViewModel.setUserData("memberImgUrl",contentUri.toString())
-                            } else{
-                                //loginViewModel.setUserData("memberImgUrl",null)
-                            }
-                        }
-                        if (originalCapturedImageFile.delete())
-                            Toast.makeText(this, "Removed the garbage file. ", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }
-        }
     }
 
     private fun copyFromTo(inputStream: InputStream, outputStream: OutputStream) {
@@ -264,15 +219,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
-    //
-    private val getPickImage = registerForActivityResult(
-        ActivityResultContracts.GetContent()) {uri: Uri? ->
-        uri?.let {
-            // 이미지를 사용하는 코드 작성
-        }
-    }
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
@@ -300,6 +246,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
 
         // 직군 키워드 업데이트
         userInfoLoad()
+
         goBack()
         showCameraDialog()
         ChangeName()
@@ -338,40 +285,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
 
     }
 
-
-    // 카메라 촬영 후 이미지 불러오기
-    override fun onCameraClick(intent:Intent) {
-        checkPermission(permissions)
-        //val uriName = requestCapture()
-        //getTakePicture.launch(uriName)
-
-        lifecycleScope.launch {
-            withContext(Dispatchers.Main) {
-
-                val path = getExternalStoragePublicDirectory( Environment.DIRECTORY_PICTURES )
-                path.mkdirs() // 임시 파일이 위치할 폴더 생성
-
-                val file = File.createTempFile(
-                    "my_img",
-                    ".jpg",
-                    path
-                ) // 임시 파일 생성
-                Log.d(TAG, "File name : ${file}")
-
-                cameraFileUri = FileProvider.getUriForFile(
-                    applicationContext,
-                    "com.example.cherry_pick_android.provider",
-                    file
-                ) // uri 생성
-                Log.d(TAG, "Uri Name : ${cameraFileUri}")
-
-                getTakePicture.launch(cameraFileUri)
-
-            }
-        }
-    }
-
-
     // 기본 이미지로 변경
     override fun onBasicClick(intent: Intent) {
         binding.ivProfilePic.setImageDrawable(getDrawable(R.drawable.ic_my_page_user))
@@ -409,7 +322,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         binding.ibtnProfileNameChange.setOnClickListener{
             cnt+=1
             isNameChange(cnt)
-            binding.etProfileName.requestFocus()
 
             // 닉네임 수정
             if(cnt%2 == 0){
@@ -455,25 +367,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
-
-    // uri -> 절대경로 변환
-    private fun createCopyAndReturnRealPath(uri: Uri) :String? {
-        // Create an image file name
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(System.currentTimeMillis())
-        val imageFileName = "JPEG_" + timeStamp + "_"
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val image = File.createTempFile(
-            imageFileName, /* prefix */
-            ".jpg", /* suffix */
-            storageDir      /* directory */
-        )
-
-        // Save a file: path for use with ACTION_VIEW intents
-        val mCurrentPhotoPath = image.getAbsolutePath()
-        return mCurrentPhotoPath
-
-    }
-
     override fun onResume() {
         userInfoLoad()
         super.onResume()
@@ -498,7 +391,17 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
             binding.etProfileName.isEnabled= true
             binding.etProfileName.setTextColor(getColor(R.color.main_pink))
             binding.ibtnProfileNameChange.setImageResource(R.drawable.ic_pencil_complete)
+
+            binding.etProfileName.requestFocus()
+            binding.etProfileName.setSelection(binding.etProfileName.length())
+            //window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+            showKeyboard(binding.etProfileName)
         }
+    }
+
+    private fun showKeyboard(editText : EditText) {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.showSoftInput(editText.rootView, InputMethodManager.SHOW_IMPLICIT)
     }
 
     private fun mapperToJob(value: String): String{
@@ -541,19 +444,31 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         lifecycleScope.launch {
             val response = userInfoService.getUserInfo().body()
             val statusCode = response?.statusCode
-            val industryResponse =
+
+            val tempIndustryResponse2 = response?.data?.industryKeyword2.toString()
+            Log.d(TAG,"${tempIndustryResponse2}")
+            val tempIndustryResponse3 = response?.data?.industryKeyword3.toString()
+            Log.d(TAG,"${tempIndustryResponse3}")
+
+            val industryResponse = if(tempIndustryResponse2==""){
+                "${mapperToJob(response?.data?.industryKeyword1.toString())}"
+            } else if(tempIndustryResponse3==""){
+                "${mapperToJob(response?.data?.industryKeyword1.toString())}, " +
+                        "${mapperToJob(response?.data?.industryKeyword2.toString())}"
+            } else{
                 "${mapperToJob(response?.data?.industryKeyword1.toString())}, " +
                         "${mapperToJob(response?.data?.industryKeyword2.toString())}, " +
                         mapperToJob(response?.data?.industryKeyword3.toString())
+            }
+
+            val imageResponse = response?.data?.memberImgUrl
+
             withContext(Dispatchers.Main){
                 if(statusCode == 200){
-                    val imageResponse = response?.data?.memberImgUrl
                     binding.tvProfileJob.text = industryResponse
                     binding.etProfileName.setText(response.data?.name)
-                    binding.tvBirth.text = mapperToBirth(response.data?.birthdate!!)
-                    binding.tvGender.text = response.data.gender
-
-                    // 이미지 로드
+                    binding.tvBirth.text = response.data?.birthdate
+                    binding.tvGender.text = response.data?.gender
                     if(imageResponse!=null) {
                         Glide.with(applicationContext).load(imageResponse).circleCrop()
                             .into(binding.ivProfilePic)
@@ -578,16 +493,4 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
 
         return result!!
     }
-}
-
-private fun mapperToBirth(birth: String): String{
-    val year = birth.substring(0, 4)
-    val month = birth.substring(4, 6)
-    val day = birth.substring(6, 8)
-
-    return "$year.$month.$day"
-}
-
-enum class RequestCode {
-    Capture, CapturePermissions
 }

@@ -55,7 +55,7 @@
         </activity>
 
         <activity
-            android:name=".presentation.ui.newsSearch.NewsSearchActivity"
+            android:name=".presentation.util.newsSearch.NewsSearchActivity"
             android:theme="@style/Theme.Cherry_pick_android"
             android:exported="true">
 
@@ -89,7 +89,8 @@
         <activity
             android:name=".presentation.ui.mypage.ProfileActivity"
             android:theme="@style/Theme.Cherry_pick_android"
-            android:exported="true">
+            android:exported="true"
+            android:windowSoftInputMode="stateVisible" >
         </activity>
 
 

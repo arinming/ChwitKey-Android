@@ -32,20 +32,6 @@
             android:layout_height="0.3dp"
             android:background="@color/gray_3" />
 
-        <TextView
-            android:id="@+id/tv_img_fromCamera"
-            android:layout_width="match_parent"
-            android:layout_height="57dp"
-            android:gravity="center"
-            android:text="@string/profile_img_fromCamera"
-            android:textSize="18sp"
-            android:textColor="@drawable/ic_camera_dialog_text"
-            android:fontFamily="@font/pretendard_medium"/>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.3dp"
-            android:background="@color/gray_3" />
 
         <TextView
             android:id="@+id/tv_img_basic"

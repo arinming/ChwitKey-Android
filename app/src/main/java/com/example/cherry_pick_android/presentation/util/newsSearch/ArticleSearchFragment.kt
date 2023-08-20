@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.presentation.ui.newsSearch
+package com.example.cherry_pick_android.presentation.util.newsSearch
 
 import SearchRecordAdapter
 import android.os.Bundle
