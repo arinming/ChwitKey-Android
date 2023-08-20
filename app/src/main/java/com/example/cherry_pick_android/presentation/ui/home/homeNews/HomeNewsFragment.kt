@@ -45,6 +45,10 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
     lateinit var userDataRepository: UserDataRepository
 
     private lateinit var selectedIndustry: String
+    private lateinit var newsAdapter: NewsRecyclerViewAdapter
+    private lateinit var linearLayoutManager: LinearLayoutManager
+    private var isScrolling = false
+
 
     companion object {
         const val TAG = "HomeNewsFragmnet"
@@ -66,6 +70,8 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
         industryLoad()
         goToNewsSearch()
 
+        // 초기 뉴스 기사 불러오기
+        getArticleList("desc")
 
         // 유저 정보 갱신
         lifecycleScope.launch {
@@ -85,25 +91,23 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
     private fun getArticleList(sort: String) {
         // API 통신
         lifecycleScope.launch {
+            var nowIndustry = mapperToIndustry(industryInit)
+            val pageable = Pageable(
+                page = 1,
+                size = 2,
+                sort = ""
+            )
+            val response = articleService.getArticleIndustry(
+                industry = nowIndustry,
+                sortType = sort,
+                pageable = pageable
+            )
+            Log.d("초기 직군", "$industryInit, $nowIndustry")
+
+            val statusCode = response.body()?.statusCode
             withContext(Dispatchers.Main) {
-                var nowIndustry = mapperToIndustry(industryInit)
-                val pageable = Pageable(
-                    page = 1,
-                    size = 2,
-                    sort = "your_sort_value"
-                )
-
-                val response = articleService.getArticleIndustry(
-                    industry = nowIndustry,
-                    sortType = sort,
-                    pageable = pageable
-                )
-                Log.d("초기 직군", "$industryInit, $nowIndustry")
-
-                val statusCode = response.body()?.statusCode
                 if (statusCode == 200) {
                     onIndustryButtonClick(nowIndustry)
-
                     val articleItems = response.body()?.data?.content?.map { content ->
                         val imageUrl =
                             if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
@@ -116,8 +120,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
                         )
                     }
                     binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
-                } else {
-                    Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -257,31 +259,31 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
     // 버튼 클릭시 뉴스 리스트 갱신
     private fun loadArticlesByIndustry(industry: String) {
         lifecycleScope.launch {
-            withContext(Dispatchers.Main) {
-                var nowIndustry = mapperToIndustry(industry)
-                val response = articleService.getArticleIndustry(
-                    sortType = when (binding.tvSorting.text) {
-                        "인기순" -> "like"
-                        "오름차순" -> "asc"
-                        "내림차순" -> "desc"
-                        else -> ""
-                    },
-                    industry = nowIndustry,
-                    pageable = Pageable(1, 10, "")
+            var nowIndustry = mapperToIndustry(industry)
+            val response = articleService.getArticleIndustry(
+                sortType = when (binding.tvSorting.text) {
+                    "인기순" -> "like"
+                    "오름차순" -> "asc"
+                    "내림차순" -> "desc"
+                    else -> ""
+                },
+                industry = nowIndustry,
+                pageable = Pageable(1, 10, "")
+            )
+            Log.d("직군", "$industryInit, $nowIndustry")
+            // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신
+            val articleItems = response.body()?.data?.content?.map { content ->
+                val imageUrl =
+                    if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else ""
+                ArticleItem(
+                    content.title,
+                    content.publisher,
+                    content.uploadedAt,
+                    imageUrl,
+                    content.articleId
                 )
-                Log.d("직군", "$industryInit, $nowIndustry")
-                // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신
-                val articleItems = response.body()?.data?.content?.map { content ->
-                    val imageUrl =
-                        if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else ""
-                    ArticleItem(
-                        content.title,
-                        content.publisher,
-                        content.uploadedAt,
-                        imageUrl,
-                        content.articleId
-                    )
-                }
+            }
+            withContext(Dispatchers.Main) {
                 binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
             }
         }
