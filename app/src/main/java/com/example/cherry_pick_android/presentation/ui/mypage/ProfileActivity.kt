@@ -1,8 +1,6 @@
 package com.example.cherry_pick_android.presentation.ui.mypage
 
 import android.Manifest
-import android.app.Activity
-import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,8 +8,6 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
-import android.os.Environment.getExternalStoragePublicDirectory
 import android.provider.MediaStore
 import android.util.Log
 import android.view.WindowManager
@@ -22,7 +18,6 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.FileProvider
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -54,12 +49,6 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Callback
 import java.io.File
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.InputStream
-import java.io.OutputStream
-import java.text.SimpleDateFormat
-import java.util.Locale
 import javax.inject.Inject
 
 
@@ -84,12 +73,9 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     @Inject
     lateinit var userDeleteImageService: UserDeleteImageService
 
-
     // 요청하고자 하는 권한들
     private val permissions = arrayOf(
         Manifest.permission.CAMERA,
-        //Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        //Manifest.permission.READ_EXTERNAL_STORAGE
     )
     // 권한 확인 응답
     private val getPermissionResult = registerForActivityResult(
@@ -104,35 +90,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     private val viewModel: MyPageViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
 
-    //private lateinit var photofile : File
-    private lateinit var cameraFileUri: Uri
     private lateinit var albumFileUri: Uri
-
-    private lateinit var contentUri: Uri
-
-    private var extraOutputFile: File? = null
-
-    private fun requestCapture() : Uri {
-        val dateTime = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis())
-        extraOutputFile = File(cacheDir, "${dateTime}.jpg")
-        Log.d(TAG,"extraOutputFile: ${extraOutputFile}")
-        val uri = FileProvider.getUriForFile(this, "$packageName.provider", extraOutputFile!!)
-        Log.d(TAG,"uri: ${uri}")
-        return uri
-    }
-
-    private fun copyFromTo(inputStream: InputStream, outputStream: OutputStream) {
-        val buffer = ByteArray(8192)
-        while (true) {
-            val data = inputStream.read(buffer)
-            if (data == -1) {
-                break
-            }
-            outputStream.write(buffer)
-        }
-        inputStream.close()
-        outputStream.close()
-    }
 
     // 앨범으로부터 이미지 불러오기
     private val getResultImage = registerForActivityResult(
@@ -142,7 +100,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
             Glide.with(this).load(albumFileUri).circleCrop().into(binding.ivProfilePic)
 
             val pathTemp = albumFileUri.toString()
-            //photofile = File(pathTemp)
             val photofile = File(absolutelyPath(albumFileUri, this))
 
             val requestFile = photofile.asRequestBody("image/*".toMediaTypeOrNull())
@@ -176,49 +133,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
-    // 카메라를 실행한 후 찍은 사진을 저장
-    private val getTakePicture = registerForActivityResult(
-        ActivityResultContracts.TakePicture()) {
-        if(it) {
-            cameraFileUri.let {
-                Glide.with(this).load(cameraFileUri).circleCrop().into(binding.ivProfilePic)
-
-                val pathTemp = cameraFileUri.toString()
-                //photofile = File(pathTemp)
-                val photofile = File(absolutelyPath(cameraFileUri, this))
-
-                val requestFile = photofile.asRequestBody("image/*".toMediaTypeOrNull())
-                val bodyFile =
-                    MultipartBody.Part.createFormData("image", photofile.name, requestFile)
-                val request = UpLoadImageRequest(pathTemp)
-
-                upLoadImageService.putUserImage(bodyFile, request)
-                    .enqueue(object : Callback<UpLoadImageResponse> {
-                        override fun onResponse(
-                            call: retrofit2.Call<UpLoadImageResponse>,
-                            response: retrofit2.Response<UpLoadImageResponse>
-                        ) {
-                            val statusCode = response.body()?.statusCode
-                            if (statusCode != 200) {
-                                Toast.makeText(
-                                    this@ProfileActivity,
-                                    "ERROR: $statusCode",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                            Log.d(TAG, "Success: $statusCode")
-                        }
-                        override fun onFailure(
-                            call: retrofit2.Call<UpLoadImageResponse>,
-                            t: Throwable
-                        ) {
-                            Log.d(TAG, "ERROR: ${t.message} / ${call.toString()}")
-                        }
-                    })
-            }
-        }
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityProfileBinding.inflate(layoutInflater)
@@ -244,7 +158,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
             binding.etProfileName.setText(it)
         })
 
-        // 직군 키워드 업데이트
+        // 유저 정보 불러오기
         userInfoLoad()
 
         goBack()
@@ -254,7 +168,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         LeaveAccount()
 
     }
-
 
     // 마이페이지로 돌아가기 = 뒤로가기
     private fun goBack() {
@@ -278,13 +191,10 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
             withContext(Dispatchers.Main) {
 
                 getResultImage.launch(intent)
-                //getPickImage.launch(outputFileUri)
 
             }
         }
-
     }
-
     // 기본 이미지로 변경
     override fun onBasicClick(intent: Intent) {
         binding.ivProfilePic.setImageDrawable(getDrawable(R.drawable.ic_my_page_user))
@@ -371,6 +281,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         userInfoLoad()
         super.onResume()
     }
+
     override fun onClickBtn(value: String) {
         viewModel.setDelete(value)
     }
@@ -392,9 +303,10 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
             binding.etProfileName.setTextColor(getColor(R.color.main_pink))
             binding.ibtnProfileNameChange.setImageResource(R.drawable.ic_pencil_complete)
 
+            binding.etProfileName.clearFocus()
             binding.etProfileName.requestFocus()
             binding.etProfileName.setSelection(binding.etProfileName.length())
-            //window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_VISIBLE)
             showKeyboard(binding.etProfileName)
         }
     }
@@ -446,9 +358,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
             val statusCode = response?.statusCode
 
             val tempIndustryResponse2 = response?.data?.industryKeyword2.toString()
-            Log.d(TAG,"${tempIndustryResponse2}")
             val tempIndustryResponse3 = response?.data?.industryKeyword3.toString()
-            Log.d(TAG,"${tempIndustryResponse3}")
 
             val industryResponse = if(tempIndustryResponse2==""){
                 "${mapperToJob(response?.data?.industryKeyword1.toString())}"
@@ -482,7 +392,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
-    // 절대경로 변환
+    // 절대 경로 변환
     fun absolutelyPath(path: Uri?, context : Context): String {
         var proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
         var c: Cursor? = context.contentResolver.query(path!!, proj, null, null, null)
