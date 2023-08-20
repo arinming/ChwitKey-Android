@@ -59,6 +59,9 @@ class JobGroupActivity: AppCompatActivity() {
         gridView = binding.gvJobGroup
         arrayList = ArrayList()
 
+        lifecycleScope.launch {
+            binding.tvJobUserName.text = userDataRepository.getUserData().name
+        }
         adapter = JobGroupAdapter(applicationContext, jobgroups, onCompleteButtonStateChanged)
         gridView.adapter = adapter
 

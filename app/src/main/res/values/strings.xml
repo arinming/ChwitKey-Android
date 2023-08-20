@@ -36,7 +36,7 @@
 
 
     <!-- mypage -->
-    <string name="mypage_user_id">유저네임a</string>
+    <string name="mypage_user_id"></string>
     <string name="mypage_score_appstore">스토어 별점 남기기</string>
     <string name="mypage_user_policy">이용약관 및 사용자 정책</string>
     <string name="mypage_contacts">언론사 연락처</string>
@@ -114,12 +114,12 @@
     <string name="article_image_explain"></string>
     <string name="article_news_dot">･</string>
     <string name="article_news_time"></string>
-    <string name="article_news_link_btn">기사 이동 버튼 이름 모하지</string>
+    <string name="article_news_link_btn">기사 링크로 이동</string>
     <string name="article_news_detail"></string>
 
 
     <!-- scrap -->
-    <string name="scrap_name">채영</string>
+    <string name="scrap_name"></string>
     <string name="scrap_toolbar">님이 스크랩한 기사</string>
     <string name="scrap_count_none">0</string>
     <string name="scrap_count_true">23</string>

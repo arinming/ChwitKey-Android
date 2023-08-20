@@ -4,14 +4,30 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.data.data.Article
+import com.example.cherry_pick_android.data.remote.service.user.DeleteUserService
+import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.databinding.FragmentScrapTrueBinding
+import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.adapter.ScrapAdapter
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class ScrapTrueFragment : Fragment() {
     private var _binding: FragmentScrapTrueBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var userInfoService: UserInfoService
+    @Inject
+    lateinit var userDataRepository: UserDataRepository
 
     private val scrapNews = mutableListOf(
         Article("1", "뉴스1", "회사1", "9분"),
@@ -30,6 +46,10 @@ class ScrapTrueFragment : Fragment() {
     ): View? {
         _binding = FragmentScrapTrueBinding.inflate(inflater, container, false)
 
+        lifecycleScope.launch {
+            binding.tvScrapName.text = userDataRepository.getUserData().name
+        }
+
         return binding.root
     }
 
@@ -37,7 +57,6 @@ class ScrapTrueFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initScrapList()
-
     }
 
     override fun onDestroyView() {
@@ -45,6 +64,21 @@ class ScrapTrueFragment : Fragment() {
         _binding = null
     }
 
+    private fun getUserInfo() {
+        lifecycleScope.launch {
+            val response = userInfoService.getUserInfo().body()
+            val statusCode = response?.statusCode
+            val name = response?.data?.name
+
+            withContext(Dispatchers.Main){
+                if(statusCode == 200){
+                    binding.tvScrapName.text = name
+                }else{
+                    Toast.makeText(context, "통신오류: $statusCode", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
 
     private fun initScrapList() {
         binding.rvScrapNewsList.adapter = ScrapAdapter(scrapNews)

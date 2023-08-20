@@ -1,19 +1,31 @@
 package com.example.cherry_pick_android.presentation.ui.newsSearch
 
+import SearchRecordAdapter
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.KeyEvent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.viewModelScope
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.model.SearchRecordEntity
 import com.example.cherry_pick_android.databinding.ActivityNewsSearchBinding
+import com.example.cherry_pick_android.presentation.viewmodel.searchRecord.SearchRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class NewsSearchActivity: AppCompatActivity() {
     private lateinit var binding: ActivityNewsSearchBinding
     private val manager = supportFragmentManager
+
+    private val searchRecordViewModel: SearchRecordViewModel by viewModels()
+    private lateinit var searchRecordAdapter: SearchRecordAdapter
 
     private var searchRecordLiveData: LiveData<List<SearchRecordEntity>>? = null
 
@@ -23,9 +35,24 @@ class NewsSearchActivity: AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
+
         initFragment()
         changeText()
         goToBack()
+
+        // 텍스트가 변경될 때마다 프래그먼트 변경 감지
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+
+            override fun afterTextChanged(s: Editable?) {
+                val newText = s?.toString() ?: ""
+                if (newText.isEmpty()) {
+                    changeFragment(ArticleSearchFragment.oldInstance())
+                }
+            }
+        })
     }
 
     override fun onDestroy() {
@@ -64,17 +91,33 @@ class NewsSearchActivity: AppCompatActivity() {
     private fun changeText() {
         // 엔터 감지
         binding.etSearch.setOnKeyListener { v, keyCode, event ->
-            if (keyCode == KeyEvent.KEYCODE_ENTER) {
-                val text = binding.etSearch.text.toString()
-                if (text.isNotEmpty()) {
-                    // ArticleSearchFragment를 SearchListFragment로 대체
-                    val searchListFragment = SearchListFragment.newInstance()
-                    changeFragment(searchListFragment)
-                } else {
-                    val articleSearchFragment = ArticleSearchFragment.oldInstance()
-                    changeFragment(articleSearchFragment)
+            if (keyCode == KeyEvent.KEYCODE_ENTER && event.action == KeyEvent.ACTION_UP) {
+                val text = binding.etSearch.text.toString().trim()
+
+                searchRecordViewModel.viewModelScope.launch {
+                    if (text.isNotEmpty()) {
+
+                        val existingRecords = searchRecordViewModel.loadRecord().value.orEmpty()
+                        val existingRecord = existingRecords.find { it.record == text }
+
+                        if (existingRecord != null) {
+                            searchRecordViewModel.deleteRecord(existingRecord.record)
+                            searchRecordAdapter.removeRecord(existingRecord)
+                            searchRecordViewModel.addRecord(text)
+                        } else {
+                            searchRecordViewModel.addRecord(text)
+                        }
+
+                        // ArticleSearchFragment를 SearchListFragment로 대체
+                        val searchListFragment = SearchListFragment.newInstance()
+                        changeFragment(searchListFragment)
+                    } else {
+                        val articleSearchFragment = ArticleSearchFragment.oldInstance()
+                        changeFragment(articleSearchFragment)
+                    }
+
                 }
-                true
+                   true
             } else {
                 false
             }
@@ -82,7 +125,8 @@ class NewsSearchActivity: AppCompatActivity() {
     }
 
 
-    private fun changeFragment(fragment: Fragment) {
+
+    fun changeFragment(fragment: Fragment) {
         manager.beginTransaction().replace(R.id.fl_search, fragment).commit()
     }
 
