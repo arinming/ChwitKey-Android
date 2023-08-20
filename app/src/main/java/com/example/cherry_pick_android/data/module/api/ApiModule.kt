@@ -4,6 +4,7 @@ package com.example.cherry_pick_android.data.module.api
 import android.util.Log
 import com.example.cherry_pick_android.data.remote.service.article.ArticleDetailService
 import com.example.cherry_pick_android.data.remote.service.article.ArticleLikeService
+import com.example.cherry_pick_android.data.remote.service.article.ArticleScrapService
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchIndustryService
 import com.example.cherry_pick_android.data.remote.service.article.ArticleUnlikeService
@@ -129,6 +130,12 @@ class ApiModule {
     @Singleton
     fun provideUpdateIndustry(retrofit: Retrofit): UpdateIndustryService {
         return retrofit.create(UpdateIndustryService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideScrapList(retrofit: Retrofit): ArticleScrapService{
+        return retrofit.create(ArticleScrapService::class.java)
     }
 
     @Provides
