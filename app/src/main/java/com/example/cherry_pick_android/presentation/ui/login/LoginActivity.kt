@@ -9,7 +9,6 @@ import android.text.style.StyleSpan
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -17,8 +16,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.remote.request.login.SignInRequest
 import com.example.cherry_pick_android.data.remote.service.login.SignInService
-import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
-import com.example.cherry_pick_android.data.remote.service.user.UserKeywordService
 import com.example.cherry_pick_android.databinding.ActivityLoginBinding
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity

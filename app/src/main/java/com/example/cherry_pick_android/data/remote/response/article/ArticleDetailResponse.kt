@@ -33,7 +33,11 @@ data class ArticleDetailResponse(
         @Json(name = "uploadedAt")
         val uploadedAt: String,
         @Json(name = "url")
-        val url: String
+        val url: String,
+        @Json(name = "isLiked")
+        val isLiked: Boolean,
+        @Json(name = "isScrapped")
+        val isScrapped: Boolean
     ) {
         data class ArticlePhoto(
             @Json(name = "articleImgUrl")
