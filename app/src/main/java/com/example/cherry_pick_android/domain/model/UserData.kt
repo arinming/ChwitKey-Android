@@ -7,5 +7,5 @@ data class UserData(
     val name: String,
     val gender: String,
     val birthday: String,
-    val isInit: String
+    val isInit: String,
 )
