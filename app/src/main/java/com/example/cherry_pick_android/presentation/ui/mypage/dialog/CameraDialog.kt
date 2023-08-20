@@ -58,7 +58,7 @@ class CameraDialog (
         savedInstanceState: Bundle?
     ): View {
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-        dialog?.window?.setDimAmount(0.7F)
+        dialog?.window?.setDimAmount(0.5F)
         dialog?.window?.setGravity(Gravity.BOTTOM)
 
         dialog?.setCancelable(false)

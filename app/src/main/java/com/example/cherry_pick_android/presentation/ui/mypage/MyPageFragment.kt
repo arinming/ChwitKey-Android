@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
+import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.databinding.FragmentMypageBinding
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.ui.login.LoginActivity
@@ -29,6 +31,8 @@ class MyPageFragment : Fragment() {
 
     @Inject
     lateinit var userDataRepository: UserDataRepository
+    @Inject
+    lateinit var userInfoService: UserInfoService
 
     companion object{
         const val TAG = "MyPageFragment"
@@ -41,14 +45,11 @@ class MyPageFragment : Fragment() {
         _binding = FragmentMypageBinding.inflate(inflater, container, false)
         val view = binding.root
 
-        lifecycleScope.launch {
-            binding.tvMypageUserName.text = userDataRepository.getUserData().name
-        }
-
         // 유저네임 변경 감지
         userDataRepository.getNameLiveData().observe(requireActivity(), Observer {
             binding.tvMypageUserName.text = it.toString()
         })
+        loadUserInfo()
 
         setButton()
 
@@ -108,6 +109,19 @@ class MyPageFragment : Fragment() {
             .setNegativeButton("취소"){_, _->}
             .create()
             .show()
+    }
+
+    private fun loadUserInfo(){
+        CoroutineScope(Dispatchers.Main).launch {
+            val response = userInfoService.getUserInfo().body()
+            val statusCode = response?.statusCode
+
+            if(statusCode == 200){
+                binding.tvMypageUserName.text = response.data?.name
+            }else{
+                Toast.makeText(requireContext(), "통신 오류:$statusCode", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 
