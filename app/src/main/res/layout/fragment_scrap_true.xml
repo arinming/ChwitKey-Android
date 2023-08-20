@@ -55,7 +55,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:fontFamily="@font/pretendard_medium"
-                android:text="@string/scrap_count_true"
                 android:textColor="@color/main_pink"
                 android:textSize="18sp"
                 app:layout_constraintBottom_toBottomOf="parent"
