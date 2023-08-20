@@ -1,15 +1,18 @@
 package com.example.cherry_pick_android.data.remote.response.user
 
 
+import com.example.cherry_pick_android.data.remote.response.article.ArticleDetailResponse
 import com.squareup.moshi.Json
 
 data class UpLoadImageResponse(
-    @field:Json(name = "error")
-    val error: String?,
-    @field:Json(name = "path")
-    val path: String?,
-    @field:Json(name = "status")
-    val status: Int?,
-    @field:Json(name = "timestamp")
-    val timestamp: String?
+    @Json(name = "data")
+    val data: String,
+    @Json(name = "transaction_time")
+    val transactionTime: String?,
+    @Json(name = "status")
+    val status: String,
+    @Json(name = "description")
+    val description: String?,
+    @Json(name = "statusCode")
+    val statusCode: Int
 )

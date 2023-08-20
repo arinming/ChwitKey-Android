@@ -1,12 +1,20 @@
 package com.example.cherry_pick_android.presentation.ui.mypage
 
 import android.Manifest
+import android.app.Activity
 import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
+import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.os.Environment.getExternalStorageDirectory
+import android.os.Environment.getExternalStoragePublicDirectory
+import android.os.FileUtils
 import android.provider.MediaStore
 import android.util.Log
 import android.widget.Toast
@@ -14,6 +22,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
+import androidx.core.net.toFile
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
@@ -23,6 +33,7 @@ import com.example.cherry_pick_android.data.remote.request.user.updateNameReques
 import com.example.cherry_pick_android.data.remote.response.user.UpLoadImageResponse
 import com.example.cherry_pick_android.data.remote.service.user.DeleteUserService
 import com.example.cherry_pick_android.data.remote.service.user.UpLoadImageService
+import com.example.cherry_pick_android.data.remote.service.user.UserDeleteImageService
 import com.example.cherry_pick_android.data.remote.service.user.UserInfoService
 import com.example.cherry_pick_android.data.remote.service.user.UserNameUpdateService
 import com.example.cherry_pick_android.databinding.ActivityProfileBinding
@@ -44,7 +55,14 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Callback
 import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
+import java.io.InputStream
+import java.io.OutputStream
+import java.sql.Date
 import java.text.SimpleDateFormat
+import java.util.Locale
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -65,13 +83,15 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     lateinit var userInfoService: UserInfoService
     @Inject
     lateinit var upLoadImageService: UpLoadImageService
+    @Inject
+    lateinit var userDeleteImageService: UserDeleteImageService
 
 
     // 요청하고자 하는 권한들
     private val permissions = arrayOf(
         Manifest.permission.CAMERA,
-        // Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        // Manifest.permission.READ_EXTERNAL_STORAGE
+        //Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        //Manifest.permission.READ_EXTERNAL_STORAGE
     )
     // 권한 확인 응답
     private val getPermissionResult = registerForActivityResult(
@@ -86,32 +106,172 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     private val viewModel: MyPageViewModel by viewModels()
     private val loginViewModel: LoginViewModel by viewModels()
 
+    //private lateinit var photofile : File
+    private lateinit var cameraFileUri: Uri
+    private lateinit var albumFileUri: Uri
 
-    // 촬영한 사진 불러오기
-    // 이미지 로드
-    private val readImage = registerForActivityResult(
-        ActivityResultContracts.GetContent()) {
-            //uri -> binding.ivProfilePic.load(uri)
+    private lateinit var contentUri: Uri
+
+    private var extraOutputFile: File? = null
+
+    private fun requestCapture() : Uri {
+        val dateTime = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.US).format(System.currentTimeMillis())
+        extraOutputFile = File(cacheDir, "${dateTime}.jpg")
+        Log.d(TAG,"extraOutputFile: ${extraOutputFile}")
+        val uri = FileProvider.getUriForFile(this, "$packageName.provider", extraOutputFile!!)
+        Log.d(TAG,"uri: ${uri}")
+        return uri
     }
 
-    // 카메라를 실행한 후 찍은 사진을 저장
-    var pictureUri: Uri? = null
-    private val getTakePicture = registerForActivityResult(
-        ActivityResultContracts.TakePicture()) {
-        if(it) { pictureUri.let {
-            Glide.with(this).load(pictureUri).circleCrop().into(binding.ivProfilePic)
-        }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            when (requestCode) {
+                RequestCode.Capture.ordinal -> {
+                    extraOutputFile?.let { originalCapturedImageFile ->
+                        val contentValues = ContentValues().apply {
+                            put(MediaStore.Images.Media.TITLE, originalCapturedImageFile.name)
+                            put(MediaStore.Images.Media.SIZE, originalCapturedImageFile.length())
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            contentValues.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_DCIM)
+                            contentValues.put(MediaStore.Images.Media.IS_PENDING, 1)
+                            contentUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
+                            if (contentUri != null) {
+                                contentResolver.openFileDescriptor(contentUri, "w")?.use { pfd ->
+                                    val outputStream = FileOutputStream(pfd.fileDescriptor)
+                                    copyFromTo(FileInputStream(extraOutputFile), outputStream)
+                                    contentValues.clear()
+                                    contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
+                                    contentResolver.update(contentUri, contentValues, null, null)
+                                }
+                                //loginViewModel.setUserData("memberImgUrl",contentUri.toString())
+                            }
+                        } else {
+                            val externalFile = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM), originalCapturedImageFile.name)
+                            copyFromTo(FileInputStream(extraOutputFile), FileOutputStream(externalFile))
+                            contentValues.put(MediaStore.Images.Media.DATA, externalFile.absolutePath)
+                            contentUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)!!
+                            if (contentUri != null) {
+                                //loginViewModel.setUserData("memberImgUrl",contentUri.toString())
+                            } else{
+                                //loginViewModel.setUserData("memberImgUrl",null)
+                            }
+                        }
+                        if (originalCapturedImageFile.delete())
+                            Toast.makeText(this, "Removed the garbage file. ", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }
         }
     }
+
+    private fun copyFromTo(inputStream: InputStream, outputStream: OutputStream) {
+        val buffer = ByteArray(8192)
+        while (true) {
+            val data = inputStream.read(buffer)
+            if (data == -1) {
+                break
+            }
+            outputStream.write(buffer)
+        }
+        inputStream.close()
+        outputStream.close()
+    }
+
     // 앨범으로부터 이미지 불러오기
     private val getResultImage = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == RESULT_OK) {
-            var imageUrl = it.data?.data
-            Glide.with(this).load(imageUrl).circleCrop().into(binding.ivProfilePic)
+            albumFileUri = it.data?.data!!
+            Glide.with(this).load(albumFileUri).circleCrop().into(binding.ivProfilePic)
 
+            val pathTemp = albumFileUri.toString()
+            //photofile = File(pathTemp)
+            val photofile = File(absolutelyPath(albumFileUri, this))
+
+            val requestFile = photofile.asRequestBody("image/*".toMediaTypeOrNull())
+            val bodyFile =
+                MultipartBody.Part.createFormData("image", photofile.name, requestFile)
+            val request = UpLoadImageRequest(pathTemp)
+
+            upLoadImageService.putUserImage(bodyFile, request)
+                .enqueue(object : Callback<UpLoadImageResponse> {
+                    override fun onResponse(
+                        call: retrofit2.Call<UpLoadImageResponse>,
+                        response: retrofit2.Response<UpLoadImageResponse>
+                    ) {
+                        val statusCode = response.body()?.statusCode
+                        if (statusCode != 200) {
+                            Toast.makeText(
+                                this@ProfileActivity,
+                                "ERROR: $statusCode",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        Log.d(TAG, "Success: $statusCode")
+                    }
+                    override fun onFailure(
+                        call: retrofit2.Call<UpLoadImageResponse>,
+                        t: Throwable
+                    ) {
+                        Log.d(TAG, "ERROR: ${t.message} / ${call.toString()}")
+                    }
+                })
         }
     }
+
+    // 카메라를 실행한 후 찍은 사진을 저장
+    private val getTakePicture = registerForActivityResult(
+        ActivityResultContracts.TakePicture()) {
+        if(it) {
+            cameraFileUri.let {
+                Glide.with(this).load(cameraFileUri).circleCrop().into(binding.ivProfilePic)
+
+                val pathTemp = cameraFileUri.toString()
+                //photofile = File(pathTemp)
+                val photofile = File(absolutelyPath(cameraFileUri, this))
+
+                val requestFile = photofile.asRequestBody("image/*".toMediaTypeOrNull())
+                val bodyFile =
+                    MultipartBody.Part.createFormData("image", photofile.name, requestFile)
+                val request = UpLoadImageRequest(pathTemp)
+
+                upLoadImageService.putUserImage(bodyFile, request)
+                    .enqueue(object : Callback<UpLoadImageResponse> {
+                        override fun onResponse(
+                            call: retrofit2.Call<UpLoadImageResponse>,
+                            response: retrofit2.Response<UpLoadImageResponse>
+                        ) {
+                            val statusCode = response.body()?.statusCode
+                            if (statusCode != 200) {
+                                Toast.makeText(
+                                    this@ProfileActivity,
+                                    "ERROR: $statusCode",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                            Log.d(TAG, "Success: $statusCode")
+                        }
+                        override fun onFailure(
+                            call: retrofit2.Call<UpLoadImageResponse>,
+                            t: Throwable
+                        ) {
+                            Log.d(TAG, "ERROR: ${t.message} / ${call.toString()}")
+                        }
+                    })
+            }
+        }
+    }
+
+    //
+    private val getPickImage = registerForActivityResult(
+        ActivityResultContracts.GetContent()) {uri: Uri? ->
+        uri?.let {
+            // 이미지를 사용하는 코드 작성
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,13 +286,22 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         })
 
 
+        // 유저 정보 갱신
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main){
+                binding.etProfileName.setText(userDataRepository.getUserData().name)
+            }
+        }
+
         // 닉네임 변경 감지
         userDataRepository.getNameLiveData().observe(this@ProfileActivity, Observer {
             binding.etProfileName.setText(it)
         })
 
         // 직군 키워드 업데이트
-        userInfoLoad()
+        industryLoad()
+        ImageLoad()
+
         goBack()
         showCameraDialog()
         ChangeName()
@@ -141,20 +310,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
 
     }
 
-    override fun onResume() {
-        userInfoLoad()
-        super.onResume()
-    }
-    // 생년월일 매핑함수
-    fun mapperToBirth(birthday: String): String{
-        if(birthday.length == 8){
-            val year = birthday.substring(0, 4)
-            val month = birthday.substring(4, 6)
-            val day = birthday.substring(6, 8)
-            return "$year.$month.$day"
-        }
-        return birthday
-    }
 
     // 마이페이지로 돌아가기 = 뒤로가기
     private fun goBack() {
@@ -173,70 +328,74 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     // 앨범 이미지 불러오기
     override fun onAlbumClick(intent: Intent) {
         checkPermission(permissions)
-        getResultImage.launch(intent)
+
+        lifecycleScope.launch {
+            withContext(Dispatchers.Main) {
+
+                getResultImage.launch(intent)
+                //getPickImage.launch(outputFileUri)
+
+            }
+        }
 
     }
+
+
     // 카메라 촬영 후 이미지 불러오기
     override fun onCameraClick(intent:Intent) {
+        checkPermission(permissions)
+        //val uriName = requestCapture()
+        //getTakePicture.launch(uriName)
+
         lifecycleScope.launch {
-
-            checkPermission(permissions)
-            pictureUri = createImageFile()
-            getTakePicture.launch(pictureUri)
-
             withContext(Dispatchers.Main) {
-                val photofile = File(pictureUri.toString())
-                val requestFile = photofile.asRequestBody("image/*".toMediaTypeOrNull())
-                val bodyFile = MultipartBody.Part.createFormData("image", photofile.name, requestFile)
-                val request = UpLoadImageRequest(pictureUri.toString())
 
-                upLoadImageService.putUserImage(bodyFile, request).enqueue(object: Callback<UpLoadImageResponse>{
-                    override fun onResponse(
-                        call: retrofit2.Call<UpLoadImageResponse>,
-                        response: retrofit2.Response<UpLoadImageResponse>
-                    ) {
-                        val status = response.body()?.status
-                        if(status != 200){
-                            Toast.makeText(this@ProfileActivity, "ERROR: $status", Toast.LENGTH_SHORT).show()
-                        }
-                        Log.d(TAG, "Success: $status")
-                    }
-                    override fun onFailure(
-                        call: retrofit2.Call<UpLoadImageResponse>,
-                        t: Throwable
-                    ) {
-                        Log.d(TAG, "ERROR: ${t.message} / ${call.toString()}")
-                    }
-                })
+                val path = getExternalStoragePublicDirectory( Environment.DIRECTORY_PICTURES )
+                path.mkdirs() // 임시 파일이 위치할 폴더 생성
 
+                val file = File.createTempFile(
+                    "my_img",
+                    ".jpg",
+                    path
+                ) // 임시 파일 생성
+                Log.d(TAG, "File name : ${file}")
 
-                /*lifecycleScope.launch {
-                    val response = userUploadImageService.postUploadImage(bodyFile)
-                }*/
+                cameraFileUri = FileProvider.getUriForFile(
+                    applicationContext,
+                    "com.example.cherry_pick_android.provider",
+                    file
+                ) // uri 생성
+                Log.d(TAG, "Uri Name : ${cameraFileUri}")
 
+                getTakePicture.launch(cameraFileUri)
 
             }
         }
     }
+
+
     // 기본 이미지로 변경
     override fun onBasicClick(intent: Intent) {
         binding.ivProfilePic.setImageDrawable(getDrawable(R.drawable.ic_my_page_user))
-        //deleteImage
+
+        lifecycleScope.launch {
+            val response = userDeleteImageService.deleteImage().body()?.statusCode
+            // 200: 성공
+            withContext(Dispatchers.Main){
+                if(response == 200){
+                    Log.d(TAG, "Success: $response")
+                } else {
+                    Toast.makeText(
+                        this@ProfileActivity,
+                        "통신오류: $response",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
     }
     // 이미지 변경 취소
     override fun onCancelClick(intent: Intent) {    }
-
-    // 고유 이름으로 이미지 파일 생성
-    private fun createImageFile(): Uri? {
-        val now = SimpleDateFormat("yyMMdd_HHmmss").format(System.currentTimeMillis())
-        val content = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, "img_$now.jpg")
-            put(MediaStore.Images.Media.MIME_TYPE, "image/jpg")
-        }
-        return contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, content)
-    }
-
-
 
     // 직군정보 변경페이지로 이동
     private fun ChangeJobInterest() {
@@ -297,6 +456,29 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
+
+    // uri -> 절대경로 변환
+    private fun createCopyAndReturnRealPath(uri: Uri) :String? {
+        // Create an image file name
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss").format(System.currentTimeMillis())
+        val imageFileName = "JPEG_" + timeStamp + "_"
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val image = File.createTempFile(
+            imageFileName, /* prefix */
+            ".jpg", /* suffix */
+            storageDir      /* directory */
+        )
+
+        // Save a file: path for use with ACTION_VIEW intents
+        val mCurrentPhotoPath = image.getAbsolutePath()
+        return mCurrentPhotoPath
+
+    }
+
+
+
+
+
     override fun onClickBtn(value: String) {
         viewModel.setDelete(value)
     }
@@ -320,7 +502,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
-    // 영문->한글 매핑
     private fun mapperToJob(value: String): String{
         return when(value){
             "steel" -> "철강" "Petroleum/Chemical" -> "석유·화학" "oilrefining" -> "정유" "secondarybattery" -> "2차 전지"
@@ -331,7 +512,6 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
-    // 회원탈퇴 기능
     private fun deleteUserData(ck: String){
         if(ck == "ok"){
             lifecycleScope.launch {
@@ -358,25 +538,21 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
-    // 유저 정보 갱신
-    private fun userInfoLoad(){
+    private fun ImageLoad(){
+
         lifecycleScope.launch {
             val response = userInfoService.getUserInfo().body()
             val statusCode = response?.statusCode
-            val industryResponse =
-                "${mapperToJob(response?.data?.industryKeyword1.toString())}, " +
-                        "${mapperToJob(response?.data?.industryKeyword2.toString())}, " +
-                        mapperToJob(response?.data?.industryKeyword3.toString())
-            val name = response?.data?.name
-            val birth = response?.data?.birthdate
-            val gender = response?.data?.gender
+            val imageResponse = response?.data?.memberImgUrl
 
             withContext(Dispatchers.Main){
                 if(statusCode == 200){
-                    binding.tvProfileJob.text = industryResponse
-                    binding.etProfileName.setText(name)
-                    binding.tvBirth.text = mapperToBirth(birth!!)
-                    binding.tvGender.text = gender
+                    if(imageResponse!=null) {
+                        Glide.with(applicationContext).load(imageResponse).circleCrop()
+                            .into(binding.ivProfilePic)
+                    }else{
+                        binding.ivProfilePic.setImageDrawable(getDrawable(R.drawable.ic_my_page_user))
+                    }
                 }else{
                     Toast.makeText(this@ProfileActivity, "통신오류: $statusCode", Toast.LENGTH_SHORT).show()
                 }
@@ -384,4 +560,37 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         }
     }
 
+    private fun industryLoad(){
+        lifecycleScope.launch {
+            val response = userInfoService.getUserInfo().body()
+            val statusCode = response?.statusCode
+            val industryResponse =
+                "${mapperToJob(response?.data?.industryKeyword1.toString())}, " +
+                        "${mapperToJob(response?.data?.industryKeyword2.toString())}, " +
+                        mapperToJob(response?.data?.industryKeyword3.toString())
+            withContext(Dispatchers.Main){
+                if(statusCode == 200){
+                    binding.tvProfileJob.text = industryResponse
+                }else{
+                    Toast.makeText(this@ProfileActivity, "통신오류: $statusCode", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
+    }
+
+    // 절대경로 변환
+    fun absolutelyPath(path: Uri?, context : Context): String {
+        var proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
+        var c: Cursor? = context.contentResolver.query(path!!, proj, null, null, null)
+        var index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        c?.moveToFirst()
+
+        var result = c?.getString(index!!)
+
+        return result!!
+    }
+}
+
+enum class RequestCode {
+    Capture, CapturePermissions
 }
