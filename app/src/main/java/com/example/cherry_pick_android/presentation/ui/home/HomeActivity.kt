@@ -12,6 +12,7 @@ import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywor
 import com.example.cherry_pick_android.presentation.ui.mypage.MyPageFragment
 import com.example.cherry_pick_android.presentation.ui.scrap.ScrapTrueFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
+import com.example.cherry_pick_android.presentation.viewmodel.searchRecord.SearchRecordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -24,6 +25,7 @@ class HomeActivity: AppCompatActivity() {
 
     // 뷰 모델 가져오기
     private val searchKeywordViewModel: SearchKeywordViewModel by viewModels()
+    private val searchRecordViewModel: SearchRecordViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +34,7 @@ class HomeActivity: AppCompatActivity() {
         setContentView(view)
 
         searchKeywordViewModel.loadKeyword().observe(this){} // DB 업데이트
+        searchRecordViewModel.loadRecord().observe(this){}
         initFragment()
         initBottomNavigation()
     }

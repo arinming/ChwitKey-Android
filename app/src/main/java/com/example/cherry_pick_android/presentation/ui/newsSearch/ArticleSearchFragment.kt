@@ -2,6 +2,7 @@ package com.example.cherry_pick_android.presentation.ui.newsSearch
 
 import SearchRecordAdapter
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -95,6 +96,7 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
             val existingRecords = searchRecordAdapter.getRecords()
             val existingRecord = existingRecords.find { it.record == keyword }
 
+            Log.d("현재 검색어 리스트", "$existingRecords")
             if (existingRecord != null) {
                 // 이미 존재하는 키워드를 리스트에서 삭제하고, 맨 앞에 새로운 값 추가
                 searchRecordViewModel.deleteRecord(existingRecord.record)

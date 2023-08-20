@@ -4,6 +4,7 @@ import SearchRecordAdapter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.KeyEvent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -27,6 +28,7 @@ class NewsSearchActivity: AppCompatActivity() {
     private val searchRecordViewModel: SearchRecordViewModel by viewModels()
     private lateinit var searchRecordAdapter: SearchRecordAdapter
 
+    private lateinit var nowList : List<SearchRecordEntity>
     private var searchRecordLiveData: LiveData<List<SearchRecordEntity>>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +36,11 @@ class NewsSearchActivity: AppCompatActivity() {
         binding = ActivityNewsSearchBinding.inflate(layoutInflater)
         val view = binding.root
         setContentView(view)
+
+        searchRecordViewModel.loadRecord().observe(this) {searchList ->
+            nowList = searchList
+        }
+
 
 
         initFragment()
@@ -97,12 +104,11 @@ class NewsSearchActivity: AppCompatActivity() {
                 searchRecordViewModel.viewModelScope.launch {
                     if (text.isNotEmpty()) {
 
-                        val existingRecords = searchRecordViewModel.loadRecord().value.orEmpty()
-                        val existingRecord = existingRecords.find { it.record == text }
+                        val existingRecord = nowList.find { it.record == text }
+                        Log.d("검색어 리스트", "$nowList")
 
                         if (existingRecord != null) {
                             searchRecordViewModel.deleteRecord(existingRecord.record)
-                            searchRecordAdapter.removeRecord(existingRecord)
                             searchRecordViewModel.addRecord(text)
                         } else {
                             searchRecordViewModel.addRecord(text)

@@ -94,7 +94,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
             var nowIndustry = mapperToIndustry(industryInit)
             val pageable = Pageable(
                 page = 1,
-                size = 2,
+                size = 100,
                 sort = ""
             )
             val response = articleService.getArticleIndustry(
@@ -268,7 +268,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
                     else -> ""
                 },
                 industry = nowIndustry,
-                pageable = Pageable(1, 10, "")
+                pageable = Pageable(1, 100, "")
             )
             Log.d("직군", "$industryInit, $nowIndustry")
             // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신
