@@ -1,6 +1,5 @@
 package com.example.cherry_pick_android.presentation.ui.newsSearch
 
-import SearchRecordAdapter
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -9,9 +8,7 @@ import android.view.KeyEvent
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.model.SearchRecordEntity
@@ -26,7 +23,6 @@ class NewsSearchActivity: AppCompatActivity() {
     private val manager = supportFragmentManager
 
     private val searchRecordViewModel: SearchRecordViewModel by viewModels()
-    private lateinit var searchRecordAdapter: SearchRecordAdapter
 
     private lateinit var nowList : List<SearchRecordEntity>
     private var searchRecordLiveData: LiveData<List<SearchRecordEntity>>? = null

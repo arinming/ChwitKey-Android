@@ -11,6 +11,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.ArticleItem
 import com.example.cherry_pick_android.data.data.Pageable
@@ -23,7 +24,9 @@ import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdap
 import com.example.cherry_pick_android.presentation.ui.keyword.AdapterInteractionListener
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -34,6 +37,10 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
     private val binding get() = _binding!!
 
     private var industryInit: String = ""
+    private var pageInit: Int = 0
+    private var isLoading = false
+    private lateinit var mRecyclerView: RecyclerView
+
 
     @Inject
     lateinit var articleService: ArticleSearchIndustryService
@@ -45,9 +52,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
     lateinit var userDataRepository: UserDataRepository
 
     private lateinit var selectedIndustry: String
-    private lateinit var newsAdapter: NewsRecyclerViewAdapter
-    private lateinit var linearLayoutManager: LinearLayoutManager
-    private var isScrolling = false
 
 
     companion object {
@@ -69,6 +73,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
 
         industryLoad()
         goToNewsSearch()
+        initScrollListener()
 
         // 초기 뉴스 기사 불러오기
         getArticleList("desc")
@@ -93,8 +98,8 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
         lifecycleScope.launch {
             var nowIndustry = mapperToIndustry(industryInit)
             val pageable = Pageable(
-                page = 1,
-                size = 100,
+                page = pageInit,
+                size = 10,
                 sort = ""
             )
             val response = articleService.getArticleIndustry(
@@ -268,7 +273,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
                     else -> ""
                 },
                 industry = nowIndustry,
-                pageable = Pageable(1, 100, "")
+                pageable = Pageable(pageInit, 10, "")
             )
             Log.d("직군", "$industryInit, $nowIndustry")
             // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신
@@ -286,6 +291,31 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
             withContext(Dispatchers.Main) {
                 binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
             }
+        }
+    }
+
+    private fun initScrollListener() {
+        binding.rvNewsList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                if(!isLoading) {
+                    if ((recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition() == 9) {
+                        Log.d("true", "True")
+                        moreArticles()
+                        isLoading = true
+                    }
+                }
+            }
+        })
+    }
+
+    fun moreArticles() {
+        mRecyclerView = binding.rvNewsList
+
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(1000)
+            loadArticlesByIndustry("It")
         }
     }
 
