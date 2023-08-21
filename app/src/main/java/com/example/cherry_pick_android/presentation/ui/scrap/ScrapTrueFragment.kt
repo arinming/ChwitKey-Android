@@ -71,6 +71,15 @@ class ScrapTrueFragment : Fragment(), DeleteScrapListener {
 
                 binding.rvScrapNewsList.adapter = ScrapAdapter(this@ScrapTrueFragment, scrapData)
                 binding.tvScrapCount.text = scrapData.size.toString()
+
+                // 스크랩한 기사가 없을 경우 나타내는 화면
+                if(scrapData.isEmpty()){
+                    binding.llNoneScrap.visibility = View.VISIBLE
+                }
+                // 스크랩한 기사가 있을 경우 다시 전환
+                else{
+                    binding.llNoneScrap.visibility = View.GONE
+                }
             }
         }
     }

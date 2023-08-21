@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -296,6 +297,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
             articleOldItems.addAll(articleItems)
 
             withContext(Dispatchers.Main) {
+                binding.lottieDotLoading.visibility = View.GONE
                 binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articleOldItems)
                 binding.rvNewsList.adapter?.notifyDataSetChanged()
                 (binding.rvNewsList.layoutManager as LinearLayoutManager).scrollToPosition(savedScrollPosition)
