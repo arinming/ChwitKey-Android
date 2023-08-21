@@ -19,7 +19,7 @@
     <item
         android:id="@+id/nav_fragment_my_page"
         android:title="@string/home_menu_my_page"
-        android:icon="@drawable/ic_my_page"
+        android:icon="@drawable/ic_mypage"
         android:enabled="true"/>
 
 </menu>
