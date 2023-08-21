@@ -53,7 +53,7 @@ class SearchListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchListBinding.inflate(inflater, container, false)
-        getArticleList()
+        getArticleList(sort)
 
         return binding.root
     }
@@ -67,7 +67,7 @@ class SearchListFragment : Fragment() {
     }
 
 
-    private fun getArticleList() {
+    private fun getArticleList(sort: String) {
         // API 통신
         lifecycleScope.launch {
             val newsSearchActivity = activity as? NewsSearchActivity
@@ -98,9 +98,10 @@ class SearchListFragment : Fragment() {
                             imageUrl,
                             content.articleId
                         )
-                    }?: emptyList()
+                    } ?: emptyList()
                     articleOldItems = articleItems.toMutableList()
-                    binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(articleItems.toMutableList())
+                    binding.rvSearchNewsList.adapter =
+                        NewsRecyclerViewAdapter(articleItems.toMutableList())
                     binding.tvSearchCount.text = articleItems?.size.toString()
                 } else {
                     Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
@@ -118,15 +119,15 @@ class SearchListFragment : Fragment() {
 
         // 메뉴 아이템 클릭 처리
         popupMenu.setOnMenuItemClickListener { item ->
-            when (item.itemId) {
-                R.id.menu_sort_asc -> binding.tvSorting.text = getString(R.string.sort_article_asc)
-                R.id.menu_sort_desc -> binding.tvSorting.text =
-                    getString(R.string.sort_article_desc)
+            pageInit = 0
 
-                R.id.menu_sort_like -> binding.tvSorting.text =
-                    getString(R.string.sort_article_like)
+            when (item.itemId) {
+                R.id.menu_sort_asc -> sort = getString(R.string.sort_article_asc)
+                R.id.menu_sort_desc -> sort = getString(R.string.sort_article_desc)
+                R.id.menu_sort_like -> sort = getString(R.string.sort_article_like)
             }
-            getArticleList()
+            binding.tvSorting.text = sort
+            getArticleList(sort)
             true
         }
 

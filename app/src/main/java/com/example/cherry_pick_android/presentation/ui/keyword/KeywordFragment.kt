@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.ArticleItem
 import com.example.cherry_pick_android.data.data.Pageable
@@ -40,7 +41,14 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
     private lateinit var keywordListAdapter: KeywordListAdapter
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var selectedKeyword: String
+    private var keyword = ""
+    private var sort = ""
+    private var pageInit: Int = 0
+    private var isLoading = false
+    private lateinit var mRecyclerView: RecyclerView
 
+    private var articleOldItems = mutableListOf<ArticleItem>()
+    private var savedScrollPosition: Int = 0
 
     @Inject
     lateinit var articleService: ArticleSearchKeywordService
