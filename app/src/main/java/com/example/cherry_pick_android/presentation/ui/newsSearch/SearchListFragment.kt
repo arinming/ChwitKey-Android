@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.presentation.util.newsSearch
+package com.example.cherry_pick_android.presentation.ui.newsSearch
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -85,6 +85,8 @@ class SearchListFragment : Fragment() {
                 } else {
                     Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
                 }
+                binding.lottieDotLoading.visibility = View.GONE
+
             }
         }
     }

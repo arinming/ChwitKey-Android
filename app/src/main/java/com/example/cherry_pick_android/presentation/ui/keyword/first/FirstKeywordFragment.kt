@@ -106,6 +106,7 @@ class FirstKeywordFragment : Fragment(), AddListener, DeleteListener {
 
     // 어뎁터 연결 함수
     fun initView(){
+        binding.lottieDotLoading.visibility = View.GONE
         binding.rvKeyword.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding.rvKeyword.adapter = KeywordAdapter(keywords, this)
     }

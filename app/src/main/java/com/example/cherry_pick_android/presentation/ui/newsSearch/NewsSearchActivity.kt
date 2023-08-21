@@ -1,4 +1,4 @@
-package com.example.cherry_pick_android.presentation.util.newsSearch
+package com.example.cherry_pick_android.presentation.ui.newsSearch
 
 import android.os.Bundle
 import android.text.Editable

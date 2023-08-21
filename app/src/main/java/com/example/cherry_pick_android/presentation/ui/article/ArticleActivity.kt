@@ -115,6 +115,7 @@ class ArticleActivity : AppCompatActivity() {
                 } else {
                     Toast.makeText(this@ArticleActivity, "에러", Toast.LENGTH_SHORT).show()
                 }
+                binding.lottieDotLoading.visibility = View.GONE
             }
         }
     }

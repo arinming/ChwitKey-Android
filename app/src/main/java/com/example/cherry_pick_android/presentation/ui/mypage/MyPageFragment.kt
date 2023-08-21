@@ -130,6 +130,8 @@ class MyPageFragment : Fragment() {
             }else{
                 Toast.makeText(requireContext(), "통신 오류:$statusCode", Toast.LENGTH_SHORT).show()
             }
+            binding.lottieDotLoading.visibility = View.GONE
+
         }
     }
 }
