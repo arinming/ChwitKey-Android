@@ -133,7 +133,7 @@
         android:id="@+id/btm_nav_view"
         android:layout_width="match_parent"
         android:layout_height="84dp"
-        android:backgroundTint="@android:color/transparent"
+        android:background="@android:color/transparent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
