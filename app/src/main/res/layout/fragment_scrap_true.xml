@@ -125,7 +125,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/btm_nav_view"
         android:layout_width="match_parent"
-        android:layout_height="84dp"
+        android:layout_height="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
