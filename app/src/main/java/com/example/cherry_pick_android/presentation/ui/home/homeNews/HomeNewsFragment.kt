@@ -149,7 +149,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
         return when (value) {
             "철강" -> "steel"
             "석유·화학" -> "Petroleum/Chemical"
-            "정" -> "oilrefining"
+            "정유" -> "oilrefining"
             "2차 전지" -> "seconarybattery"
             "반도체" -> "Semiconductor"
             "디스플레이" -> "Display"

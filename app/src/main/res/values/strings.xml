@@ -83,6 +83,7 @@
 
     <!-- home_news -->
     <string name="home_news_search_hint">원하는 주제를 검색하세요</string>
+    <string name="home_news_none">관련 기사내용이 없어요 :(</string>
 
     <!-- keyword -->
     <string name="first_keyword_title">앗! 아직 등록된 키워드가 없어요</string>
