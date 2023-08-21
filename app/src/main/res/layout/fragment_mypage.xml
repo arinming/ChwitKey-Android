@@ -176,13 +176,13 @@
             android:layout_marginBottom="20dp"/>
 
         <TextView
-            android:id="@+id/tv_mypage_contacts"
+            android:id="@+id/tv_mypage_marketing_policy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:clickable="true"
             android:fontFamily="@font/pretendard_light"
-            android:text="@string/mypage_contacts"
+            android:text="@string/mypage_marketing_policy"
             android:textColor="@color/gray_6"
             android:textSize="14sp" />
 
