@@ -377,7 +377,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
                 if(statusCode == 200){
                     binding.tvProfileJob.text = industryResponse
                     binding.etProfileName.setText(response.data?.name)
-                    binding.tvBirth.text = response.data?.birthdate
+                    binding.tvBirth.text = mapperToBirth(response.data?.birthdate.toString())
                     binding.tvGender.text = response.data?.gender
                     if(imageResponse!=null) {
                         Glide.with(applicationContext).load(imageResponse).circleCrop()
@@ -393,7 +393,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     }
 
     // 절대 경로 변환
-    fun absolutelyPath(path: Uri?, context : Context): String {
+    private fun absolutelyPath(path: Uri?, context : Context): String {
         var proj: Array<String> = arrayOf(MediaStore.Images.Media.DATA)
         var c: Cursor? = context.contentResolver.query(path!!, proj, null, null, null)
         var index = c?.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
@@ -402,5 +402,13 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         var result = c?.getString(index!!)
 
         return result!!
+    }
+
+    private fun mapperToBirth(birth: String): String{
+        val year = birth.substring(0, 4)
+        val month = birth.substring(4, 6)
+        val day = birth.substring(6, 8)
+
+        return "$year.$month.$day"
     }
 }
