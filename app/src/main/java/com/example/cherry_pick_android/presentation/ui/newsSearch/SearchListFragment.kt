@@ -53,7 +53,7 @@ class SearchListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchListBinding.inflate(inflater, container, false)
-        getArticleList(sort)
+        getArticleList()
 
         return binding.root
     }
@@ -67,13 +67,13 @@ class SearchListFragment : Fragment() {
     }
 
 
-    private fun getArticleList(sort: String) {
+    private fun getArticleList() {
         // API 통신
         lifecycleScope.launch {
             val newsSearchActivity = activity as? NewsSearchActivity
 
             // NewsSearchActivity 인스턴스의 binding.etSearch.text 가져오기
-            cond = newsSearchActivity?.getNowText().toString()
+            cond = newsSearchActivity?.getNowText().toString().trim()
             var sort = binding.tvSorting.text
 
             when (sort) {
@@ -83,7 +83,7 @@ class SearchListFragment : Fragment() {
             }
 
             // trim으로 공백 제거
-            val response = articleService.getArticleCommend(cond.trim(), sort.toString(), pageInit)
+            val response = articleService.getArticleCommend(cond, sort.toString(), pageInit)
             val statusCode = response.body()?.statusCode
 
             withContext(Dispatchers.Main) {
@@ -130,7 +130,7 @@ class SearchListFragment : Fragment() {
                 R.id.menu_sort_like -> sort = getString(R.string.sort_article_like)
             }
             binding.tvSorting.text = sort
-            getArticleList(sort)
+            getArticleList()
             true
         }
 
@@ -185,7 +185,7 @@ class SearchListFragment : Fragment() {
                         "내림차순" -> "desc"
                         else -> ""
                     },
-                    cond = cond,
+                    cond = cond.trim(),
                     page = pageInit
                 )
 

@@ -156,6 +156,7 @@ class SearchKeywordFragment : Fragment(), DeleteListener {
         binding.etSearch.setOnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 val text = binding.etSearch.text.toString()
+                searchKeywordDetailFragment?.clearPage(text)
                 if (text.isNotEmpty()) {
                     addDetailFragment()
                     searchKeywordDetailFragment?.getArticleList()
