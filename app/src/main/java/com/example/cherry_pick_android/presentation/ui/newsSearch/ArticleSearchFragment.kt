@@ -125,7 +125,34 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener, AdapterIn
     }
 
     override fun onButtonSelected(button: String) {
-        search = button
-        Log.d("검색어", search)
+        searchKeywordViewModel.viewModelScope.launch {
+            val existingRecords = searchRecordAdapter.getRecords()
+            val existingRecord = existingRecords.find { it.record == button}
+
+            Log.d("현재 검색어 리스트", "$existingRecords")
+            if (existingRecord != null) {
+                // 이미 존재하는 키워드를 리스트에서 삭제하고, 맨 앞에 새로운 값 추가
+                searchRecordViewModel.deleteRecord(existingRecord.record)
+                searchRecordAdapter.removeRecord(existingRecord)
+                searchRecordViewModel.addRecord(button)
+
+                // NewsSearchActivity의 etSearch 텍스트 변경
+                if (activity is NewsSearchActivity) {
+                    val newsSearchActivity = activity as NewsSearchActivity
+                    newsSearchActivity.updateSearchText(button)
+                }
+            } else {
+                // 새로운 값만 추가
+                searchRecordViewModel.addRecord(button)
+                // NewsSearchActivity의 etSearch 텍스트 변경
+                if (activity is NewsSearchActivity) {
+                    val newsSearchActivity = activity as NewsSearchActivity
+                    newsSearchActivity.updateSearchText(button)
+                }
+            }
+        }
+        val newsSearchActivity = activity as? NewsSearchActivity
+        newsSearchActivity?.changeFragment(SearchListFragment.newInstance())
+
     }
 }
