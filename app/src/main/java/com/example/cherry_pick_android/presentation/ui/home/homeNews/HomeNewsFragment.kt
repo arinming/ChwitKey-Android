@@ -382,7 +382,11 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
 
     override fun onButtonSelected(button: String) {
         selectedIndustry = button
-        industryInit = button
+        if(industryInit != button){
+            industryInit = button
+            pageInit = 0
+            articleOldItems.clear()
+        }
         loadArticlesByIndustry(button)
     }
 }
