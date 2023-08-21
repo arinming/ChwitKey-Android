@@ -133,6 +133,9 @@ class SearchKeywordDetailFragment : Fragment() {
                             )
                         }?.toMutableList()
                         articleOldItems = articleItems?.toMutableList()!!
+                        if (articleOldItems.size < 10) {
+                            isDone = true
+                        }
                         Log.d("기사", articleItems.toString())
                         binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
                     } else {
@@ -236,8 +239,12 @@ class SearchKeywordDetailFragment : Fragment() {
 
         // 페이지 번호를 증가시키고 새로운 기사를 로드
         pageInit++
+        binding.lottieDotLoading.visibility = View.VISIBLE
 
         lifecycleScope.launch {
+            delay(1000) // 임의의 딜레이 추가
+            // 이전 스크롤 위치 저장
+            binding.lottieDotLoading.visibility = View.GONE
 
             val response = articleService.getArticleKeyword(
                 sortType = "desc",
@@ -258,7 +265,6 @@ class SearchKeywordDetailFragment : Fragment() {
             } ?: emptyList()
 
             if (articleItems.isEmpty()) {
-                articleOldItems.add(ArticleItem("", "", "", "", null))
                 Toast.makeText(context, "불러올 기사가 없습니다.", Toast.LENGTH_SHORT).show()
                 isDone = true
             }
@@ -280,6 +286,8 @@ class SearchKeywordDetailFragment : Fragment() {
     fun clearPage(text: String) {
         articleOldItems.clear()
         pageInit = 0
+        isDone = false
+
         loadArticlesByKeyword(text)
     }
 }
