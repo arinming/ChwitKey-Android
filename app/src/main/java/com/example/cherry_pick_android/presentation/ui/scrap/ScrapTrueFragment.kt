@@ -1,5 +1,6 @@
 package com.example.cherry_pick_android.presentation.ui.scrap
 
+import android.opengl.Visibility
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -75,6 +76,7 @@ class ScrapTrueFragment : Fragment(), DeleteScrapListener {
                 else{
                     binding.llNoneScrap.visibility = View.GONE
                 }
+                binding.lottieDotLoading.visibility = View.GONE
             }
         }
     }
