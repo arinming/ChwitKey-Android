@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.data.data.Keyword
 import com.example.cherry_pick_android.databinding.FragmentArticleSearchBinding
 import com.example.cherry_pick_android.presentation.adapter.ArticleKeywordAdapter
+import com.example.cherry_pick_android.presentation.ui.keyword.AdapterInteractionListener
 import com.example.cherry_pick_android.presentation.ui.keyword.AddListener
 import com.example.cherry_pick_android.presentation.ui.keyword.DeleteListener
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
@@ -21,13 +22,14 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
-class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
+class ArticleSearchFragment : Fragment(), AddListener, DeleteListener, AdapterInteractionListener {
     private var _binding: FragmentArticleSearchBinding? = null
     private val binding get() = _binding!!
 
     private val searchKeywordViewModel: SearchKeywordViewModel by viewModels()
     private val searchRecordViewModel: SearchRecordViewModel by viewModels()
     private lateinit var searchRecordAdapter: SearchRecordAdapter
+    private var search = ""
 
     private val keywords = listOf(
         Keyword("2차전지"), Keyword("IT"), Keyword("철강"), Keyword("정유"),
@@ -70,7 +72,7 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
 
         // 검색어
         binding.rvRecordList.layoutManager = LinearLayoutManager(context)
-        searchRecordAdapter = SearchRecordAdapter(this)
+        searchRecordAdapter = SearchRecordAdapter(this, this@ArticleSearchFragment)
         binding.rvRecordList.adapter = searchRecordAdapter
     }
 
@@ -120,5 +122,10 @@ class ArticleSearchFragment : Fragment(), AddListener, DeleteListener {
         }
         val newsSearchActivity = activity as? NewsSearchActivity
         newsSearchActivity?.changeFragment(SearchListFragment.newInstance())
+    }
+
+    override fun onButtonSelected(button: String) {
+        search = button
+        Log.d("검색어", search)
     }
 }
