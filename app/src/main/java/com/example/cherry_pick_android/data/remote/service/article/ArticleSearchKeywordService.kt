@@ -10,9 +10,8 @@ interface ArticleSearchKeywordService {
     // 키워드 & 정렬
     @GET("/api/articles/search/keyword")
     suspend fun getArticleKeyword(
-        @Query("loginStatus") loginStatus: String?,
         @Query("sortType") sortType: String,
         @Query("keyword") keyword: String,
-        @Query("pageable") pageable: Pageable
+        @Query("page") page: Int
     ): Response<ArticleKeywordResponse>
 }

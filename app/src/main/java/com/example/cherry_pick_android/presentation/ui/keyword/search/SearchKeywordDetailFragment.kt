@@ -35,6 +35,7 @@ class SearchKeywordDetailFragment: Fragment() {
     }
     private val searchKeywordViewModel: SearchKeywordViewModel by viewModels() // 뷰모델 초기화 불필요 (Hilt)
     private lateinit var searchKeywordAdapter: SearchKeywordAdapter
+    private var pageInit: Int = 0
 
     @Inject
     lateinit var articleService: ArticleSearchKeywordService
@@ -103,10 +104,9 @@ class SearchKeywordDetailFragment: Fragment() {
 
                 if (::articleService.isInitialized) {
                     val response = articleService.getArticleKeyword(
-                        loginStatus = "",
                         sortType = "desc",
                         keyword = keyword,
-                        pageable = Pageable(1, 10, "")
+                        page = pageInit
                     )
 
                     val statusCode = response.body()?.statusCode

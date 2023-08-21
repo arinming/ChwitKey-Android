@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.ArticleItem
-import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchCommendService
 import com.example.cherry_pick_android.databinding.FragmentSearchListBinding
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
@@ -31,6 +30,7 @@ class SearchListFragment : Fragment() {
     private val binding get() = _binding!!
     private var cond = ""
     private var sort = ""
+    private var isDone = false
     private var pageInit: Int = 0
     private var isLoading = false
     private lateinit var mRecyclerView: RecyclerView
@@ -100,6 +100,9 @@ class SearchListFragment : Fragment() {
                         )
                     } ?: emptyList()
                     articleOldItems = articleItems.toMutableList()
+                    if (articleOldItems.size < 10) {
+                        isDone = true
+                    }
                     binding.rvSearchNewsList.adapter =
                         NewsRecyclerViewAdapter(articleItems.toMutableList())
                     binding.tvSearchCount.text = articleItems?.size.toString()
@@ -145,7 +148,7 @@ class SearchListFragment : Fragment() {
                 val lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition()
                 val totalItemCount = layoutManager.itemCount
 
-                if (!isLoading && lastVisibleItemPosition == totalItemCount - 1) {
+                if (!isLoading && !isDone && lastVisibleItemPosition == totalItemCount - 1) {
                     moreArticles(cond)
                     isLoading = true
                 }
@@ -212,14 +215,10 @@ class SearchListFragment : Fragment() {
                     (binding.rvSearchNewsList.layoutManager as LinearLayoutManager).scrollToPosition(
                         savedScrollPosition
                     )
-
                 }
-
             }
             isLoading = false // 로딩 상태를 다시 false로 설정
         }
-
-
     }
 }
 

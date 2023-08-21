@@ -17,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.ArticleItem
-import com.example.cherry_pick_android.data.data.Pageable
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchKeywordService
 import com.example.cherry_pick_android.databinding.FragmentKeywordBinding
 import com.example.cherry_pick_android.presentation.adapter.KeywordListAdapter
@@ -27,7 +26,9 @@ import com.example.cherry_pick_android.presentation.ui.keyword.search.SearchKeyw
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -41,8 +42,7 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
     private lateinit var keywordListAdapter: KeywordListAdapter
     private lateinit var bottomNavigationView: BottomNavigationView
     private lateinit var selectedKeyword: String
-    private var keyword = ""
-    private var sort = ""
+    private var isDone = false
     private var pageInit: Int = 0
     private var isLoading = false
     private lateinit var mRecyclerView: RecyclerView
@@ -65,8 +65,6 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
         savedInstanceState: Bundle?
     ): View {
 
-        binding.lottieDotLoading.visibility = View.GONE
-
         return binding.root
     }
 
@@ -78,6 +76,8 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initView()
+        initScrollListener()
 
         searchKeywordViewModel.loadKeyword().observe(viewLifecycleOwner) { keywordList ->
 
@@ -106,15 +106,8 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
 
             }
 
-            // 처음 아이템 선택 처리
-            if (keywordList.isNotEmpty()) {
-                selectedKeyword = keywordList[0].keyword
-                loadArticlesByKeyword(selectedKeyword)
-            }
-
         }
 
-        initView()
 
         // 키워드 검색 프래그먼트로 전환할 때 바텀네비게이션 뷰 비활성화
         bottomNavigationView = requireActivity().findViewById(R.id.btm_nav_view_home)
@@ -122,7 +115,6 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
             showFragment(SearchKeywordFragment.newInstance(), SearchKeywordFragment.TAG)
             bottomNavigationView.isGone = true
         }
-
     }
 
     private fun initView() {
@@ -134,29 +126,28 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
     }
 
     private fun getArticleList(keyword: String) {
+        Log.d("키워드", keyword)
+
+        var nowKeyword = keyword
+
         // API 통신
 
         lifecycleScope.launch {
 
+            // trim으로 공백 제거
+            val response = articleService.getArticleKeyword(
+                sortType = "desc",
+                keyword = nowKeyword,
+                page = pageInit
+            )
+
+            val statusCode = response.body()?.statusCode
+
             withContext(Dispatchers.Main) {
-
-                val searchKeywordFragment = parentFragment as? SearchKeywordFragment
-                val keyword = searchKeywordFragment?.getNowText().toString().trim()
-
-                // trim으로 공백 제거
-                val response = articleService.getArticleKeyword(
-                    loginStatus = "",
-                    sortType = "desc",
-                    keyword = keyword,
-                    pageable = Pageable(1, 10, "")
-                )
-
-                val statusCode = response.body()?.statusCode
                 if (statusCode == 200) {
 
                     val articleItems = response.body()?.data?.content?.map { content ->
-                        val imageUrl =
-                            if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
+                        val imageUrl = if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else ""
                         ArticleItem(
                             content.title,
                             content.publisher,
@@ -165,17 +156,15 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
                             content.articleId
                         )
                     }?.toMutableList()
-                    Log.d("기사", articleItems.toString())
+
                     binding.rvKeywordArticle.adapter = NewsRecyclerViewAdapter(articleItems)
                 } else {
-
                     Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
                 }
-                binding.lottieDotLoading.visibility = View.GONE
-
             }
         }
     }
+
 
     override fun onDeleteClick(keyword: String) {
         searchKeywordViewModel.deleteKeyword(keyword)
@@ -202,21 +191,26 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
     }
 
     override fun onButtonSelected(button: String) {
+        articleOldItems.clear()
         selectedKeyword = button
-        loadArticlesByKeyword(button)
+        pageInit = 0
+        loadArticlesByKeyword()
     }
 
 
     // 버튼 클릭시 뉴스 리스트 갱신
-    private fun loadArticlesByKeyword(keyword: String) {
+    private fun loadArticlesByKeyword() {
+        savedScrollPosition = (binding.rvKeywordArticle.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+        pageInit = 0
+
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
                 val response = articleService.getArticleKeyword(
-                    loginStatus = "",
                     sortType = "desc",
-                    keyword = keyword,
-                    pageable = Pageable(1, 10, "")
+                    keyword = selectedKeyword,
+                    page = pageInit
                 )
+                Log.d("페이지", pageInit.toString())
 
                 // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신
                 val articleItems = response.body()?.data?.content?.map { content ->
@@ -231,9 +225,93 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
                     )
                 }?.toMutableList()
                 binding.rvKeywordArticle.adapter = NewsRecyclerViewAdapter(articleItems)
+                (binding.rvKeywordArticle.layoutManager as LinearLayoutManager).scrollToPosition(savedScrollPosition)
+
             }
         }
-        binding.lottieDotLoading.visibility = View.GONE
+    }
 
+
+    private fun initScrollListener() {
+        binding.rvKeywordArticle.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+
+                val layoutManager = recyclerView.layoutManager as LinearLayoutManager
+                val lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition()
+                val totalItemCount = layoutManager.itemCount
+
+                if (!isLoading && !isDone && lastVisibleItemPosition == totalItemCount - 1) {
+                    moreArticles(selectedKeyword)
+                    isLoading = true
+                }
+            }
+        })
+    }
+
+
+    fun moreArticles(keyword: String) {
+        if (isLoading) return // 이미 로딩 중이라면 중복 호출 방지
+
+        isLoading = true // 로딩 상태를 true로 설정
+
+        mRecyclerView = binding.rvKeywordArticle
+
+        // 페이지 번호를 증가시키고 새로운 기사를 로드
+        pageInit++
+        Log.d("키워드", keyword)
+
+        CoroutineScope(Dispatchers.Main).launch {
+            delay(1000) // 임의의 딜레이 추가
+            // 이전 스크롤 위치 저장
+
+            savedScrollPosition =
+                (binding.rvKeywordArticle.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+
+            lifecycleScope.launch {
+                val response = articleService.getArticleKeyword(
+                    sortType = "desc",
+                    keyword = keyword,
+                    page = pageInit
+                )
+
+                // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신
+                val articleItems = response.body()?.data?.content?.map { content ->
+                    val imageUrl =
+                        if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else ""
+                    ArticleItem(
+                        content.title,
+                        content.publisher,
+                        content.uploadedAt,
+                        imageUrl,
+                        content.articleId
+                    )
+                } ?: emptyList()
+
+                if (articleItems.isEmpty()) {
+                    articleOldItems.add(ArticleItem("", "", "", "", null))
+                    Toast.makeText(context, "불러올 기사가 없습니다.", Toast.LENGTH_SHORT).show()
+                    isDone = true
+                }
+
+                articleOldItems.addAll(articleItems)
+
+
+                Log.d("검색", "$pageInit, $articleOldItems")
+
+                withContext(Dispatchers.Main) {
+
+                    if (articleItems.isEmpty()) {
+                        Toast.makeText(context, "불러올 기사가 없습니다.", Toast.LENGTH_SHORT).show()
+                    }
+                    binding.rvKeywordArticle.adapter = NewsRecyclerViewAdapter(articleOldItems)
+                    binding.rvKeywordArticle.adapter?.notifyDataSetChanged()
+                    (binding.rvKeywordArticle.layoutManager as LinearLayoutManager).scrollToPosition(
+                        savedScrollPosition
+                    )
+                }
+            }
+            isLoading = false // 로딩 상태를 다시 false로 설정
+        }
     }
 }
