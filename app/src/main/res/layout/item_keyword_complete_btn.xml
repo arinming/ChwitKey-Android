@@ -27,6 +27,7 @@
             android:minWidth="0dp"
             android:minHeight="0dp"
             android:paddingStart="5dp"
+            android:fontFamily="@font/pretendard_regular"
             android:text="@string/keyword_title"
             android:textColor="@color/white"
             android:textSize="14sp"

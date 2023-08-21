@@ -13,6 +13,7 @@
         android:background="@drawable/bg_gpt_bubble"
         android:layout_width="125dp"
         android:layout_height="55dp"
+        android:padding="16dp"
         app:lottie_rawRes="@raw/lottie_dot_gpt_loading"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
