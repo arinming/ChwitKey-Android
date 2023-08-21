@@ -99,7 +99,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
         // API 통신
         lifecycleScope.launch {
             var nowIndustry = mapperToIndustry(industry)
-
+            isDone = false
             val response = articleService.getArticleIndustry(
                 industry = nowIndustry,
                 sortType = sort,
@@ -264,6 +264,8 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
 
     // 버튼 클릭시 뉴스 리스트 갱신
     private fun loadArticlesByIndustry(industry: String) {
+        isDone = false
+
         savedScrollPosition = (binding.rvNewsList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
         binding.lottieDotLoading.visibility = View.VISIBLE
 
