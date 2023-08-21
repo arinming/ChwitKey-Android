@@ -42,7 +42,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
     private lateinit var mRecyclerView: RecyclerView
 
     private var articleOldItems = mutableListOf<ArticleItem>()
-
     private var savedScrollPosition: Int = 0
 
 
@@ -105,8 +104,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
                 sortType = sort,
                 page = pageInit
             )
-
-            Log.d("직13131군", "$pageInit, $response")
 
             val statusCode = response.body()?.statusCode
             withContext(Dispatchers.Main) {
@@ -246,7 +243,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
 
             withContext(Dispatchers.Main) {
                 if (statusCode == 200) {
-                    Log.d("현재 직군", industryInit)
                     loadArticlesByIndustry(industry1)
 
                     binding.rvIndustry.layoutManager =
@@ -283,7 +279,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
                 industry = nowIndustry,
                 page = 0
             )
-            Log.d("직@@@@@군", "$pageInit, $response")
             // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신
             val articleItems = response.body()?.data?.content?.map { content ->
                 val imageUrl =
@@ -339,9 +334,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
         pageInit++
         binding.lottieDotLoading.visibility = View.VISIBLE
 
-        Log.d("스크롤 직군", industry)
-
-
         CoroutineScope(Dispatchers.Main).launch {
             delay(1000) // 임의의 딜레이 추가
             // 이전 스크롤 위치 저장
@@ -352,7 +344,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
             lifecycleScope.launch {
 
                 var nowIndustry = mapperToIndustry(industry)
-                Log.d("지금 직군", nowIndustry)
                 val response = articleService.getArticleIndustry(
                     sortType = when (binding.tvSorting.text) {
                         "인기순" -> "like"
@@ -364,7 +355,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
                     page = pageInit
                 )
 
-                Log.d("직군", "$pageInit, $response")
                 // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신
                 val articleItems = response.body()?.data?.content?.map { content ->
                     val imageUrl =
@@ -378,6 +368,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
                     )
                 }?: emptyList()
                 articleOldItems.addAll(articleItems)
+                Log.d("직군", "$pageInit, $response")
 
                 withContext(Dispatchers.Main) {
 
@@ -390,7 +381,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
                     (binding.rvNewsList.layoutManager as LinearLayoutManager).scrollToPosition(savedScrollPosition)
 
                 }
-
             }
             isLoading = false // 로딩 상태를 다시 false로 설정
         }
