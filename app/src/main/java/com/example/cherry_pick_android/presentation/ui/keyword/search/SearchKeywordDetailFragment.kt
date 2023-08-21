@@ -23,6 +23,7 @@ import com.example.cherry_pick_android.presentation.ui.keyword.dialog.KeywordDia
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
@@ -58,7 +59,6 @@ class SearchKeywordDetailFragment: Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         getArticleList()
         getKeyword()
 
@@ -95,6 +95,7 @@ class SearchKeywordDetailFragment: Fragment() {
 
     fun getArticleList() {
         // API 통신
+
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
                 val searchKeywordFragment = parentFragment as? SearchKeywordFragment
@@ -126,6 +127,7 @@ class SearchKeywordDetailFragment: Fragment() {
                     } else {
                         Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
                     }
+                    binding.lottieDotLoading.visibility = View.GONE
                 }
             }
         }

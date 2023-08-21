@@ -57,7 +57,7 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
         savedInstanceState: Bundle?
     ): View {
 
-        getArticleList("네이버")
+        binding.lottieDotLoading.visibility = View.GONE
 
         return binding.root
     }
@@ -70,9 +70,12 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
         searchKeywordViewModel.loadKeyword().observe(viewLifecycleOwner) { keywordList ->
+
             keywordListAdapter.setList(keywordList)
             binding.tvKeywordCnt.text = keywordList.size.toString()
+
 
             // 만약 키워드가 존재하지 않다면 firstkeyword 프래그먼트로 이동
             if (keywordList.isEmpty()) {
@@ -92,6 +95,7 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
 
                 // 기사 가져오기
                 getArticleList(firstKeyword)
+
             }
 
             // 처음 아이템 선택 처리
@@ -99,6 +103,7 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
                 selectedKeyword = keywordList[0].keyword
                 loadArticlesByKeyword(selectedKeyword)
             }
+
         }
 
         initView()
@@ -109,6 +114,7 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
             showFragment(SearchKeywordFragment.newInstance(), SearchKeywordFragment.TAG)
             bottomNavigationView.isGone = true
         }
+
     }
 
     private fun initView() {
@@ -116,12 +122,16 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
             LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         keywordListAdapter = KeywordListAdapter(this, this)
         binding.rvKeyword.adapter = keywordListAdapter
+
     }
 
     private fun getArticleList(keyword: String) {
         // API 통신
+
         lifecycleScope.launch {
+
             withContext(Dispatchers.Main) {
+
                 val searchKeywordFragment = parentFragment as? SearchKeywordFragment
                 val keyword = searchKeywordFragment?.getNowText().toString().trim()
 
@@ -133,9 +143,9 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
                     pageable = Pageable(1, 10, "")
                 )
 
-
                 val statusCode = response.body()?.statusCode
                 if (statusCode == 200) {
+
                     val articleItems = response.body()?.data?.content?.map { content ->
                         val imageUrl =
                             if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
@@ -150,8 +160,11 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
                     Log.d("기사", articleItems.toString())
                     binding.rvKeywordArticle.adapter = NewsRecyclerViewAdapter(articleItems)
                 } else {
+
                     Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
                 }
+                binding.lottieDotLoading.visibility = View.GONE
+
             }
         }
     }
@@ -212,5 +225,7 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
                 binding.rvKeywordArticle.adapter = NewsRecyclerViewAdapter(articleItems)
             }
         }
+        binding.lottieDotLoading.visibility = View.GONE
+
     }
 }

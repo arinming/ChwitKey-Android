@@ -21,8 +21,8 @@ import com.example.cherry_pick_android.presentation.adapter.SearchKeywordAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.DeleteListener
 import com.example.cherry_pick_android.presentation.ui.keyword.KeywordFragment
 import com.example.cherry_pick_android.presentation.ui.keyword.first.FirstKeywordFragment
-import com.example.cherry_pick_android.presentation.util.newsSearch.ArticleSearchFragment
-import com.example.cherry_pick_android.presentation.util.newsSearch.SearchListFragment
+import com.example.cherry_pick_android.presentation.ui.newsSearch.ArticleSearchFragment
+import com.example.cherry_pick_android.presentation.ui.newsSearch.SearchListFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
