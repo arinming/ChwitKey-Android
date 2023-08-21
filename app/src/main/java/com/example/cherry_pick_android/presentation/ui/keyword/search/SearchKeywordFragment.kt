@@ -13,8 +13,10 @@ import android.view.inputmethod.InputMethodManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.cherry_pick_android.R
+import com.example.cherry_pick_android.data.model.KeywordEntity
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchKeywordService
 import com.example.cherry_pick_android.databinding.FragmentSearchKeywordBinding
 import com.example.cherry_pick_android.presentation.adapter.SearchKeywordAdapter
@@ -25,6 +27,7 @@ import com.example.cherry_pick_android.presentation.ui.newsSearch.ArticleSearchF
 import com.example.cherry_pick_android.presentation.ui.newsSearch.SearchListFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 // 키워드 검색 프래그먼트
@@ -36,6 +39,7 @@ class SearchKeywordFragment : Fragment(), DeleteListener {
     var searchKeywordDetailFragment: SearchKeywordDetailFragment? = null
     private val searchKeywordViewModel: SearchKeywordViewModel by viewModels() // 뷰모델 초기화 불필요 (Hilt)
     private lateinit var searchKeywordAdapter: SearchKeywordAdapter
+    private lateinit var nowKeyword : List<KeywordEntity>
 
     companion object {
         const val TAG = "SearchKeywordFragment"
@@ -48,6 +52,9 @@ class SearchKeywordFragment : Fragment(), DeleteListener {
         savedInstanceState: Bundle?
     ): View {
         binding.etSearch.requestFocus() // 자동으로 EditText에 커서 효과 적용
+        searchKeywordViewModel.loadKeyword().observe(viewLifecycleOwner) {searchList ->
+            nowKeyword = searchList
+        }
 
         initView() // 어뎁터 적용
 
@@ -156,6 +163,14 @@ class SearchKeywordFragment : Fragment(), DeleteListener {
         binding.etSearch.setOnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 val text = binding.etSearch.text.toString()
+
+                searchKeywordViewModel.viewModelScope.launch {
+                    if (text.isNotEmpty()) {
+                        val existingKeyword = nowKeyword.find() { it.keyword == text}
+
+                        Log.d("검색어 리스트", "${searchKeywordViewModel.loadKeyword().value}")
+                    }
+                }
                 searchKeywordDetailFragment?.clearPage(text)
                 if (text.isNotEmpty()) {
                     addDetailFragment()

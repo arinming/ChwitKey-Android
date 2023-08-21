@@ -159,7 +159,9 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
                         )
                     }?.toMutableList()
                     articleItems?.toMutableList()?.let { articleOldItems.addAll(it) }
-
+                    if (articleOldItems.size < 10) {
+                        isDone = true
+                    }
                     Log.d("키워드 리스트", "${articleOldItems.size}, $articleOldItems")
                     binding.rvKeywordArticle.adapter = NewsRecyclerViewAdapter(articleItems)
                 } else {

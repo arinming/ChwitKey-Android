@@ -64,7 +64,6 @@ class SearchKeywordDetailFragment : Fragment() {
 
         // DB 데이터 로드 및 개수 초기화
         searchKeywordViewModel.loadKeyword().observe(viewLifecycleOwner) {
-            searchKeywordAdapter.setList(it)
         }
 
     }
@@ -86,7 +85,7 @@ class SearchKeywordDetailFragment : Fragment() {
 
             val isKeywordNew = searchKeywordViewModel.checkKeyword(keyword) // 중복 키워드 검사
             val isKeywordCnt = searchKeywordViewModel.checkKeywordCnt() // 키워드 개수 검사
-
+            Log.d("키워드 검사", "${searchKeywordViewModel.loadKeyword().value.toString()}")
             if (keyword.isNotEmpty() && isKeywordCnt) {
                 if (isKeywordNew) {
                     searchKeywordViewModel.addKeyword(keyword)
