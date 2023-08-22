@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +21,7 @@ import com.example.cherry_pick_android.presentation.adapter.IndustryAdapter
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.AdapterInteractionListener
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -250,7 +250,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
                         LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                     binding.rvIndustry.adapter = IndustryAdapter(industries, this@HomeNewsFragment)
                 } else {
-                    Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, "오류가 발생했습니다. (Code: $statusCode)", Snackbar.LENGTH_SHORT).show()
                 }
             }
         }
@@ -373,7 +373,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
 
                 if (articleItems.isEmpty()) {
                     articleOldItems.add(ArticleItem("", "", "", "", null))
-                    Toast.makeText(context, "불러올 기사가 없습니다.", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, "불러올 기사가 존재하지 않습니다.", Snackbar.LENGTH_SHORT).show()
                     isDone = true
                 }
 

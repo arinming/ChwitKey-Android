@@ -9,7 +9,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -28,11 +27,12 @@ import com.example.cherry_pick_android.presentation.ui.keyword.Keywords
 import com.example.cherry_pick_android.presentation.ui.keyword.search.SearchKeywordFragment
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-// 키워드 등록이 안되어있는 경우의 프래그먼트
 @AndroidEntryPoint
+// 키워드 등록이 안되어있는 경우의 프래그먼트
 class FirstKeywordFragment : Fragment(), AddListener, DeleteListener {
     private val binding: FragmentFirstKeywordBinding by lazy {
         FragmentFirstKeywordBinding.inflate(layoutInflater)
@@ -121,13 +121,13 @@ class FirstKeywordFragment : Fragment(), AddListener, DeleteListener {
                 searchKeywordViewModel.addKeyword(keyword)
                 showFragment(SearchKeywordFragment.newInstance(), SearchKeywordFragment.TAG)
                 bottomNavigationView.isGone = true
-                Toast.makeText(context, "$keyword 키워드가 추가되었습니다", Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "키워드가 추가되었습니다.", Snackbar.LENGTH_SHORT).show()
             }
             else if(!isKeywordCnt){
-                Toast.makeText(context, "키워드 최대 개수를 초과했습니다", Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "키워드 최대 개수를 초과했습니다.", Snackbar.LENGTH_SHORT).show()
             }
             else{
-                Toast.makeText(context, "이미 존재하는 키워드입니다", Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "이미 존재하는 키워드 입니다.", Snackbar.LENGTH_SHORT).show()
             }
         }
     }

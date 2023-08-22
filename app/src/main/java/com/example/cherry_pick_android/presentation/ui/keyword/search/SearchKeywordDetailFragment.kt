@@ -23,6 +23,7 @@ import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdap
 import com.example.cherry_pick_android.presentation.adapter.SearchKeywordAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.dialog.KeywordDialog
 import com.example.cherry_pick_android.presentation.viewmodel.keyword.SearchKeywordViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -95,12 +96,12 @@ class SearchKeywordDetailFragment : Fragment() {
                     KeywordDialog().show(parentFragmentManager, "keyword_dialog")
                     showFragment(SearchKeywordFragment.newInstance(), SearchKeywordFragment.TAG)
                 } else {
-                    Toast.makeText(context, "이미 존재하는 키워드입니다", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, "이미 존재하는 키워드입니다", Snackbar.LENGTH_SHORT).show()
                 }
             } else if (keyword.isEmpty()) {
-                Toast.makeText(context, "키워드를 입력하지 않았습니다", Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "키워드를 입력하지 않았습니다", Snackbar.LENGTH_SHORT).show()
             } else if (!isKeywordCnt) {
-                Toast.makeText(context, "키워드 최대 개수를 초과했습니다", Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "키워드 최대 개수를 초과했습니다", Snackbar.LENGTH_SHORT).show()
             }
         }
     }
@@ -140,7 +141,7 @@ class SearchKeywordDetailFragment : Fragment() {
                         Log.d("기사", articleItems.toString())
                         binding.rvSearchNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
                     } else {
-                        Toast.makeText(context, "에러", Toast.LENGTH_SHORT).show()
+                        Snackbar.make(binding.root, "오류가 발생했습니다. (Code: $statusCode)", Snackbar.LENGTH_SHORT).show()
                     }
                     binding.lottieDotLoading.visibility = View.GONE
                 }
@@ -266,7 +267,7 @@ class SearchKeywordDetailFragment : Fragment() {
             } ?: emptyList()
 
             if (articleItems.isEmpty()) {
-                Toast.makeText(context, "불러올 기사가 없습니다.", Toast.LENGTH_SHORT).show()
+                Snackbar.make(binding.root, "불러올 기사가 없습니다.", Snackbar.LENGTH_SHORT).show()
                 isDone = true
             }
 

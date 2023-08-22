@@ -169,8 +169,8 @@ class SearchKeywordFragment : Fragment(), DeleteListener {
                 }
                 searchKeywordDetailFragment?.clearPage(text)
                 if (text.isNotEmpty()) {
-                    addDetailFragment()
                     searchKeywordDetailFragment?.getArticleList()
+                    addDetailFragment()
                 } else {
                     removeDetailFragment()
                 }

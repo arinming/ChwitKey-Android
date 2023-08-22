@@ -5,10 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.example.cherry_pick_android.R
@@ -113,7 +110,7 @@ class ArticleActivity : AppCompatActivity() {
                     loadIsLiked(isLike)
 
                 } else {
-                    Toast.makeText(this@ArticleActivity, "에러", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, "오류가 발생했습니다. (Code: $statusCode)", Snackbar.LENGTH_SHORT).show()
                 }
                 binding.lottieDotLoading.visibility = View.GONE
             }
@@ -185,13 +182,13 @@ class ArticleActivity : AppCompatActivity() {
                     if(statusCode == 200){
                         changeLikeButton = R.drawable.ic_like_true
                         isLiked = true
-                    }else{Toast.makeText(this@ArticleActivity, "오류 발생", Toast.LENGTH_SHORT).show()}
+                    }else{Snackbar.make(binding.root, "오류가 발생했습니다. (Code: $statusCode)", Snackbar.LENGTH_SHORT).show()}
                 }else{
                     val statusCode = articleUnlikeService.deleteArticleUnlike(id, "like").body()?.statusCode ?: 0
                     if(statusCode == 200){
                         changeLikeButton = R.drawable.ic_like_false
                         isLiked = false
-                    }else{Toast.makeText(this@ArticleActivity, "오류 발생", Toast.LENGTH_SHORT).show()}
+                    }else{Snackbar.make(binding.root, "오류가 발생했습니다. (Code: $statusCode)", Snackbar.LENGTH_SHORT).show()}
                 }
                 withContext(Dispatchers.Main){
                     binding.ibtnLike.setImageResource(changeLikeButton)
