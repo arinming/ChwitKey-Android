@@ -130,8 +130,7 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
         Log.d("키워드", keyword)
 
         var nowKeyword = keyword
-
-        // API 통신
+        binding.lottieDotLoading.visibility = View.VISIBLE
 
         lifecycleScope.launch {
 
@@ -158,6 +157,8 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
                             content.articleId
                         )
                     }?.toMutableList()
+
+                    binding.lottieDotLoading.visibility = View.GONE
                     articleItems?.toMutableList()?.let { articleOldItems.addAll(it) }
                     if (articleOldItems.size < 10) {
                         isDone = true
@@ -202,6 +203,7 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
         savedScrollPosition = 0
         pageInit = 0
         isDone = false
+        binding.lottieDotLoading.visibility = View.VISIBLE
 
         lifecycleScope.launch {
             withContext(Dispatchers.Main) {
@@ -230,6 +232,7 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
                     isDone = true
                 }
 
+                binding.lottieDotLoading.visibility = View.GONE
                 binding.rvKeywordArticle.adapter = NewsRecyclerViewAdapter(articleItems)
                 (binding.rvKeywordArticle.layoutManager as LinearLayoutManager).scrollToPosition(
                     savedScrollPosition
@@ -266,6 +269,7 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
 
         mRecyclerView = binding.rvKeywordArticle
 
+        binding.lottieDotLoading.visibility = View.VISIBLE
         selectedKeyword = keyword
         // 페이지 번호를 증가시키고 새로운 기사를 로드
         pageInit++
@@ -300,6 +304,7 @@ class KeywordFragment : Fragment(), DeleteListener, AdapterInteractionListener {
             Log.d("추가 리스트", "${articleOldItems.size} ,${articleOldItems.toString()}")
 
             withContext(Dispatchers.Main) {
+                binding.lottieDotLoading.visibility = View.GONE
                 binding.rvKeywordArticle.adapter = NewsRecyclerViewAdapter(articleOldItems)
                 binding.rvKeywordArticle.adapter?.notifyDataSetChanged()
                 (binding.rvKeywordArticle.layoutManager as LinearLayoutManager).scrollToPosition(

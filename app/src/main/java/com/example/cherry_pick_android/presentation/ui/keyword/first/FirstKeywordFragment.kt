@@ -31,8 +31,8 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
-// 키워드 등록이 안되어있는 경우의 프래그먼트
 @AndroidEntryPoint
+// 키워드 등록이 안되어있는 경우의 프래그먼트
 class FirstKeywordFragment : Fragment(), AddListener, DeleteListener {
     private val binding: FragmentFirstKeywordBinding by lazy {
         FragmentFirstKeywordBinding.inflate(layoutInflater)
