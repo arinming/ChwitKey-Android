@@ -79,6 +79,7 @@ class JobGroupActivity: AppCompatActivity() {
             birth = it.birthday
         })
 
+        isName()
         onBackBtn()
         onCompleteBtn()
 
@@ -189,5 +190,14 @@ class JobGroupActivity: AppCompatActivity() {
         return industryList
     }
 
+    // 유저이름 업데이트
+    private fun isName(){
+        if(binding.tvJobUserName.text.isNullOrEmpty()){
+            lifecycleScope.launch(Dispatchers.Main){
+                val name = userInfoService.getUserInfo()?.body()?.data?.name
+                binding.tvJobUserName.text = name
+            }
+        }
+    }
 
 }
