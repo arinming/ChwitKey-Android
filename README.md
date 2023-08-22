@@ -1,10 +1,24 @@
-## ChwitKey-Android
-취트키 안드로이드 레포입니다.
 
 <div align="center">
 
 # 🔑 취업 성공의 치트키, 취트키!
-<img width="500" src="https://github.com/Cherrypickk/ChwitKey-Android/assets/97820109/412e3420-33d1-458d-a1c7-4649743efe5e"/>
+
+ <img width="200px" src="https://github.com/Cherrypickk/ChwitKey-Android/assets/97820109/4620b760-81d1-4c40-827e-cfad14dd6f13"/>  <img width="200px" src="https://github.com/Cherrypickk/ChwitKey-Android/assets/97820109/687e759a-8b00-4a58-a523-eae0eb2dbbb6"/>  <img width="200px" src="https://github.com/Cherrypickk/ChwitKey-Android/assets/97820109/c6876d12-0414-4f86-aa0c-9ba225453c47"/> 
+
+
+## 2023.07 - 2023. 08
+
+##### 2023. 08. 22 취트키 version 1.0 Google PlayStore 출시 신청
+
+### 협업
+
+<img src="https://img.shields.io/badge/PM-008FC7?style=flat&logo=microsoft&logoColor=white"/>
+<img src="https://img.shields.io/badge/Design-FF6550?style=flat&logo=adobeillustrator&logoColor=white"/>
+<img src="https://img.shields.io/badge/Android-9999FF?style=flat&logo=android&logoColor=white"/>
+<img src="https://img.shields.io/badge/SpringBoot-0ABF53?style=flat&logo=spring&logoColor=white"/>
+
+### 추후 지속적인 업데이트 및 리팩토링 예정 🔥
+
 
 
 <br>
@@ -108,7 +122,7 @@
 
 # 📕 *****Convention*****
 
-[우리의 협업 방식 ✅ Link](https://makeus-challenge.notion.site/7030ffa4d0b24eb199da3c18735d265a?pvs=4)
+[우리의 협업 방식 ✅ Link](https://bustling-iguanodon-674.notion.site/f89ae6a682c144f7ae0b69efc670bf77)
 
 
 <br>
