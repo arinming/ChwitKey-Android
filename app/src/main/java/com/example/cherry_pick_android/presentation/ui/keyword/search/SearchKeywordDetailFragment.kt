@@ -69,6 +69,7 @@ class SearchKeywordDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         getArticleList()
         getKeyword()
         initScrollListener()
@@ -282,14 +283,5 @@ class SearchKeywordDetailFragment : Fragment() {
                 )
             }
         }
-    }
-
-
-    fun clearPage(text: String) {
-        articleOldItems.clear()
-        pageInit = 0
-        isDone = false
-
-        loadArticlesByKeyword(text)
     }
 }

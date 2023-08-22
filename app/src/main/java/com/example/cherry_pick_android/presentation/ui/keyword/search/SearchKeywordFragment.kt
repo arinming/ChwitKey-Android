@@ -55,14 +55,7 @@ class SearchKeywordFragment : Fragment(), DeleteListener {
         initView() // 어뎁터 적용
 
         // EditText의 텍스트 변경 감지
-        binding.etSearch.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-            override fun afterTextChanged(p0: Editable?) {}
-
-            override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                changeText()
-            }
-        })
+        observeText()
 
         // DB 데이터 로드 및 개수 초기화
         searchKeywordViewModel.loadKeyword().observe(viewLifecycleOwner) {
@@ -159,26 +152,29 @@ class SearchKeywordFragment : Fragment(), DeleteListener {
         binding.etSearch.setOnKeyListener { v, keyCode, event ->
             if (keyCode == KeyEvent.KEYCODE_ENTER) {
                 val text = binding.etSearch.text.toString()
-
-                searchKeywordViewModel.viewModelScope.launch {
-                    if (text.isNotEmpty()) {
-                        val existingKeyword = nowKeyword.find() { it.keyword == text}
-
-                        Log.d("검색어 리스트", "${searchKeywordViewModel.loadKeyword().value}")
-                    }
-                }
-                searchKeywordDetailFragment?.clearPage(text)
                 if (text.isNotEmpty()) {
-                    searchKeywordDetailFragment?.getArticleList()
                     addDetailFragment()
-                } else {
-                    removeDetailFragment()
                 }
                 true
             } else {
                 false
             }
         }
+    }
+
+    private fun observeText(){
+        binding.etSearch.addTextChangedListener(object: TextWatcher{
+            override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {}
+            override fun afterTextChanged(p0: Editable?) {
+                if(p0.isNullOrEmpty()){
+                    removeDetailFragment()
+                }else{
+                    changeText()
+                }
+            }
+
+        })
     }
 
 }

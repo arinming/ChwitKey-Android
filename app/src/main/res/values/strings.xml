@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">cherry_pick_android</string>
+    <string name="app_name">취트키</string>
 
     <!-- gpt -->
     <string name="gpt_app_name">취트키 GPT</string>
