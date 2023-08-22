@@ -36,6 +36,10 @@ class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
     private var genderFlag = false
     private var birthFlag = false
 
+    private var gender = ""
+    private var birth = ""
+    private var name = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
@@ -52,9 +56,9 @@ class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
         // 다음 버튼 이벤트
         with(binding){
             tvComplete.setOnClickListener {
-                loginViewModel.setUserData("name", binding.etNick.text.toString())
-                loginViewModel.setUserData("gender", binding.tvGenderChoice.text.toString())
-                loginViewModel.setUserData("birthday", binding.etBirth.text.toString())
+                loginViewModel.setUserData("name", name)
+                loginViewModel.setUserData("gender", gender)
+                loginViewModel.setUserData("birthday", birth)
                 val intent = Intent(this@InformSettingActivity, JobGroupActivity::class.java)
                 startActivity(intent)
             }
@@ -83,6 +87,7 @@ class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
             override fun afterTextChanged(p0: Editable?) {
                 updateIcon(!p0.isNullOrEmpty(), tiNick)
                 nickFlag = !p0.isNullOrEmpty()
+                name = p0.toString()
                 isComplete()
             }
         })
@@ -105,6 +110,7 @@ class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
         binding.tvGenderChoice.text = gender
         binding.tvGenderChoice.setTextColor(getColor(R.color.black))
         genderFlag = true
+        this.gender = gender
         binding.ivGenderCk.isVisible = true
     }
 
@@ -147,6 +153,7 @@ class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
                 else{
                     isError()
                 }
+                birth = p0.toString()
                 isComplete()
             }
 
