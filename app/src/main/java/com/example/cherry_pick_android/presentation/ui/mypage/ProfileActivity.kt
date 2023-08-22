@@ -404,11 +404,14 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
         return result!!
     }
 
-    private fun mapperToBirth(birth: String): String{
-        val year = birth.substring(0, 4)
-        val month = birth.substring(4, 6)
-        val day = birth.substring(6, 8)
-
-        return "$year.$month.$day"
+    private fun mapperToBirth(birth: String): String {
+        if (birth.length >= 8) {
+            val year = birth.substring(0, 4)
+            val month = birth.substring(4, 6)
+            val day = birth.substring(6, 8)
+            return "$year.$month.$day"
+        }
+        return ""
     }
+
 }
