@@ -4,7 +4,8 @@
 <div align="center">
 
 # 🔑 취업 성공의 치트키, 취트키!
-<img width="500" src="https://github.com/Cherrypickk/ChwitKey-Android/assets/97820109/412e3420-33d1-458d-a1c7-4649743efe5e"/>
+
+ <img width="200px" src="https://github.com/arinming/ChwitKey-Android/assets/97820109/f78f76fb-602e-46d0-8d31-8fb1438d45e0"/>  <img width="200px" src="https://github.com/arinming/ChwitKey-Android/assets/97820109/9b845c0b-0e88-4255-9b8c-6a5744ef9d87"/>  <img width="200px" src="https://github.com/arinming/ChwitKey-Android/assets/97820109/daabb850-8c59-4ee6-9159-600355cff57b"/> 
 
 
 <br>
@@ -108,7 +109,7 @@
 
 # 📕 *****Convention*****
 
-[우리의 협업 방식 ✅ Link](https://makeus-challenge.notion.site/7030ffa4d0b24eb199da3c18735d265a?pvs=4)
+[우리의 협업 방식 ✅ Link](https://bustling-iguanodon-674.notion.site/f89ae6a682c144f7ae0b69efc670bf77)
 
 
 <br>
