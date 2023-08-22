@@ -95,9 +95,9 @@
     <string name="keyword_up_lode_button">키워드 등록</string>
 
     <string name="first_keyword_search">이런 기사를 알려줘요!</string>
-    <string name="first_keyword_search_sub">* 최신 기사 5개</string>
+    <string name="first_keyword_search_sub">* 최신순이에요!</string>
     <string name="keyword_search_hint">키워드를 추가해보세요 ex) IT</string>
-    <string name="keyword_view">최신순으로 일주일의 키워드를 보여드려요</string>
+    <string name="keyword_view">* 최신순으로 기사를 보여줘요!</string>
 
     <!-- keyword -->
     <string name="keyword_title">키워드</string>

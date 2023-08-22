@@ -13,7 +13,7 @@ interface ArticleSearchCommendService {
     suspend fun getArticleCommend(
         @Query("cond") cond: String,
         @Query("sortType") sortType: String,
-        @Query("pageable") pageable: Pageable
+        @Query("page") page: Int
     ): Response<ArticleCommendResponse>
 
 }

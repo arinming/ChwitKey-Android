@@ -7,6 +7,7 @@
     android:background="@color/white"
     app:layoutDescription="@xml/fragment_keyword_scene">
 
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/cl_keyword"
         android:layout_width="match_parent"
@@ -67,6 +68,15 @@
                     android:text="@string/keyword_count_max"
                     android:textSize="20sp"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/keyword_view"
+                    android:layout_marginStart="16dp"
+                    android:textSize="12sp"
+                    android:textColor="@color/gray_9"
+                    android:fontFamily="@font/pretendard_regular"/>
             </LinearLayout>
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -129,27 +139,6 @@
         app:layout_constraintTop_toBottomOf="@+id/rv_keyword" />
 
 
-    <View
-        android:id="@+id/btm_nav_view"
-        android:layout_width="match_parent"
-        android:layout_height="84dp"
-        android:backgroundTint="@android:color/transparent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
 
-    </View>
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/lottie_dot_loading"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:lottie_rawRes="@raw/lottie_dot_loading"
-        android:visibility="visible"
-        app:lottie_autoPlay="true"
-        app:lottie_loop="true"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

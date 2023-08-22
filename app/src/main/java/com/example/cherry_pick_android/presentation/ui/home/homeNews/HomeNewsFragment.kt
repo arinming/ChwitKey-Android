@@ -8,9 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
 import android.widget.Toast
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -24,7 +22,6 @@ import com.example.cherry_pick_android.presentation.adapter.IndustryAdapter
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
 import com.example.cherry_pick_android.presentation.ui.keyword.AdapterInteractionListener
 import com.example.cherry_pick_android.presentation.ui.newsSearch.NewsSearchActivity
-import com.example.cherry_pick_android.presentation.viewmodel.article.ArticleViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,12 +36,13 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
     private val binding get() = _binding!!
 
     private var industryInit: String = ""
+    private var sort = ""
     private var pageInit: Int = 0
     private var isLoading = false
+    private var isDone = false
     private lateinit var mRecyclerView: RecyclerView
 
     private var articleOldItems = mutableListOf<ArticleItem>()
-
     private var savedScrollPosition: Int = 0
 
 
@@ -81,8 +79,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
         goToNewsSearch()
         initScrollListener()
 
-        // 초기 뉴스 기사 불러오기
-        getArticleList("desc")
 
         // 유저 정보 갱신
         lifecycleScope.launch {
@@ -99,23 +95,21 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
         _binding = null
     }
 
-    private fun getArticleList(sort: String) {
+    private fun getArticleList(sort: String, industry: String) {
         // API 통신
         lifecycleScope.launch {
-            var nowIndustry = mapperToIndustry(industryInit)
-
+            var nowIndustry = mapperToIndustry(industry)
+            isDone = false
             val response = articleService.getArticleIndustry(
                 industry = nowIndustry,
                 sortType = sort,
-                page = 0
+                page = pageInit
             )
-
-            Log.d("초기 직군", "$industryInit, $nowIndustry")
 
             val statusCode = response.body()?.statusCode
             withContext(Dispatchers.Main) {
                 if (statusCode == 200) {
-                    onIndustryButtonClick(nowIndustry)
+                    onIndustryButtonClick(industryInit)
                     val articleItems = response.body()?.data?.content?.map { content ->
                         val imageUrl =
                             if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else "" // 기사 사진이 없으면 빈 문자열로 처리
@@ -126,8 +120,9 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
                             imageUrl,
                             content.articleId
                         )
-                    }?.toMutableList()
-                    binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articleItems)
+                    }?: emptyList()
+                    articleOldItems = articleItems.toMutableList()
+                    binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articleOldItems)
                 }
             }
         }
@@ -175,20 +170,25 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
 
         // 메뉴 아이템 클릭 처리
         popupMenu.setOnMenuItemClickListener { item ->
+            pageInit = 0
             when (item.itemId) {
                 R.id.menu_sort_asc -> {
+                    sort = "asc"
                     binding.tvSorting.text = getString(R.string.sort_article_asc)
-                    getArticleList("asc")
+                    getArticleList(sort, industryInit)
+                    industryInit
                 }
 
                 R.id.menu_sort_desc -> {
+                    sort = "desc"
                     binding.tvSorting.text = getString(R.string.sort_article_desc)
-                    getArticleList("desc")
+                    getArticleList(sort, industryInit)
                 }
 
                 R.id.menu_sort_like -> {
+                    sort = "like"
                     binding.tvSorting.text = getString(R.string.sort_article_like)
-                    getArticleList("like")
+                    getArticleList(sort, industryInit)
                 }
             }
             true
@@ -244,13 +244,11 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
 
             withContext(Dispatchers.Main) {
                 if (statusCode == 200) {
-                    Log.d("현재 직군", industryInit)
                     loadArticlesByIndustry(industry1)
 
                     binding.rvIndustry.layoutManager =
                         LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
                     binding.rvIndustry.adapter = IndustryAdapter(industries, this@HomeNewsFragment)
-                    Log.d("직군", "$industry1, $industry2, $industry3")
                 } else {
                     Toast.makeText(context, "Error", Toast.LENGTH_SHORT).show()
                 }
@@ -266,6 +264,8 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
 
     // 버튼 클릭시 뉴스 리스트 갱신
     private fun loadArticlesByIndustry(industry: String) {
+        isDone = false
+
         savedScrollPosition = (binding.rvNewsList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
         binding.lottieDotLoading.visibility = View.VISIBLE
 
@@ -282,7 +282,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
                 industry = nowIndustry,
                 page = 0
             )
-            Log.d("직군", "$pageInit, $response")
             // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신
             val articleItems = response.body()?.data?.content?.map { content ->
                 val imageUrl =
@@ -318,10 +317,8 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
                 val lastVisibleItemPosition = layoutManager.findLastCompletelyVisibleItemPosition()
                 val totalItemCount = layoutManager.itemCount
 
-                if (!isLoading && lastVisibleItemPosition == totalItemCount - 1) {
-                    Log.d("true", "True")
-
-                    moreArticles()
+                if (!isLoading && !isDone && lastVisibleItemPosition == totalItemCount - 1) {
+                    moreArticles(industryInit)
                     isLoading = true
                 }
             }
@@ -329,7 +326,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
     }
 
 
-    fun moreArticles() {
+    fun moreArticles(industry: String) {
         if (isLoading) return // 이미 로딩 중이라면 중복 호출 방지
 
         isLoading = true // 로딩 상태를 true로 설정
@@ -340,8 +337,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
         pageInit++
         binding.lottieDotLoading.visibility = View.VISIBLE
 
-
-
         CoroutineScope(Dispatchers.Main).launch {
             delay(1000) // 임의의 딜레이 추가
             // 이전 스크롤 위치 저장
@@ -350,44 +345,48 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
             savedScrollPosition = (binding.rvNewsList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
 
             lifecycleScope.launch {
-                withContext(Dispatchers.Main) {
-                    var nowIndustry = mapperToIndustry(industryInit)
-                    val response = articleService.getArticleIndustry(
-                        sortType = when (binding.tvSorting.text) {
-                            "인기순" -> "like"
-                            "오름차순" -> "asc"
-                            "내림차순" -> "desc"
-                            else -> ""
-                        },
-                        industry = nowIndustry,
-                        page = pageInit
+
+                var nowIndustry = mapperToIndustry(industry)
+                val response = articleService.getArticleIndustry(
+                    sortType = when (binding.tvSorting.text) {
+                        "인기순" -> "like"
+                        "오름차순" -> "asc"
+                        "내림차순" -> "desc"
+                        else -> ""
+                    },
+                    industry = nowIndustry,
+                    page = pageInit
+                )
+
+                // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신
+                val articleItems = response.body()?.data?.content?.map { content ->
+                    val imageUrl =
+                        if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else ""
+                    ArticleItem(
+                        content.title,
+                        content.publisher,
+                        content.uploadedAt,
+                        imageUrl,
+                        content.articleId
                     )
+                }?: emptyList()
 
-                    Log.d("직군", "$pageInit, $response")
-                    // 기사를 가져온 후에 아래와 같이 어댑터에 기사 리스트를 전달하여 갱신
-                    val articleItems = response.body()?.data?.content?.map { content ->
-                        val imageUrl =
-                            if (content.articlePhoto.isNotEmpty()) content.articlePhoto[0].articleImgUrl else ""
-                        ArticleItem(
-                            content.title,
-                            content.publisher,
-                            content.uploadedAt,
-                            imageUrl,
-                            content.articleId
-                        )
-                    }?: emptyList()
-                    articleOldItems.addAll(articleItems)
+                if (articleItems.isEmpty()) {
+                    articleOldItems.add(ArticleItem("", "", "", "", null))
+                    Toast.makeText(context, "불러올 기사가 없습니다.", Toast.LENGTH_SHORT).show()
+                    isDone = true
+                }
 
-                    if (articleItems.isEmpty()) {
-                        Toast.makeText(context, "불러올 기사가 없습니다.", Toast.LENGTH_SHORT).show()
-                    }
+                articleOldItems.addAll(articleItems)
+                Log.d("직군", "$pageInit, $response")
+
+                withContext(Dispatchers.Main) {
 
                     binding.rvNewsList.adapter = NewsRecyclerViewAdapter(articleOldItems)
                     binding.rvNewsList.adapter?.notifyDataSetChanged()
                     (binding.rvNewsList.layoutManager as LinearLayoutManager).scrollToPosition(savedScrollPosition)
 
                 }
-
             }
             isLoading = false // 로딩 상태를 다시 false로 설정
         }
@@ -400,6 +399,6 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
             pageInit = 0
             articleOldItems.clear()
         }
-        loadArticlesByIndustry(button)
+        loadArticlesByIndustry(industryInit)
     }
 }

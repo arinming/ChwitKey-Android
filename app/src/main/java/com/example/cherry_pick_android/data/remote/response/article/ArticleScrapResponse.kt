@@ -41,7 +41,7 @@ data class ArticleScrapResponse(
     ) {
         data class Content(
             @Json(name = "articleId")
-            val articleId: Int,
+            val articleId: Int?,
             @Json(name = "publisher")
             val publisher: String?,
             @Json(name = "thumbnailUrl")
@@ -49,7 +49,7 @@ data class ArticleScrapResponse(
             @Json(name = "title")
             val title: String,
             @Json(name = "uploadedAt")
-            val uploadedAt: String
+            val uploadedAt: String?
         )
 
         data class Pageable(
