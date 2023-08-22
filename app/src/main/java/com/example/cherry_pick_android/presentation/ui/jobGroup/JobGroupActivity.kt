@@ -45,8 +45,7 @@ class JobGroupActivity: AppCompatActivity() {
     lateinit var userDataRepository: UserDataRepository
     @Inject
     lateinit var updateIndustryService: UpdateIndustryService
-    @Inject
-    lateinit var userInfoService: UserInfoService
+
 
     private val binding: ActivityJobGroupBinding by lazy {
         ActivityJobGroupBinding.inflate(layoutInflater)
@@ -78,8 +77,6 @@ class JobGroupActivity: AppCompatActivity() {
             gender = it.gender
             birth = it.birthday
         })
-
-        isName()
         onBackBtn()
         onCompleteBtn()
 
@@ -190,14 +187,5 @@ class JobGroupActivity: AppCompatActivity() {
         return industryList
     }
 
-    // 유저이름 업데이트
-    private fun isName(){
-        if(binding.tvJobUserName.text.isNullOrEmpty()){
-            lifecycleScope.launch(Dispatchers.Main){
-                val name = userInfoService.getUserInfo()?.body()?.data?.name
-                binding.tvJobUserName.text = name
-            }
-        }
-    }
 
 }
