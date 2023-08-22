@@ -18,7 +18,7 @@ class UserPolicy : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        binding.tvUserPolicy.text = getTextString(this,"임시개인정보처리방침")
+        binding.tvUserPolicy.text = getTextString(this,"이용약관")
         goBack()
     }
 

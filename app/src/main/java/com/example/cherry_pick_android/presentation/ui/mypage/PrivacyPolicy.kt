@@ -17,7 +17,7 @@ class PrivacyPolicy : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        binding.tvPrivacyPolicy.text = getTextString(this,"임시개인정보처리방침")
+        binding.tvPrivacyPolicy.text = getTextString(this,"개인정보처리방침")
         goBack()
     }
 

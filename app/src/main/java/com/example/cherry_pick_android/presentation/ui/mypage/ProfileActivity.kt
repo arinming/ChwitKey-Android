@@ -40,7 +40,6 @@ import com.example.cherry_pick_android.presentation.ui.mypage.dialog.UserDeleteD
 import com.example.cherry_pick_android.presentation.ui.mypage.dialog.UserDeleteDialogInterface
 import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
 import com.example.cherry_pick_android.presentation.viewmodel.mypage.MyPageViewModel
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -84,7 +83,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
     ) {
         if (it.all { permission -> permission.value == true }) {
         } else {
-            Snackbar.make(binding.root, "권한을 거부하였습니다.", Snackbar.LENGTH_SHORT).show()
+            Toast.makeText(this, "권한을 거부하였습니다.", Toast.LENGTH_SHORT).show()
         }
     }
     // 뷰 모델 주입받기
@@ -116,7 +115,11 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
                     ) {
                         val statusCode = response.body()?.statusCode
                         if (statusCode != 200) {
-                            Snackbar.make(binding.root, "오류가 발생했습니다. (Code: $statusCode)", Snackbar.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                this@ProfileActivity,
+                                "ERROR: $statusCode",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                         Log.d(TAG, "Success: $statusCode")
                     }
@@ -203,7 +206,11 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
                 if(response == 200){
                     Log.d(TAG, "Success: $response")
                 } else {
-                    Snackbar.make(binding.root, "오류가 발생했습니다. (Code: $response)", Snackbar.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this@ProfileActivity,
+                        "통신오류: $response",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
@@ -237,7 +244,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
                         if(statusCode == 200){
                             loginViewModel.setUserData("name", binding.etProfileName.text.toString())
                         }else{
-                            Snackbar.make(binding.root, "오류가 발생했습니다. (Code: $statusCode)", Snackbar.LENGTH_SHORT).show()
+                            Toast.makeText(this@ProfileActivity, "통신오류: $statusCode", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
@@ -261,7 +268,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
             if (permissions.all {
                     ContextCompat.checkSelfPermission(this, it) == PackageManager.PERMISSION_GRANTED
                 }) {
-                Snackbar.make(binding.root, "카메라 권한이 허용되어 있습니다.", Snackbar.LENGTH_SHORT).show()
+                Toast.makeText(this, "카메라 권한이 허용되어 있습니다.", Toast.LENGTH_SHORT).show()
             }
             // 권한 요청
             else {
@@ -338,7 +345,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
                     }else if(response == 404){
                         Log.d(TAG, "ERROR")
                     }else{
-                        Snackbar.make(binding.root, "오류가 발생했습니다. (Code: $response)", Snackbar.LENGTH_SHORT).show()
+                        Toast.makeText(this@ProfileActivity, "통신 오류 발생", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
@@ -379,7 +386,7 @@ class ProfileActivity : AppCompatActivity(),CameraDialogInterface, UserDeleteDia
                         binding.ivProfilePic.setImageDrawable(getDrawable(R.drawable.ic_my_page_user))
                     }
                 }else{
-                    Snackbar.make(binding.root, "오류가 발생했습니다. (Code: $statusCode)", Snackbar.LENGTH_SHORT).show()
+                    Toast.makeText(this@ProfileActivity, "통신오류: $statusCode", Toast.LENGTH_SHORT).show()
                 }
             }
         }
