@@ -42,7 +42,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.example.cherry_pick_android.provider"
+            android:authorities="com.chwitkey.cherry_pick_android.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

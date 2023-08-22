@@ -31,7 +31,7 @@ android {
         manifestPlaceholders["KAKAO_NATIVE_KEY"] =
                 properties.getProperty("KAKAO_NATIVE_KEY_MF")
     }
-    namespace 'com.example.cherry_pick_android'
+    namespace "com.chwitkey.cherry_pick_android"
     compileSdk 34
 
     buildFeatures{
@@ -40,7 +40,7 @@ android {
         buildConfig true
     }
     defaultConfig {
-        applicationId "com.example.cherry_pick_android"
+        applicationId "com.chwitkey.cherry_pick_android"
         minSdk 33
         targetSdk 34
         versionCode 1
@@ -106,7 +106,7 @@ dependencies {
 
     // Dagger Hilt
     implementation 'com.google.dagger:hilt-android:2.47'
-    kapt 'com.google.dagger:hilt-compiler:2.47'
+    kapt "com.google.dagger:hilt-compiler:2.47"
 
     // Lottie Animation
     implementation 'com.airbnb.android:lottie:6.1.0'
