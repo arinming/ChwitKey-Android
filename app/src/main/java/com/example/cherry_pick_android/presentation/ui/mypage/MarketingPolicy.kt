@@ -17,7 +17,7 @@ class MarketingPolicy : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
 
-        binding.tvMarketingPolicy.text = getTextString(this,"임시개인정보처리방침")
+        binding.tvMarketingPolicy.text = getTextString(this,"마케팅정보수집동의")
         goBack()
     }
 

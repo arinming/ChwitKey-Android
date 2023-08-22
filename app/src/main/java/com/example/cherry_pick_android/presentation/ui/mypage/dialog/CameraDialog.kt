@@ -40,7 +40,6 @@ class CameraDialog (
 ): DialogFragment() {
     companion object {
         const val TAG = "CameraDialog"
-        const val PICK_IMAGE_FROM_ALBUM = 0
     }
 
     private var cameraDialogInterface: CameraDialogInterface? = null

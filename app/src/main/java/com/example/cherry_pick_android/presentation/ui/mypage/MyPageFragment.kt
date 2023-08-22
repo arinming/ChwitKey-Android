@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -18,7 +19,6 @@ import com.example.cherry_pick_android.databinding.FragmentMypageBinding
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.ui.login.LoginActivity
 import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -145,7 +145,7 @@ class MyPageFragment : Fragment() {
                     binding.ivProfilePic.setImageResource(R.drawable.ic_my_page_user)
                 }
             }else{
-                Snackbar.make(binding.root, "오류가 발생했습니다. (Code: $statusCode)", Snackbar.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "통신 오류:$statusCode", Toast.LENGTH_SHORT).show()
             }
             binding.lottieDotLoading.visibility = View.GONE
 
