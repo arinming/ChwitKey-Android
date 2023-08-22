@@ -63,8 +63,8 @@
     <string name="home_menu_scrap">스크랩</string>
     <string name="home_menu_my_page">마이페이지</string>
 
-    <string name="sort_article_asc">오름차순</string>
-    <string name="sort_article_desc">내림차순</string>
+    <string name="sort_article_asc">오래된순</string>
+    <string name="sort_article_desc">최신순</string>
     <string name="sort_article_like">인기순</string>
 
     <!-- news_item -->

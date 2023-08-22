@@ -17,6 +17,7 @@ import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.infrom.dialog.GenderDialog
 import com.example.cherry_pick_android.presentation.ui.infrom.dialog.GenderDialogInterface
 import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroupActivity
+import com.example.cherry_pick_android.presentation.ui.login.LoginActivity
 import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
 import com.google.android.material.textfield.TextInputLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -189,6 +190,4 @@ class InformSettingActivity : AppCompatActivity(), GenderDialogInterface {
             }
         }
     }
-
-
 }
