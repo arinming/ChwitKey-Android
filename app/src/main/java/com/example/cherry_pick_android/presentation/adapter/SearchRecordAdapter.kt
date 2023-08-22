@@ -1,13 +1,16 @@
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.data.model.SearchRecordEntity
 import com.example.cherry_pick_android.databinding.ItemSearchBinding
 import com.example.cherry_pick_android.presentation.ui.keyword.DeleteListener
+import com.example.cherry_pick_android.presentation.ui.newsSearch.ArticleSearchFragment
 
 class SearchRecordAdapter(
-    private val deleteListener: DeleteListener
-    ): RecyclerView.Adapter<SearchRecordAdapter.ViewHolder>() {
+    private val deleteListener: DeleteListener,
+    private var interactionListener: ArticleSearchFragment
+) : RecyclerView.Adapter<SearchRecordAdapter.ViewHolder>() {
     private val records = ArrayList<SearchRecordEntity>()
 
     // 뷰 홀더 클래스
@@ -23,6 +26,12 @@ class SearchRecordAdapter(
                     // 삭제한 아이템만 제거하도록 수정
                     removeRecord(record)
                 }
+            }
+
+            binding.btnRecentSearchItem.setOnClickListener {
+                val searchText = binding.btnRecentSearchItem.text.toString()
+                Log.d("검색어 클릭", searchText)
+                interactionListener.onButtonSelected(searchText)
             }
         }
     }
