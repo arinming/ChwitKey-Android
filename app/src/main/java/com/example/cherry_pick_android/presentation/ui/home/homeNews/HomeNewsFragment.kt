@@ -145,7 +145,7 @@ class HomeNewsFragment : Fragment(R.layout.fragment_home_news), AdapterInteracti
             "철강" -> "steel"
             "석유·화학" -> "Petroleum/Chemical"
             "정유" -> "oilrefining"
-            "2차 전지" -> "seconarybattery"
+            "2차 전지" -> "secondarybattery"
             "반도체" -> "Semiconductor"
             "디스플레이" -> "Display"
             "휴대폰" -> "Mobile"
