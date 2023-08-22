@@ -19,6 +19,7 @@ import com.example.cherry_pick_android.databinding.ActivityGptBinding
 import com.example.cherry_pick_android.presentation.adapter.GptAdapter
 import com.example.cherry_pick_android.presentation.adapter.Message
 import com.example.cherry_pick_android.presentation.viewmodel.gpt.GptViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -179,7 +180,7 @@ class GptActivity: AppCompatActivity(), GptClickListener {
                     val answer = response.body()?.data?.answer!!
                     gptAdapter.addMessage(answer, 1)
                 }else{
-                    Toast.makeText(this@GptActivity, "통신오류: $statusCode", Toast.LENGTH_SHORT).show()
+                    Snackbar.make(binding.root, "오류가 발생했습니다. (Code: $statusCode)", Snackbar.LENGTH_SHORT).show()
                 }
             }
         }

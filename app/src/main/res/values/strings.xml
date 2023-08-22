@@ -153,4 +153,7 @@
     <string name="gpt_translation">기사 영어로 번역하기</string>
     <string name="gpt_keyword">기사 키워드 보기</string>
 
+    <!-- error -->
+    <string name="error">에러가 발생했습니다:</string>
+
 </resources>

@@ -15,6 +15,7 @@ import com.example.cherry_pick_android.databinding.FragmentScrapTrueBinding
 import com.example.cherry_pick_android.domain.repository.UserDataRepository
 import com.example.cherry_pick_android.presentation.adapter.ScrapAdapter
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -39,8 +40,10 @@ class ScrapTrueFragment : Fragment(), DeleteScrapListener {
     ): View {
         _binding = FragmentScrapTrueBinding.inflate(inflater, container, false)
 
-        lifecycleScope.launch {
-            binding.tvScrapName.text = userDataRepository.getUserData().name
+        // 닉네임 로드
+        lifecycleScope.launch(Dispatchers.Main){
+            val response = userInfoService.getUserInfo().body()
+            binding.tvScrapName.text = response?.data?.name
         }
 
         return binding.root

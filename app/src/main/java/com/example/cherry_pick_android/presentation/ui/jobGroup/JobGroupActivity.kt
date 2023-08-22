@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.GridView
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.lifecycleScope
@@ -23,6 +22,7 @@ import com.example.cherry_pick_android.presentation.adapter.JobGroupAdapter
 import com.example.cherry_pick_android.presentation.ui.home.HomeActivity
 import com.example.cherry_pick_android.presentation.ui.jobGroup.JobGroups.jobgroups
 import com.example.cherry_pick_android.presentation.viewmodel.login.LoginViewModel
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -159,7 +159,7 @@ class JobGroupActivity: AppCompatActivity() {
                         if(statusCode == 200){
                             finish()
                         }else{
-                            Toast.makeText(this@JobGroupActivity, "통신오류", Toast.LENGTH_SHORT).show()
+                            Snackbar.make(binding.root, "오류가 발생했습니다. (Code: $statusCode)", Snackbar.LENGTH_SHORT).show()
                         }
                     }
                 }else{
