@@ -1,11 +1,24 @@
-## ChwitKey-Android
-취트키 안드로이드 레포입니다.
 
 <div align="center">
 
 # 🔑 취업 성공의 치트키, 취트키!
 
- <img width="200px" src="https://github.com/arinming/ChwitKey-Android/assets/97820109/f78f76fb-602e-46d0-8d31-8fb1438d45e0"/>  <img width="200px" src="https://github.com/arinming/ChwitKey-Android/assets/97820109/9b845c0b-0e88-4255-9b8c-6a5744ef9d87"/>  <img width="200px" src="https://github.com/arinming/ChwitKey-Android/assets/97820109/daabb850-8c59-4ee6-9159-600355cff57b"/> 
+ <img width="200px" src="https://github.com/Cherrypickk/ChwitKey-Android/assets/97820109/4620b760-81d1-4c40-827e-cfad14dd6f13"/>  <img width="200px" src="https://github.com/Cherrypickk/ChwitKey-Android/assets/97820109/687e759a-8b00-4a58-a523-eae0eb2dbbb6"/>  <img width="200px" src="https://github.com/Cherrypickk/ChwitKey-Android/assets/97820109/c6876d12-0414-4f86-aa0c-9ba225453c47"/> 
+
+
+## 2023.07 - 2023. 08
+
+##### 2023. 08. 22 취트키 version 1.0 Google PlayStore 출시 신청
+
+### 협업
+
+<img src="https://img.shields.io/badge/PM-008FC7?style=flat&logo=microsoft&logoColor=white"/>
+<img src="https://img.shields.io/badge/Design-FF6550?style=flat&logo=adobeillustrator&logoColor=white"/>
+<img src="https://img.shields.io/badge/Android-9999FF?style=flat&logo=android&logoColor=white"/>
+<img src="https://img.shields.io/badge/SpringBoot-0ABF53?style=flat&logo=spring&logoColor=white"/>
+
+### 추후 지속적인 업데이트 및 리팩토링 예정 🔥
+
 
 
 <br>
