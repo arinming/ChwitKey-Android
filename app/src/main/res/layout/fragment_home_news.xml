@@ -137,7 +137,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"></androidx.recyclerview.widget.RecyclerView>
+            app:layout_constraintTop_toTopOf="parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -145,7 +147,7 @@
         android:id="@+id/lottie_dot_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:lottie_rawRes="@raw/lottie_dot_loading"
+        app:lottie_rawRes="@raw/lottie_base_loading"
         android:visibility="visible"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
