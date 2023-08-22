@@ -39,7 +39,7 @@
     <string name="mypage_user_id"></string>
     <string name="mypage_score_appstore">스토어 별점 남기기</string>
     <string name="mypage_user_policy">이용약관 및 사용자 정책</string>
-    <string name="mypage_contacts">언론사 연락처</string>
+    <string name="mypage_marketing_policy">마케팅 정보 수집 및 수신 동의 </string>
     <string name="mypage_privacy_policy">개인정보처리방침</string>
 
     <!-- profile -->
@@ -62,7 +62,7 @@
     <string name="home_menu_keyword">키워드</string>
     <string name="home_menu_scrap">스크랩</string>
     <string name="home_menu_my_page">마이페이지</string>
-    
+
     <string name="sort_article_asc">오름차순</string>
     <string name="sort_article_desc">내림차순</string>
     <string name="sort_article_like">인기순</string>
@@ -147,7 +147,7 @@
     <string name="logout_sub_title">로그아웃 하시겠습니까?</string>
     <string name="logout_ok">로그아웃</string>
     <string name="logout_no">취소</string>
-    
+
     <!-- gpt -->
     <string name="gpt_summary">기사 요약하기</string>
     <string name="gpt_translation">기사 영어로 번역하기</string>

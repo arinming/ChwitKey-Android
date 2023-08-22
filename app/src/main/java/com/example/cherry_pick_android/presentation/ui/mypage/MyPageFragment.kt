@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import androidx.fragment.app.Fragment
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -75,7 +76,6 @@ class MyPageFragment : Fragment() {
                     it.startActivity(intent)
                 }
             }
-
             // 스토어 별점 남기기 이동
             ibtnMoveToScore.setOnClickListener {
                 // val intent = Intent(Intent.ACTION_VIEW)
@@ -84,11 +84,28 @@ class MyPageFragment : Fragment() {
             }
             // 이용약관 및 사용자 정책 페이지 이동
             ibtnMoveToPolicy.setOnClickListener {
-
+                Log.d(TAG,"이용약관 페이지 이동")
+                activity?.let {
+                    val intent = Intent(it, UserPolicy::class.java)
+                    it.startActivity(intent)
+                }
             }
-            // 언론사 연락처
-
-            // 개인정보처리방침
+            // 마케팅수신동의 페이지 이동
+            tvMypageMarketingPolicy.setOnClickListener {
+                Log.d(TAG,"마케팅 페이지 이동")
+                activity?.let {
+                    val intent = Intent(it, MarketingPolicy::class.java)
+                    it.startActivity(intent)
+                }
+            }
+            // 개인정보처리방침 페이지 이동
+            tvMypagePrivacyPolicy.setOnClickListener {
+                activity?.let {
+                    Log.d(TAG,"개인정보 페이지 이동")
+                    val intent = Intent(it, PrivacyPolicy::class.java)
+                    it.startActivity(intent)
+                }
+            }
         }
     }
 
