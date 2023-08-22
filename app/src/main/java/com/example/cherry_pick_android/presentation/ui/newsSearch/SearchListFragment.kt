@@ -55,6 +55,7 @@ class SearchListFragment : Fragment() {
         _binding = FragmentSearchListBinding.inflate(inflater, container, false)
         getArticleList()
 
+
         return binding.root
     }
 

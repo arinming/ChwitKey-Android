@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.cherry_pick_android.R
 import com.example.cherry_pick_android.data.data.ArticleItem
+import com.example.cherry_pick_android.data.model.KeywordEntity
 import com.example.cherry_pick_android.data.remote.service.article.ArticleSearchKeywordService
 import com.example.cherry_pick_android.databinding.FragmentSearchKeywordDetailBinding
 import com.example.cherry_pick_android.presentation.adapter.NewsRecyclerViewAdapter
@@ -42,6 +43,7 @@ class SearchKeywordDetailFragment : Fragment() {
     private var isDone = false
     private var pageInit: Int = 0
     private var isLoading = false
+    private lateinit var nowKeyword : List<KeywordEntity>
     private lateinit var mRecyclerView: RecyclerView
 
     private var articleOldItems = mutableListOf<ArticleItem>()
@@ -62,11 +64,6 @@ class SearchKeywordDetailFragment : Fragment() {
     ): View? {
         return binding.root
 
-        // DB 데이터 로드 및 개수 초기화
-        searchKeywordViewModel.loadKeyword().observe(viewLifecycleOwner) {
-            searchKeywordAdapter.setList(it)
-        }
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -75,6 +72,10 @@ class SearchKeywordDetailFragment : Fragment() {
         getKeyword()
         initScrollListener()
 
+        // DB 데이터 로드 및 개수 초기화
+        searchKeywordViewModel.loadKeyword().observe(viewLifecycleOwner) {
+            nowKeyword = searchKeywordViewModel.loadKeyword().value!!
+        }
     }
 
 
@@ -86,7 +87,7 @@ class SearchKeywordDetailFragment : Fragment() {
 
             val isKeywordNew = searchKeywordViewModel.checkKeyword(keyword) // 중복 키워드 검사
             val isKeywordCnt = searchKeywordViewModel.checkKeywordCnt() // 키워드 개수 검사
-
+            Log.d("키워드 검사", "${searchKeywordViewModel.loadKeyword().value.toString()}")
             if (keyword.isNotEmpty() && isKeywordCnt) {
                 if (isKeywordNew) {
                     searchKeywordViewModel.addKeyword(keyword)
